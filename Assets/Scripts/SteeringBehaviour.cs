@@ -6,7 +6,8 @@ public enum SteeringBehaviourType
     None,
     Seek,
     Arrive,
-    Evade
+    Evade,
+    Separation
 }
 
 public abstract class SteeringBehaviour : MonoBehaviour
