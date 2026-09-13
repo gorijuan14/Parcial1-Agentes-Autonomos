@@ -19,4 +19,9 @@ public class SteeringAgent : MonoBehaviour
 
         transform.position += velocity * Time.deltaTime;
     }
+
+    public void SetSteering(Vector3 steering)
+    {
+        this.steering = steering;
+    }
 }
