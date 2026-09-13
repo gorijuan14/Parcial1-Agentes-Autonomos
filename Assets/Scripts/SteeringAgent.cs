@@ -5,6 +5,7 @@ public class SteeringAgent : MonoBehaviour
     [Header("Movement")]
     [SerializeField] protected float maxSpeed = 5f;
     [SerializeField] protected float maxAcceleration = 10f;
+    [SerializeField] protected float maxTurnSpeed = 360f;
 
     protected Vector3 velocity;
 
@@ -33,11 +34,26 @@ public class SteeringAgent : MonoBehaviour
 
         Vector3 acceleration = Vector3.ClampMagnitude(steering, maxAcceleration);
 
+        acceleration.y = 0f;
+
         velocity += acceleration * Time.deltaTime;
+
+        velocity.y = 0f;
 
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
 
         transform.position += velocity * Time.deltaTime;
+
+        if (velocity.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(velocity);
+
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                targetRotation,
+                maxTurnSpeed * Time.deltaTime
+            );
+        }
     }
 
     private SteeringBehaviour GetBehaviour(SteeringBehaviourType type)
