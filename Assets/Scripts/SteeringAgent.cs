@@ -8,7 +8,19 @@ public class SteeringAgent : MonoBehaviour
 
     protected Vector3 velocity;
 
-    [SerializeField] private SteeringBehaviour steeringBehaviour;
+    public float MaxSpeed => maxSpeed;
+    public Vector3 Velocity => velocity;
+
+    [Header("Steering")]
+    [SerializeField] private SteeringBehaviourType behaviourType;
+
+    private SteeringBehaviour steeringBehaviour;
+
+
+    protected virtual void Awake()
+    {
+        steeringBehaviour = GetBehaviour(behaviourType);
+    }
 
     protected virtual void Update()
     {
@@ -27,4 +39,20 @@ public class SteeringAgent : MonoBehaviour
 
         transform.position += velocity * Time.deltaTime;
     }
+
+    private SteeringBehaviour GetBehaviour(SteeringBehaviourType type)
+    {
+        switch (type)
+        {
+            case SteeringBehaviourType.Seek:
+                return GetComponent<Seek>();
+
+            case SteeringBehaviourType.Arrive:
+                return GetComponent<Arrive>();
+
+            default:
+                return null;
+        }
+    }
+
 }
