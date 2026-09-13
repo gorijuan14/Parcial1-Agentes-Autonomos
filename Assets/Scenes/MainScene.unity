@@ -812,6 +812,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
   maxSpeed: 5
   maxAcceleration: 10
+  maxTurnSpeed: 360
   behaviourType: 2
 --- !u!114 &1721795445
 MonoBehaviour:
@@ -826,8 +827,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrive
   target: {fileID: 990399190}
-  slowRadius: 3
-  stopRadius: 0.1
+  slowRadius: 10
+  stopRadius: 5
 --- !u!1001 &7487441213854751822
 PrefabInstance:
   m_ObjectHideFlags: 0

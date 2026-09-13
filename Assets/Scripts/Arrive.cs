@@ -3,8 +3,8 @@ using UnityEngine;
 public class Arrive : SteeringBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private float slowRadius = 3f;
-    [SerializeField] private float stopRadius = 0.1f;
+    [SerializeField] private float slowRadius = 10f;
+    [SerializeField] private float stopRadius = 5f;
 
     private SteeringAgent agent;
 
@@ -39,4 +39,5 @@ public class Arrive : SteeringBehaviour
 
         return desiredVelocity - agent.Velocity;
     }
+
 }
