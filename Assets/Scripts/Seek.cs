@@ -1,26 +1,19 @@
 using UnityEngine;
 
-public class Seek : MonoBehaviour
+public class Seek : SteeringBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private SteeringAgent agent;
 
-    private void Awake()
-    {
-        if (agent == null)
-            agent = GetComponent<SteeringAgent>();
-    }
-
-    private void Update()
+    public override Vector3 CalculateSteering()
     {
         if (target == null)
         {
-            return;
+            return Vector3.zero;
         }
 
         Vector3 direction = target.position - transform.position;
-        direction = direction.normalized;
+        direction.Normalize();
 
-        agent.SetSteering(direction);
+        return direction;
     }
 }

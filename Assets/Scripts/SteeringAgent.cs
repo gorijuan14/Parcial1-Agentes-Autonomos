@@ -7,10 +7,18 @@ public class SteeringAgent : MonoBehaviour
     [SerializeField] protected float maxAcceleration = 10f;
 
     protected Vector3 velocity;
-    protected Vector3 steering;
+
+    [SerializeField] private SteeringBehaviour steeringBehaviour;
 
     protected virtual void Update()
     {
+        if (steeringBehaviour == null)
+        {
+            return;
+        }
+
+        Vector3 steering = steeringBehaviour.CalculateSteering();
+
         Vector3 acceleration = Vector3.ClampMagnitude(steering, maxAcceleration);
 
         velocity += acceleration * Time.deltaTime;
@@ -18,10 +26,5 @@ public class SteeringAgent : MonoBehaviour
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
 
         transform.position += velocity * Time.deltaTime;
-    }
-
-    public void SetSteering(Vector3 steering)
-    {
-        this.steering = steering;
     }
 }

@@ -797,7 +797,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Seek
   target: {fileID: 990399190}
-  agent: {fileID: 1721795444}
 --- !u!114 &1721795444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -812,6 +811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
   maxSpeed: 5
   maxAcceleration: 10
+  steeringBehaviour: {fileID: 1721795443}
 --- !u!1001 &7487441213854751822
 PrefabInstance:
   m_ObjectHideFlags: 0
