@@ -475,6 +475,7 @@ GameObject:
   - component: {fileID: 990399189}
   - component: {fileID: 990399188}
   - component: {fileID: 990399187}
+  - component: {fileID: 990399191}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -575,6 +576,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990399191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990399186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab3861abc6c69141b674e919adefe45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
+  maxSpeed: 5
+  maxAcceleration: 10
+  maxTurnSpeed: 360
+  behaviourType: 0
 --- !u!1 &1078325083
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,6 +779,7 @@ GameObject:
   - component: {fileID: 1721795444}
   - component: {fileID: 1721795443}
   - component: {fileID: 1721795445}
+  - component: {fileID: 1721795446}
   m_Layer: 0
   m_Name: Agents
   m_TagString: Untagged
@@ -813,7 +831,7 @@ MonoBehaviour:
   maxSpeed: 5
   maxAcceleration: 10
   maxTurnSpeed: 360
-  behaviourType: 2
+  behaviourType: 3
 --- !u!114 &1721795445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,6 +847,20 @@ MonoBehaviour:
   target: {fileID: 990399190}
   slowRadius: 10
   stopRadius: 5
+--- !u!114 &1721795446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721795441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd0c9754c3702ce438bfa816ff3b3cb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Evade
+  target: {fileID: 990399190}
+  predictionTime: 0.1
 --- !u!1001 &7487441213854751822
 PrefabInstance:
   m_ObjectHideFlags: 0

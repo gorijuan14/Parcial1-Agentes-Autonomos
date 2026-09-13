@@ -8,9 +8,11 @@ public class SteeringAgent : MonoBehaviour
     [SerializeField] protected float maxTurnSpeed = 360f;
 
     protected Vector3 velocity;
+    public Vector3 Velocity => velocity;
 
     public float MaxSpeed => maxSpeed;
-    public Vector3 Velocity => velocity;
+    public float MaxAcceleration => maxAcceleration;
+   
 
     [Header("Steering")]
     [SerializeField] private SteeringBehaviourType behaviourType;
@@ -65,6 +67,9 @@ public class SteeringAgent : MonoBehaviour
 
             case SteeringBehaviourType.Arrive:
                 return GetComponent<Arrive>();
+
+            case SteeringBehaviourType.Evade:
+                return GetComponent<Evade>();
 
             default:
                 return null;
