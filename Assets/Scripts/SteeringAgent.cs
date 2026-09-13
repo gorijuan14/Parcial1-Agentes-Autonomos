@@ -71,9 +71,6 @@ public class SteeringAgent : MonoBehaviour
             case SteeringBehaviourType.Evade:
                 return GetComponent<Evade>();
 
-            case SteeringBehaviourType.Separation:
-                return GetComponent<Separation>();
-
             default:
                 return null;
         }
