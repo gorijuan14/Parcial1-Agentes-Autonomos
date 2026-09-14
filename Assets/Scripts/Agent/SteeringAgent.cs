@@ -22,15 +22,7 @@ public class SteeringAgent : MonoBehaviour
 
     protected virtual void Update()
     {
-        SteeringBehaviour steeringBehaviour = GetCurrentBehaviour();
-
-
-        if (steeringBehaviour == null)
-        {
-            return;
-        }
-
-        Vector3 steering = steeringBehaviour.CalculateSteering();
+        Vector3 steering = CalculatePatrolAndFlocking();
 
         Vector3 acceleration = Vector3.ClampMagnitude(steering, maxAcceleration);
 
@@ -54,6 +46,26 @@ public class SteeringAgent : MonoBehaviour
                 maxTurnSpeed * Time.deltaTime
             );
         }
+    }
+
+    private Vector3 CalculatePatrolAndFlocking()
+    {
+        Patrol patrol = GetComponent<Patrol>();
+        Flocking flocking = GetComponent<Flocking>();
+
+        Vector3 steering = Vector3.zero;
+
+        if (patrol != null)
+        {
+            steering += patrol.CalculateSteering();
+        }
+
+        if (flocking != null)
+        {
+            steering += flocking.CalculateSteering();
+        }
+
+        return steering;
     }
 
     private SteeringBehaviour GetBehaviour(SteeringBehaviourType type)
