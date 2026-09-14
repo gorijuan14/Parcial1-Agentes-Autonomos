@@ -6,6 +6,7 @@ public class SteeringAgent : MonoBehaviour
     [SerializeField] protected float maxSpeed = 5f;
     [SerializeField] protected float maxAcceleration = 10f;
     [SerializeField] protected float maxTurnSpeed = 360f;
+    [SerializeField] private Vector3 initialVelocity;
 
     protected Vector3 velocity;
     public Vector3 Velocity => velocity;
@@ -23,6 +24,7 @@ public class SteeringAgent : MonoBehaviour
     protected virtual void Awake()
     {
         steeringBehaviour = GetBehaviour(behaviourType);
+        velocity = initialVelocity;
     }
 
     protected virtual void Update()
@@ -70,6 +72,9 @@ public class SteeringAgent : MonoBehaviour
 
             case SteeringBehaviourType.Evade:
                 return GetComponent<Evade>();
+
+            case SteeringBehaviourType.Flocking:
+                return GetComponent<Flocking>();
 
             default:
                 return null;

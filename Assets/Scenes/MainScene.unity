@@ -339,8 +339,10 @@ GameObject:
   - component: {fileID: 371792754}
   - component: {fileID: 371792753}
   - component: {fileID: 371792752}
+  - component: {fileID: 371792756}
+  - component: {fileID: 371792757}
   m_Layer: 0
-  m_Name: Agent_3
+  m_Name: Boid_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -419,7 +421,48 @@ MonoBehaviour:
   maxSpeed: 5
   maxAcceleration: 10
   maxTurnSpeed: 360
-  behaviourType: 3
+  initialVelocity: {x: 0, y: 0, z: 0}
+  behaviourType: 4
+--- !u!114 &371792756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371792750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b3366050436b945883d16ec89ffbd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Flocking
+  separationRadius: 2
+  perceptionRadius: 5
+  separationWeight: 1
+  alignmentWeight: 0.3
+  cohesionWeight: 0.28
+--- !u!136 &371792757
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371792750}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &387311767
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,8 +634,10 @@ GameObject:
   - component: {fileID: 464566870}
   - component: {fileID: 464566869}
   - component: {fileID: 464566868}
+  - component: {fileID: 464566872}
+  - component: {fileID: 464566873}
   m_Layer: 0
-  m_Name: Agent_2
+  m_Name: Boid_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -671,7 +716,48 @@ MonoBehaviour:
   maxSpeed: 5
   maxAcceleration: 10
   maxTurnSpeed: 360
-  behaviourType: 3
+  initialVelocity: {x: 0, y: 0, z: 0}
+  behaviourType: 4
+--- !u!114 &464566872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464566866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b3366050436b945883d16ec89ffbd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Flocking
+  separationRadius: 2
+  perceptionRadius: 5
+  separationWeight: 1
+  alignmentWeight: 0.3
+  cohesionWeight: 0.28
+--- !u!136 &464566873
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464566866}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &498713766
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,8 +771,10 @@ GameObject:
   - component: {fileID: 498713770}
   - component: {fileID: 498713769}
   - component: {fileID: 498713768}
+  - component: {fileID: 498713772}
+  - component: {fileID: 498713773}
   m_Layer: 0
-  m_Name: Agent_5
+  m_Name: Boid_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -765,7 +853,48 @@ MonoBehaviour:
   maxSpeed: 5
   maxAcceleration: 10
   maxTurnSpeed: 360
-  behaviourType: 3
+  initialVelocity: {x: 0, y: 0, z: 0}
+  behaviourType: 4
+--- !u!114 &498713772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498713766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b3366050436b945883d16ec89ffbd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Flocking
+  separationRadius: 2
+  perceptionRadius: 5
+  separationWeight: 1
+  alignmentWeight: 0.3
+  cohesionWeight: 0.28
+--- !u!136 &498713773
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498713766}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &828282525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1140,7 +1269,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1701029399}
   m_Layer: 0
-  m_Name: Agents
+  m_Name: Boids
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1179,8 +1308,10 @@ GameObject:
   - component: {fileID: 1721795443}
   - component: {fileID: 1721795445}
   - component: {fileID: 1721795446}
+  - component: {fileID: 1721795447}
+  - component: {fileID: 1721795448}
   m_Layer: 0
-  m_Name: Agent_1
+  m_Name: Boid_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1230,7 +1361,8 @@ MonoBehaviour:
   maxSpeed: 5
   maxAcceleration: 10
   maxTurnSpeed: 360
-  behaviourType: 3
+  initialVelocity: {x: 2, y: 0, z: 0}
+  behaviourType: 4
 --- !u!114 &1721795445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1260,6 +1392,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Evade
   target: {fileID: 0}
   predictionTime: 0.1
+--- !u!114 &1721795447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721795441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b3366050436b945883d16ec89ffbd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Flocking
+  separationRadius: 2
+  perceptionRadius: 5
+  separationWeight: 1
+  alignmentWeight: 0.3
+  cohesionWeight: 0.28
+--- !u!136 &1721795448
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721795441}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1968253046
 GameObject:
   m_ObjectHideFlags: 0
@@ -1273,8 +1445,10 @@ GameObject:
   - component: {fileID: 1968253050}
   - component: {fileID: 1968253049}
   - component: {fileID: 1968253048}
+  - component: {fileID: 1968253052}
+  - component: {fileID: 1968253053}
   m_Layer: 0
-  m_Name: Agent_4
+  m_Name: Boid_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1353,7 +1527,48 @@ MonoBehaviour:
   maxSpeed: 5
   maxAcceleration: 10
   maxTurnSpeed: 360
-  behaviourType: 3
+  initialVelocity: {x: 0, y: 0, z: 0}
+  behaviourType: 4
+--- !u!114 &1968253052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968253046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b3366050436b945883d16ec89ffbd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Flocking
+  separationRadius: 2
+  perceptionRadius: 5
+  separationWeight: 1
+  alignmentWeight: 0.3
+  cohesionWeight: 0.28
+--- !u!136 &1968253053
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968253046}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &2142132062
 PrefabInstance:
   m_ObjectHideFlags: 0
