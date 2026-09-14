@@ -1,0 +1,48 @@
+using UnityEngine;
+
+public class HunterAttackState : HunterState
+{
+    private SteeringAgent agent;
+    private Pursue pursue;
+    private HunterSensor sensor;
+
+    [SerializeField] private Transform target;
+
+    public HunterAttackState(HunterFSM hunter, Transform target) : base(hunter)
+    {
+        agent = hunter.GetComponent<SteeringAgent>();
+        pursue = hunter.GetComponent<Pursue>();
+        sensor = hunter.GetComponent<HunterSensor>();
+
+        this.target = target;
+    }
+
+    public override void Enter()
+    {
+        pursue.SetTarget(target);
+        agent.SetBehaviour(pursue);
+
+        Debug.Log($"Hunter entra en Attack. Objetivo: {target.name}");
+    }
+
+    public override void Update()
+    {
+        Transform boid = sensor.GetClosestBoid();
+
+        if (boid == null)
+        {
+            hunter.ChangeState(new HunterPatrolState(hunter));
+            return;
+        }
+
+        if (boid != target)
+        {
+            target = boid;
+            pursue.SetTarget(target);
+        }
+    }
+
+    public override void Exit()
+    {
+    }
+}

@@ -22,7 +22,9 @@ public class HunterPatrolState : HunterState
 
         if (boid != null)
         {
-            Debug.Log($"Patrol detectó a {boid.name}");
+            hunter.ChangeState(
+                new HunterAttackState(hunter, boid)
+            );
         }
     }
 
