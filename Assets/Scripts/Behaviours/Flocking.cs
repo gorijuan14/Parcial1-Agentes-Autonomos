@@ -28,7 +28,7 @@ public class Flocking : SteeringBehaviour
         int alignmentCount = 0;
         int cohesionCount = 0;
 
-        SteeringAgent agent = GetComponent<SteeringAgent>();
+        Agent agent = GetComponent<Agent>();
 
         foreach (Collider neighbor in neighbors)
         {
@@ -42,7 +42,7 @@ public class Flocking : SteeringBehaviour
 
             float distance = direction.magnitude;
 
-            SteeringAgent neighborAgent = neighbor.GetComponent<SteeringAgent>();
+            Agent neighborAgent = neighbor.GetComponent<Agent>();
 
             if (neighborAgent == null)
             {

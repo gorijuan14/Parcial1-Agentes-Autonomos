@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HunterAttackState : HunterState
 {
-    private SteeringAgent agent;
+    private Agent agent;
     private Pursue pursue;
     private HunterSensor sensor;
 
@@ -10,7 +10,7 @@ public class HunterAttackState : HunterState
 
     public HunterAttackState(HunterFSM hunter, Transform target) : base(hunter)
     {
-        agent = hunter.GetComponent<SteeringAgent>();
+        agent = hunter.GetComponent<Agent>();
         pursue = hunter.GetComponent<Pursue>();
         sensor = hunter.GetComponent<HunterSensor>();
 

@@ -5,13 +5,13 @@ public class Pursue : SteeringBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private float predictionTime = 1f;
 
-    private SteeringAgent targetAgent;
+    private Agent targetAgent;
 
     private void Awake()
     {
         if (target != null)
         {
-            targetAgent = target.GetComponent<SteeringAgent>();
+            targetAgent = target.GetComponent<Agent>();
         }
     }
 
@@ -40,7 +40,7 @@ public class Pursue : SteeringBehaviour
     {
         target = newTarget;
         targetAgent = newTarget != null
-            ? newTarget.GetComponent<SteeringAgent>()
+            ? newTarget.GetComponent<Agent>()
             : null;
     }
 }

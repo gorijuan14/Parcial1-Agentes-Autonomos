@@ -13,7 +13,7 @@ public class HunterPatrolState : HunterState
 
     public override void Enter()
     {
-        hunter.GetComponent<SteeringAgent>().SetBehaviour(patrol);
+        hunter.GetComponent<Agent>().SetBehaviour(patrol);
     }
 
     public override void Update()

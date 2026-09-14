@@ -16,7 +16,7 @@ public class HunterSensor : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            SteeringAgent agent = collider.GetComponent<SteeringAgent>();
+            Agent agent = collider.GetComponent<Agent>();
 
             if (agent == null)
             {

@@ -6,11 +6,11 @@ public class Arrive : SteeringBehaviour
     [SerializeField] private float slowRadius = 10f;
     [SerializeField] private float stopRadius = 5f;
 
-    private SteeringAgent agent;
+    private Agent agent;
 
     private void Awake()
     {
-        agent = GetComponent<SteeringAgent>();
+        agent = GetComponent<Agent>();
     }
 
     public override Vector3 CalculateSteering()

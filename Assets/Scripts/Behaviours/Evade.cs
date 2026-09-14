@@ -5,13 +5,13 @@ public class Evade : SteeringBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private float predictionTime = 0.1f;
 
-    private SteeringAgent targetAgent;
+    private Agent targetAgent;
 
     private void Awake()
     {
         if (target != null)
         {
-            targetAgent = target.GetComponent<SteeringAgent>();
+            targetAgent = target.GetComponent<Agent>();
         }
     }
 

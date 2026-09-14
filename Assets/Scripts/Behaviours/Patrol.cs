@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class Patrol : SteeringBehaviour
 {
-    private SteeringAgent agent;
+    private Agent agent;
     private WaypointPatrol waypointPatrol;
     private Arrive arrive;
 
     private void Awake()
     {
-        agent = GetComponent<SteeringAgent>();
+        agent = GetComponent<Agent>();
         waypointPatrol = GetComponent<WaypointPatrol>();
         arrive = GetComponent<Arrive>();
     }
