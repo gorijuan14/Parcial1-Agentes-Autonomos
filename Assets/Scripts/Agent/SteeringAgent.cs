@@ -79,7 +79,24 @@ public class SteeringAgent : MonoBehaviour
 
     private SteeringBehaviour GetCurrentBehaviour()
     {
-        // Por ahora todos los agentes usan Flocking
+        WaypointPatrol patrol = GetComponent<WaypointPatrol>();
+
+        if (patrol != null)
+        {
+            if (patrol.HasReachedWaypoint())
+            {
+                patrol.GoToNextWaypoint();
+            }
+
+            Arrive arrive = GetComponent<Arrive>();
+
+            if (arrive != null)
+            {
+                arrive.SetTarget(patrol.CurrentWaypoint);
+                return arrive;
+            }
+        }
+
         return GetComponent<Flocking>();
     }
 

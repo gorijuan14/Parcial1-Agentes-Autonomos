@@ -40,4 +40,9 @@ public class Arrive : SteeringBehaviour
         return desiredVelocity - agent.Velocity;
     }
 
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
+
 }
