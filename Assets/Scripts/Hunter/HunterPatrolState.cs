@@ -8,12 +8,12 @@ public class HunterPatrolState : HunterState
     public HunterPatrolState(HunterFSM hunter) : base(hunter)
     {
         patrol = hunter.GetComponent<Patrol>();
-        sensor = hunter.GetComponent<HunterSensor>();
+        sensor = hunter.GetComponentInChildren<HunterSensor>();
     }
 
     public override void Enter()
     {
-        hunter.GetComponent<Agent>().SetBehaviour(patrol);
+        hunter.GetComponent<Hunter>().SetBehaviour(patrol);
     }
 
     public override void Update()

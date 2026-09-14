@@ -16,27 +16,22 @@ public class HunterSensor : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            Agent agent = collider.GetComponent<Agent>();
+            Boid boid = collider.GetComponent<Boid>();
 
-            if (agent == null)
-            {
-                continue;
-            }
-
-            if (agent.gameObject == gameObject)
+            if (boid == null)
             {
                 continue;
             }
 
             float distance = Vector3.Distance(
                 transform.position,
-                agent.transform.position
+                boid.transform.position
             );
 
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestBoid = agent.transform;
+                closestBoid = boid.transform;
             }
         }
 

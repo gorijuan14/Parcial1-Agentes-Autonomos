@@ -12,7 +12,7 @@ public class HunterAttackState : HunterState
     {
         agent = hunter.GetComponent<Agent>();
         pursue = hunter.GetComponent<Pursue>();
-        sensor = hunter.GetComponent<HunterSensor>();
+        sensor = hunter.GetComponentInChildren<HunterSensor>();
 
         this.target = target;
     }

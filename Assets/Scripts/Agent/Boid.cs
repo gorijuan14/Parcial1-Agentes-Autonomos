@@ -4,6 +4,7 @@ public class Boid : Agent
 {
     private Patrol patrol;
     private Flocking flocking;
+    private bool isCollected;
 
     protected override void Start()
     {
@@ -15,6 +16,11 @@ public class Boid : Agent
 
     protected override void Update()
     {
+        if (isCollected)
+        {
+            return;
+        }
+
         Vector3 steering = Vector3.zero;
 
         if (patrol != null)
@@ -28,5 +34,22 @@ public class Boid : Agent
         }
 
         Move(steering);
+    }
+
+    public void Collect()
+    {
+        if (isCollected)
+        {
+            return;
+        }
+
+        isCollected = true;
+        StopMovement();
+    }
+
+
+    public void Disappear()
+    {
+        gameObject.SetActive(false);
     }
 }

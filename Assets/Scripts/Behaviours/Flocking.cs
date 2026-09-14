@@ -28,7 +28,7 @@ public class Flocking : SteeringBehaviour
         int alignmentCount = 0;
         int cohesionCount = 0;
 
-        Agent agent = GetComponent<Agent>();
+        Boid boid = GetComponent<Boid>();
 
         foreach (Collider neighbor in neighbors)
         {
@@ -42,16 +42,16 @@ public class Flocking : SteeringBehaviour
 
             float distance = direction.magnitude;
 
-            Agent neighborAgent = neighbor.GetComponent<Agent>();
+            Boid neighborBoid = neighbor.GetComponent<Boid>();
 
-            if (neighborAgent == null)
+            if (neighborBoid == null)
             {
                 continue;
             }
 
             if (distance > 0f && distance < alignmentRadius)
             {
-                alignment += neighborAgent.Velocity;
+                alignment += neighborBoid.Velocity;
                 alignmentCount++;
             }
 
@@ -71,9 +71,9 @@ public class Flocking : SteeringBehaviour
         {
             alignment /= alignmentCount;
 
-            if (agent != null)
+            if (boid != null)
             {
-                alignment -= agent.Velocity;
+                alignment -= boid.Velocity;
             }
         }
 
@@ -84,9 +84,9 @@ public class Flocking : SteeringBehaviour
             Vector3 directionToCenter = averagePosition - transform.position;
             directionToCenter.y = 0f;
 
-            if (directionToCenter.sqrMagnitude > 0.001f && agent != null)
+            if (directionToCenter.sqrMagnitude > 0.001f && boid != null)
             {
-                cohesion = directionToCenter.normalized * agent.MaxSpeed - agent.Velocity;
+                cohesion = directionToCenter.normalized * boid.MaxSpeed - boid.Velocity;
             }
             else
             {
