@@ -403,6 +403,8 @@ GameObject:
   - component: {fileID: 371792752}
   - component: {fileID: 371792756}
   - component: {fileID: 371792757}
+  - component: {fileID: 371792759}
+  - component: {fileID: 371792758}
   m_Layer: 0
   m_Name: Boid_3
   m_TagString: Untagged
@@ -525,6 +527,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &371792758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371792750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f98c8fb6568e94883bc986e3a76d9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaypointPatrol
+  waypoints:
+  - {fileID: 754009700}
+  - {fileID: 565146978}
+  - {fileID: 1811320327}
+  - {fileID: 346248639}
+  - {fileID: 45218900}
+  arrivalDistance: 5
+--- !u!114 &371792759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371792750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9756a6d71ec6f3a4c8d2dd8f7cd20560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Patrol
 --- !u!1 &387311767
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,6 +731,8 @@ GameObject:
   - component: {fileID: 464566868}
   - component: {fileID: 464566872}
   - component: {fileID: 464566873}
+  - component: {fileID: 464566875}
+  - component: {fileID: 464566874}
   m_Layer: 0
   m_Name: Boid_2
   m_TagString: Untagged
@@ -820,6 +855,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &464566874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464566866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f98c8fb6568e94883bc986e3a76d9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaypointPatrol
+  waypoints:
+  - {fileID: 754009700}
+  - {fileID: 565146978}
+  - {fileID: 1811320327}
+  - {fileID: 346248639}
+  - {fileID: 45218900}
+  arrivalDistance: 5
+--- !u!114 &464566875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464566866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9756a6d71ec6f3a4c8d2dd8f7cd20560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Patrol
 --- !u!1 &498713766
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,6 +901,8 @@ GameObject:
   - component: {fileID: 498713768}
   - component: {fileID: 498713772}
   - component: {fileID: 498713773}
+  - component: {fileID: 498713775}
+  - component: {fileID: 498713774}
   m_Layer: 0
   m_Name: Boid_5
   m_TagString: Untagged
@@ -957,6 +1025,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &498713774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498713766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f98c8fb6568e94883bc986e3a76d9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaypointPatrol
+  waypoints:
+  - {fileID: 754009700}
+  - {fileID: 565146978}
+  - {fileID: 1811320327}
+  - {fileID: 346248639}
+  - {fileID: 45218900}
+  arrivalDistance: 5
+--- !u!114 &498713775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498713766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9756a6d71ec6f3a4c8d2dd8f7cd20560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Patrol
 --- !u!1 &565146977
 GameObject:
   m_ObjectHideFlags: 0
@@ -1640,6 +1739,8 @@ GameObject:
   - component: {fileID: 1968253048}
   - component: {fileID: 1968253052}
   - component: {fileID: 1968253053}
+  - component: {fileID: 1968253055}
+  - component: {fileID: 1968253054}
   m_Layer: 0
   m_Name: Boid_4
   m_TagString: Untagged
@@ -1762,6 +1863,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1968253054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968253046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f98c8fb6568e94883bc986e3a76d9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaypointPatrol
+  waypoints:
+  - {fileID: 754009700}
+  - {fileID: 565146978}
+  - {fileID: 1811320327}
+  - {fileID: 346248639}
+  - {fileID: 45218900}
+  arrivalDistance: 5
+--- !u!114 &1968253055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968253046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9756a6d71ec6f3a4c8d2dd8f7cd20560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Patrol
 --- !u!1001 &2142132062
 PrefabInstance:
   m_ObjectHideFlags: 0
