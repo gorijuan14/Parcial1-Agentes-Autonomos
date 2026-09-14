@@ -22,7 +22,14 @@ public class SteeringAgent : MonoBehaviour
 
     protected virtual void Update()
     {
-        Vector3 steering = CalculatePatrolAndFlocking();
+        SteeringBehaviour steeringBehaviour = GetCurrentBehaviour();
+
+        if (steeringBehaviour == null)
+        {
+            return;
+        }
+
+        Vector3 steering = steeringBehaviour.CalculateSteering();
 
         Vector3 acceleration = Vector3.ClampMagnitude(steering, maxAcceleration);
 
@@ -81,6 +88,9 @@ public class SteeringAgent : MonoBehaviour
             case SteeringBehaviourType.Evade:
                 return GetComponent<Evade>();
 
+            case SteeringBehaviourType.Pursue:
+                return GetComponent<Pursue>();
+
             case SteeringBehaviourType.Flocking:
                 return GetComponent<Flocking>();
 
@@ -91,7 +101,14 @@ public class SteeringAgent : MonoBehaviour
 
     private SteeringBehaviour GetCurrentBehaviour()
     {
-        return GetComponent<Patrol>();
+        Pursue pursue = GetComponent<Pursue>();
+
+        if (pursue != null)
+        {
+            return pursue;
+        }
+
+        return null;
     }
 
 }

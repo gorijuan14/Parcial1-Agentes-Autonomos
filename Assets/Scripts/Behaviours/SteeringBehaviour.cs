@@ -7,6 +7,7 @@ public enum SteeringBehaviourType
     Seek,
     Arrive,
     Evade,
+    Pursue,
     Flocking
 }
 
