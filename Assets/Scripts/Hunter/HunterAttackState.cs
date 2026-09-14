@@ -27,11 +27,37 @@ public class HunterAttackState : HunterState
 
     public override void Update()
     {
+        if (target == null)
+        {
+            hunter.ChangeState(
+                new HunterPatrolState(hunter)
+            );
+
+            return;
+        }
+
+        float distance = Vector3.Distance(
+            hunter.transform.position,
+            target.position
+        );
+
+        if (distance <= 2f)
+        {
+            hunter.ChangeState(
+                new HunterGatherState(hunter, target)
+            );
+
+            return;
+        }
+
         Transform boid = sensor.GetClosestBoid();
 
         if (boid == null)
         {
-            hunter.ChangeState(new HunterPatrolState(hunter));
+            hunter.ChangeState(
+                new HunterPatrolState(hunter)
+            );
+
             return;
         }
 
