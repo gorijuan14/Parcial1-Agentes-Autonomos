@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class HunterCollector : MonoBehaviour
 {
@@ -23,15 +24,17 @@ public class HunterCollector : MonoBehaviour
         StartCoroutine(CollectBoid(boid));
     }
 
-    private System.Collections.IEnumerator CollectBoid(Boid boid)
+    private IEnumerator CollectBoid(Boid boid)
     {
         isCollecting = true;
 
         Hunter hunter = GetComponentInParent<Hunter>();
+        HunterFSM hunterFSM = GetComponentInParent<HunterFSM>();
 
         if (hunter != null)
         {
             hunter.StopMovement();
+            hunter.SetBehaviour(null);
         }
 
         boid.Collect();
@@ -41,5 +44,12 @@ public class HunterCollector : MonoBehaviour
         boid.Disappear();
 
         isCollecting = false;
+
+        if (hunterFSM != null)
+        {
+            hunterFSM.ChangeState(
+                new HunterPatrolState(hunterFSM)
+            );
+        }
     }
 }
