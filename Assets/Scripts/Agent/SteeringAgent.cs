@@ -14,6 +14,7 @@ public class SteeringAgent : MonoBehaviour
     public float MaxSpeed => maxSpeed;
     public float MaxAcceleration => maxAcceleration;
 
+    private SteeringBehaviour currentBehaviour;
 
     protected virtual void Awake()
     {
@@ -22,14 +23,16 @@ public class SteeringAgent : MonoBehaviour
 
     protected virtual void Update()
     {
-        SteeringBehaviour steeringBehaviour = GetCurrentBehaviour();
+        Vector3 steering;
 
-        if (steeringBehaviour == null)
+        if (currentBehaviour != null)
         {
-            return;
+            steering = currentBehaviour.CalculateSteering();
         }
-
-        Vector3 steering = steeringBehaviour.CalculateSteering();
+        else
+        {
+            steering = CalculatePatrolAndFlocking();
+        }
 
         Vector3 acceleration = Vector3.ClampMagnitude(steering, maxAcceleration);
 
@@ -97,6 +100,13 @@ public class SteeringAgent : MonoBehaviour
             default:
                 return null;
         }
+    }
+
+
+
+    public void SetBehaviour(SteeringBehaviour behaviour)
+    {
+        currentBehaviour = behaviour;
     }
 
     private SteeringBehaviour GetCurrentBehaviour()
