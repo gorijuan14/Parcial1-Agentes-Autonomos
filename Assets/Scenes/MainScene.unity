@@ -1235,6 +1235,8 @@ GameObject:
   - component: {fileID: 796407649}
   - component: {fileID: 796407648}
   - component: {fileID: 796407653}
+  - component: {fileID: 796407654}
+  - component: {fileID: 796407655}
   m_Layer: 0
   m_Name: Hunter_1
   m_TagString: Untagged
@@ -1355,6 +1357,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc01e90ae10bcc24cb73a79131e77bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HunterFSM
+--- !u!114 &796407654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796407645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 973f7d8cdd3288b4fab839aad342d145, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HunterSensor
+  perceptionRadius: 7
+--- !u!135 &796407655
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796407645}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 7
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &828282525
 PrefabInstance:
   m_ObjectHideFlags: 0
