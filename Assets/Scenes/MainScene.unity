@@ -436,7 +436,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Flocking
   separationRadius: 2
-  perceptionRadius: 5
+  alignmentRadius: 5
+  cohesionRadius: 5
   separationWeight: 1
   alignmentWeight: 0.3
   cohesionWeight: 0.28
@@ -731,7 +732,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Flocking
   separationRadius: 2
-  perceptionRadius: 5
+  alignmentRadius: 5
+  cohesionRadius: 5
   separationWeight: 1
   alignmentWeight: 0.3
   cohesionWeight: 0.28
@@ -868,7 +870,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Flocking
   separationRadius: 2
-  perceptionRadius: 5
+  alignmentRadius: 5
+  cohesionRadius: 5
   separationWeight: 1
   alignmentWeight: 0.3
   cohesionWeight: 0.28
@@ -1405,10 +1408,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Flocking
   separationRadius: 2
-  perceptionRadius: 5
+  alignmentRadius: 5
+  cohesionRadius: 5
   separationWeight: 1
-  alignmentWeight: 0.3
-  cohesionWeight: 0.28
+  alignmentWeight: 1
+  cohesionWeight: 1
 --- !u!136 &1721795448
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1542,7 +1546,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Flocking
   separationRadius: 2
-  perceptionRadius: 5
+  alignmentRadius: 5
+  cohesionRadius: 5
   separationWeight: 1
   alignmentWeight: 0.3
   cohesionWeight: 0.28

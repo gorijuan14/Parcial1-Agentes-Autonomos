@@ -13,22 +13,18 @@ public class SteeringAgent : MonoBehaviour
 
     public float MaxSpeed => maxSpeed;
     public float MaxAcceleration => maxAcceleration;
-   
-
-    [Header("Steering")]
-    [SerializeField] private SteeringBehaviourType behaviourType;
-
-    private SteeringBehaviour steeringBehaviour;
 
 
     protected virtual void Awake()
     {
-        steeringBehaviour = GetBehaviour(behaviourType);
         velocity = initialVelocity;
     }
 
     protected virtual void Update()
     {
+        SteeringBehaviour steeringBehaviour = GetCurrentBehaviour();
+
+
         if (steeringBehaviour == null)
         {
             return;
@@ -79,6 +75,12 @@ public class SteeringAgent : MonoBehaviour
             default:
                 return null;
         }
+    }
+
+    private SteeringBehaviour GetCurrentBehaviour()
+    {
+        // Por ahora todos los agentes usan Flocking
+        return GetComponent<Flocking>();
     }
 
 }
