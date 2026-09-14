@@ -1234,7 +1234,7 @@ GameObject:
   - component: {fileID: 796407650}
   - component: {fileID: 796407649}
   - component: {fileID: 796407648}
-  - component: {fileID: 796407647}
+  - component: {fileID: 796407653}
   m_Layer: 0
   m_Name: Hunter_1
   m_TagString: Untagged
@@ -1258,20 +1258,6 @@ Transform:
   - {fileID: 781839593}
   m_Father: {fileID: 340561898}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &796407647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796407645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72fff684daf2a494fbf52607450663dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Pursue
-  target: {fileID: 1721795442}
-  predictionTime: 0.1
 --- !u!114 &796407648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1356,7 +1342,19 @@ MonoBehaviour:
   maxSpeed: 5
   maxAcceleration: 10
   maxTurnSpeed: 360
-  initialVelocity: {x: 2, y: 0, z: 0}
+  initialVelocity: {x: 0, y: 0, z: 0}
+--- !u!114 &796407653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796407645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc01e90ae10bcc24cb73a79131e77bc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HunterFSM
 --- !u!1001 &828282525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1830,7 +1828,7 @@ MonoBehaviour:
   maxSpeed: 5
   maxAcceleration: 10
   maxTurnSpeed: 360
-  initialVelocity: {x: 2, y: 0, z: 0}
+  initialVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &1721795445
 MonoBehaviour:
   m_ObjectHideFlags: 0
