@@ -33,7 +33,7 @@ public class HunterAttackState : HunterState
     public override void Update()
     {
         attackCooldown += Time.deltaTime;
-        
+
         if (target == null)
         {
             hunter.ChangeState(
@@ -48,7 +48,9 @@ public class HunterAttackState : HunterState
             target.position
         );
 
-        if (distance <= 2f)
+        EvaluateAttackRange(distance);
+
+        if (distance <= hunterAgent.MeleeAttackRadius)
         {
             hunter.ChangeState(
                 new HunterGatherState(hunter, target)
@@ -75,7 +77,24 @@ public class HunterAttackState : HunterState
         }
     }
 
+    private void EvaluateAttackRange(float distance)
+    {
+        if (distance <= hunterAgent.MeleeAttackRadius)
+        {
+            Debug.Log("Hunter: MELEE");
+        }
+        else if (distance <= hunterAgent.RangeAttackRadius)
+        {
+            Debug.Log("Hunter: RANGED");
+        }
+        else
+        {
+            Debug.Log("Hunter: CHASE");
+        }
+    }
+
     public override void Exit()
     {
     }
+
 }

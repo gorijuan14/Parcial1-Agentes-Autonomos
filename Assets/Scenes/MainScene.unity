@@ -1412,6 +1412,9 @@ MonoBehaviour:
   maxAcceleration: 10
   maxTurnSpeed: 360
   initialVelocity: {x: 0, y: 0, z: 0}
+  tba: 2
+  rangeAttackRadius: 5
+  meleeAttackRadius: 2
 --- !u!114 &796407653
 MonoBehaviour:
   m_ObjectHideFlags: 0
