@@ -21,8 +21,6 @@ public class HunterAttackState : HunterState
     {
         pursue.SetTarget(target);
         agent.SetBehaviour(pursue);
-
-        Debug.Log($"Hunter entra en Attack. Objetivo: {target.name}");
     }
 
     public override void Update()

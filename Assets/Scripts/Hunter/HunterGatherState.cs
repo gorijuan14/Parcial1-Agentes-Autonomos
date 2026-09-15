@@ -7,7 +7,7 @@ public class HunterGatherState : HunterState
 
     private float gatherDuration = 2f;
     private float gatherTimer;
-    private float gatherRadius = 2f;
+    private float gatherRadius = 0.5f;
 
     private bool hasReachedTarget;
 
@@ -21,8 +21,6 @@ public class HunterGatherState : HunterState
     {
         gatherTimer = 0f;
         hasReachedTarget = false;
-
-        Debug.Log($"Hunter entra en Gather. Objetivo: {target.name}");
     }
 
     public override void Update()
