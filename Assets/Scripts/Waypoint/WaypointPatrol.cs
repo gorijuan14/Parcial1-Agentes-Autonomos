@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class WaypointPatrol : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private Transform[] waypoints;
-    [SerializeField] private float arrivalDistance = 5f;
-
-    private int currentWaypoint;
-
     public Transform CurrentWaypoint => waypoints[currentWaypoint];
+
+    [Header("Stats")]
+    [SerializeField] private float arrivalDistance = 5f;
+    private int currentWaypoint;
 
     private void Start()
     {

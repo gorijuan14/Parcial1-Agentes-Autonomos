@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class Arrive : SteeringBehaviour
 {
+    [Header("References")]
+    private Agent agent;
     [SerializeField] private Transform target;
+
+    [Header("Stats")]
     [SerializeField] private float slowRadius = 10f;
     [SerializeField] private float stopRadius = 5f;
-
-    private Agent agent;
+    
 
     private void Awake()
     {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Flocking : SteeringBehaviour
 {
-
+    [Header("Stats")]
     [SerializeField] private float separationRadius = 2f;
     [SerializeField] private float alignmentRadius = 5f;
     [SerializeField] private float cohesionRadius = 5f;

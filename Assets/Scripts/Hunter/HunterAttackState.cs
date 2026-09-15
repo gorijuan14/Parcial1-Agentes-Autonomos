@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class HunterAttackState : HunterState
 {
+    [Header("References")]
     private Agent agent;
     private Pursue pursue;
     private HunterSensor sensor;
     private Hunter hunterAgent;
-
-    private float attackCooldown;
     [SerializeField] private Transform target;
 
+    [Header("Stats")]
+    private float attackCooldown;
+    
     public HunterAttackState(HunterFSM hunter, Transform target) : base(hunter)
     {
         agent = hunter.GetComponent<Agent>();

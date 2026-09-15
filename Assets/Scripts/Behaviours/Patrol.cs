@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Patrol : SteeringBehaviour
 {
+    [Header("References")]
     private Agent agent;
     private WaypointPatrol waypointPatrol;
     private Arrive arrive;

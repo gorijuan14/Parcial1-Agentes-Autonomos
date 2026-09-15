@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class HunterPatrolState : HunterState
 {
+    [Header("References")]
     private Patrol patrol;
     private HunterSensor sensor;
     private Hunter hunterAgent;
 
+    [Header("Bait")]
     private float baitPlacementTimer;
     private bool isPlacingBait;
 

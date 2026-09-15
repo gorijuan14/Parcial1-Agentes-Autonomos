@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class Pursue : SteeringBehaviour
 {
+    [Header("References")]
     [SerializeField] private Transform target;
-    private float maxPredictionTime = 2f;
-
     private Agent targetAgent;
     private Agent agent;
+
+    [Header("Stats")]
+    private float maxPredictionTime = 2f;
 
     private void Awake()
     {

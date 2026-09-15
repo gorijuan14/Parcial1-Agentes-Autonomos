@@ -7,6 +7,7 @@ public class Hunter : Agent
     [SerializeField] private float rangeAttackRadius = 5f;
     [SerializeField] private float meleeAttackRadius = 0.5f;
 
+    [Header("References")]
     public float TBA => tba;
     public float RangeAttackRadius => rangeAttackRadius;
     public float MeleeAttackRadius => meleeAttackRadius;
@@ -15,8 +16,8 @@ public class Hunter : Agent
     [SerializeField] private GameObject baitPrefab;
     [SerializeField] private int maxBaits = 5;
     [SerializeField] private float baitSpawnInterval = 5f;
-
     private float baitTimer;
+    
 
     public bool UpdateBaits()
     {

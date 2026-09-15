@@ -2,14 +2,15 @@ using UnityEngine;
 
 public abstract class Agent : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] protected float maxSpeed = 5f;
     [SerializeField] protected float maxAcceleration = 10f;
     [SerializeField] protected float maxTurnSpeed = 360f;
     [SerializeField] protected Vector3 initialVelocity;
-
-    protected Vector3 velocity;
     protected SteeringBehaviour currentBehaviour;
-
+    
+    [Header("Stats")]
+    protected Vector3 velocity;
     public Vector3 Velocity => velocity;
     public float MaxSpeed => maxSpeed;
     public float MaxAcceleration => maxAcceleration;

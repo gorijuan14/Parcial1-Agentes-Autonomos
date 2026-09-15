@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Seek : SteeringBehaviour
 {
+    [Header("References")]
     [SerializeField] private Transform target;
 
     public override Vector3 CalculateSteering()

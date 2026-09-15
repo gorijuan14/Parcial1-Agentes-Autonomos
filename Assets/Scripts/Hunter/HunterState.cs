@@ -2,6 +2,7 @@ using UnityEngine;
 
 public abstract class HunterState
 {
+    [Header("References")]
     protected HunterFSM hunter;
 
     public HunterState(HunterFSM hunter)

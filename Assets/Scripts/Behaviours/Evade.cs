@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class Evade : SteeringBehaviour
 {
+    [Header("References")]
     [SerializeField] private Transform target;
-    [SerializeField] private float predictionTime = 0.1f;
-
     private Agent targetAgent;
+    
+    [Header("Stats")]
+    [SerializeField] private float predictionTime = 0.1f;
 
     private void Awake()
     {

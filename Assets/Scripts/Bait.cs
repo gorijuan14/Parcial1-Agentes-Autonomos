@@ -1,15 +1,14 @@
 using UnityEngine;
 
 public class Bait : MonoBehaviour
-{
-    [SerializeField] private int maxHealth = 5;
-
-    private int currentHealth;
-
-    public bool IsDestroyed => currentHealth <= 0;
-
+{   
+    [Header("References")]
     private Boid assignedBoid;
 
+    [Header("Stats")]
+    [SerializeField] private int maxHealth = 5;
+    private int currentHealth;
+    public bool IsDestroyed => currentHealth <= 0;
     public bool IsAvailable => assignedBoid == null;
 
     private void Start()

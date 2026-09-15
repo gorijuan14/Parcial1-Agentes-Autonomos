@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BoidSensor : MonoBehaviour
 {
+    [Header("Stats")]
     [SerializeField] private float perceptionRadius = 7f;
 
     public Bait GetClosestBait()

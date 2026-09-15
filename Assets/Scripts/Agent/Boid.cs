@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Boid : Agent
 {
+    [Header("References")]
     private Patrol patrol;
     private Flocking flocking;
     private bool isCollected;
@@ -9,11 +10,16 @@ public class Boid : Agent
     private Arrive arrive;
     private Bait currentBait;
 
+    [Header("Health")]
     [SerializeField] private int maxHealth = 3;
-
     private int currentHealth;
     private bool isDead;
     public bool IsDead => isDead;
+
+    [Header("Bait")]
+    [SerializeField] private float baitDamageInterval = 1f;
+    [SerializeField] private float baitDamageDistance = 5f;
+    private float baitDamageTimer;
 
     protected override void Start()
     {

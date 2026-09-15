@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class HunterFSM : MonoBehaviour
 {
+    [Header("References")]
     private HunterState currentState;
 
     private void Start()

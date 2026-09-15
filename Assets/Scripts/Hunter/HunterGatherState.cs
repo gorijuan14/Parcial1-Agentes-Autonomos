@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class HunterGatherState : HunterState
 {
+    [Header("References")]
     private Agent agent;
     private Transform target;
 
+    [Header("Stats")]
     private float gatherDuration = 2f;
     private float gatherTimer;
     private float gatherRadius = 0.5f;
-
     private bool hasReachedTarget;
 
     public HunterGatherState(HunterFSM hunter, Transform target) : base(hunter)
