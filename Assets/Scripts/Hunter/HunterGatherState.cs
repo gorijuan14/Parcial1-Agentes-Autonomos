@@ -19,6 +19,7 @@ public class HunterGatherState : HunterState
 
     public override void Enter()
     {
+        Debug.Log($"Hunter entra en Gather. Objetivo: {target.name}");
         gatherTimer = 0f;
         hasReachedTarget = false;
     }

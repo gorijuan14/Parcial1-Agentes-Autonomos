@@ -48,16 +48,24 @@ public class HunterAttackState : HunterState
             target.position
         );
 
-        EvaluateAttackRange(distance);
-
-        if (distance <= hunterAgent.MeleeAttackRadius)
+        if (distance > hunterAgent.MeleeAttackRadius)
         {
-            hunter.ChangeState(
-                new HunterGatherState(hunter, target)
-            );
+            agent.SetBehaviour(pursue);
 
-            return;
+            if (distance <= hunterAgent.RangeAttackRadius)
+            {
+                TryRangedAttack();
+            }
         }
+        else
+        {
+            agent.SetBehaviour(null);
+            agent.StopMovement();
+
+            TryMeleeAttack();
+        }
+
+        EvaluateAttackRange(distance);
 
         Transform boid = sensor.GetClosestBoid();
 
@@ -91,6 +99,44 @@ public class HunterAttackState : HunterState
         {
             Debug.Log("Hunter: CHASE");
         }
+    }
+
+    private void TryMeleeAttack()
+    {
+        if (attackCooldown < hunterAgent.TBA)
+        {
+            return;
+        }
+
+        Debug.Log("HUNTER MELEE ATTACK!");
+
+        Boid boid = target.GetComponent<Boid>();
+
+        if (boid != null)
+        {
+            boid.TakeDamage(3);
+        }
+
+        attackCooldown = 0f;
+    }
+
+    private void TryRangedAttack()
+    {
+        if (attackCooldown < hunterAgent.TBA)
+        {
+            return;
+        }
+
+        Debug.Log("HUNTER RANGED ATTACK!");
+
+        Boid boid = target.GetComponent<Boid>();
+
+        if (boid != null)
+        {
+            boid.TakeDamage(1);
+        }
+
+        attackCooldown = 0f;
     }
 
     public override void Exit()

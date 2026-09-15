@@ -6,9 +6,16 @@ public class Boid : Agent
     private Flocking flocking;
     private bool isCollected;
 
+    [SerializeField] private int maxHealth = 3;
+
+    private int currentHealth;
+    private bool isDead;
+
     protected override void Start()
     {
         base.Start();
+
+        currentHealth = maxHealth;
 
         patrol = GetComponent<Patrol>();
         flocking = GetComponent<Flocking>();
@@ -38,7 +45,7 @@ public class Boid : Agent
 
     public void Collect()
     {
-        if (isCollected)
+        if (isCollected || isDead)
         {
             return;
         }
@@ -47,6 +54,31 @@ public class Boid : Agent
         StopMovement();
     }
 
+    public void TakeDamage(int damage)
+    {
+        if (isDead)
+        {
+            return;
+        }
+
+        currentHealth -= damage;
+
+        Debug.Log($"{name} recibió {damage} de daño. HP: {currentHealth}");
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        isDead = true;
+
+        StopMovement();
+
+        Debug.Log($"{name} murió.");
+    }
 
     public void Disappear()
     {

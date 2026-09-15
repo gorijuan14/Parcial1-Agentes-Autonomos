@@ -13,6 +13,7 @@ public class HunterPatrolState : HunterState
 
     public override void Enter()
     {
+        Debug.Log($"Hunter entra en Patrol.");
         hunter.GetComponent<Hunter>().SetBehaviour(patrol);
     }
 
