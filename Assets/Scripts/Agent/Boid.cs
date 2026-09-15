@@ -18,7 +18,7 @@ public class Boid : Agent
 
     [Header("Bait")]
     [SerializeField] private float baitDamageInterval = 1f;
-    [SerializeField] private float baitDamageDistance = 5f;
+    [SerializeField] private float baitDamageDistance = 0.5f;
     private float baitDamageTimer;
 
     protected override void Start()
@@ -50,6 +50,7 @@ public class Boid : Agent
                 {
                     currentBait = bait;
                     arrive.SetTarget(bait.transform);
+                    baitDamageTimer = 0f;
                 }
             }
         }
@@ -58,7 +59,33 @@ public class Boid : Agent
 
         if (currentBait != null)
         {
-            steering = arrive.CalculateSteering();
+            float distance = Vector3.Distance(
+                transform.position,
+                currentBait.transform.position
+            );
+
+            if (distance > baitDamageDistance)
+            {
+                steering = arrive.CalculateSteering();
+            }
+            else
+            {
+                StopMovement();
+
+                baitDamageTimer += Time.deltaTime;
+
+                if (baitDamageTimer >= baitDamageInterval)
+                {
+                    baitDamageTimer = 0f;
+                    currentBait.TakeDamage(1);
+                }
+
+                if (currentBait == null || currentBait.IsDestroyed)
+                {
+                    currentBait = null;
+                    baitDamageTimer = 0f;
+                }
+            }
         }
         else
         {
