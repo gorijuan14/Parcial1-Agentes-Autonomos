@@ -68,6 +68,7 @@ public class Boid : Agent
 
         if (currentHealth <= 0)
         {
+            currentHealth = 0;
             Die();
         }
     }
