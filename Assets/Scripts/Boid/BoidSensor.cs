@@ -4,14 +4,14 @@ public class BoidSensor : MonoBehaviour
 {
     [SerializeField] private float perceptionRadius = 7f;
 
-    public Transform GetClosestBait()
+    public Bait GetClosestBait()
     {
         Collider[] colliders = Physics.OverlapSphere(
             transform.position,
             perceptionRadius
         );
 
-        Transform closestBait = null;
+        Bait closestBait = null;
         float closestDistance = Mathf.Infinity;
 
         foreach (Collider collider in colliders)
@@ -31,10 +31,10 @@ public class BoidSensor : MonoBehaviour
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestBait = bait.transform;
+                closestBait = bait;
             }
         }
-        
+
         return closestBait;
     }
 }

@@ -8,9 +8,32 @@ public class Bait : MonoBehaviour
 
     public bool IsDestroyed => currentHealth <= 0;
 
+    private Boid assignedBoid;
+
+    public bool IsAvailable => assignedBoid == null;
+
     private void Start()
     {
         currentHealth = maxHealth;
+    }
+
+    public bool TryAssignBoid(Boid boid)
+    {
+        if (assignedBoid != null)
+        {
+            return false;
+        }
+
+        assignedBoid = boid;
+        return true;
+    }
+
+    public void ReleaseBoid(Boid boid)
+    {
+        if (assignedBoid == boid)
+        {
+            assignedBoid = null;
+        }
     }
 
     public void TakeDamage(int damage)

@@ -7,6 +7,7 @@ public class Boid : Agent
     private bool isCollected;
     private BoidSensor sensor;
     private Arrive arrive;
+    private Bait currentBait;
 
     [SerializeField] private int maxHealth = 3;
 
@@ -33,27 +34,37 @@ public class Boid : Agent
             return;
         }
 
-        Transform bait = sensor.GetClosestBait();
-
-        if (bait != null && arrive != null)
+        if (currentBait == null)
         {
-            arrive.SetTarget(bait);
+            Bait bait = sensor.GetClosestBait();
 
-            SetBehaviour(arrive);
-
-            return;
+            if (bait != null && bait.IsAvailable)
+            {
+                if (bait.TryAssignBoid(this))
+                {
+                    currentBait = bait;
+                    arrive.SetTarget(bait.transform);
+                }
+            }
         }
 
         Vector3 steering = Vector3.zero;
 
-        if (patrol != null)
+        if (currentBait != null)
         {
-            steering += patrol.CalculateSteering();
+            steering = arrive.CalculateSteering();
         }
-
-        if (flocking != null)
+        else
         {
-            steering += flocking.CalculateSteering();
+            if (patrol != null)
+            {
+                steering += patrol.CalculateSteering();
+            }
+
+            if (flocking != null)
+            {
+                steering += flocking.CalculateSteering();
+            }
         }
 
         Move(steering);
