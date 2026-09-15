@@ -43,6 +43,17 @@ public class HunterAttackState : HunterState
             return;
         }
 
+        Boid targetBoid = target.GetComponent<Boid>();
+
+        if (targetBoid != null && targetBoid.IsDead)
+        {
+            hunter.ChangeState(
+                new HunterGatherState(hunter, target)
+            );
+
+            return;
+        }
+
         float distance = Vector3.Distance(
             hunter.transform.position,
             target.position

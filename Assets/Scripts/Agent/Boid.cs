@@ -10,6 +10,7 @@ public class Boid : Agent
 
     private int currentHealth;
     private bool isDead;
+    public bool IsDead => isDead;
 
     protected override void Start()
     {
@@ -45,7 +46,7 @@ public class Boid : Agent
 
     public void Collect()
     {
-        if (isCollected || isDead)
+        if (isCollected)
         {
             return;
         }
