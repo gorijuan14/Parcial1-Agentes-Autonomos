@@ -1418,6 +1418,9 @@ MonoBehaviour:
   tba: 2
   rangeAttackRadius: 5
   meleeAttackRadius: 0.5
+  baitPrefab: {fileID: 9196822281313155335, guid: c6facc992c9106241b9b6e925c0c49ef, type: 3}
+  maxBait: 5
+  baitSpawnInterval: 5
 --- !u!114 &796407653
 MonoBehaviour:
   m_ObjectHideFlags: 0
