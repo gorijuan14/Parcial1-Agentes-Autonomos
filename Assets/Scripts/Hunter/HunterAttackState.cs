@@ -5,12 +5,15 @@ public class HunterAttackState : HunterState
     private Agent agent;
     private Pursue pursue;
     private HunterSensor sensor;
+    private Hunter hunterAgent;
 
+    private float attackCooldown;
     [SerializeField] private Transform target;
 
     public HunterAttackState(HunterFSM hunter, Transform target) : base(hunter)
     {
         agent = hunter.GetComponent<Agent>();
+        hunterAgent = hunter.GetComponent<Hunter>();
         pursue = hunter.GetComponent<Pursue>();
         sensor = hunter.GetComponentInChildren<HunterSensor>();
 
@@ -19,12 +22,18 @@ public class HunterAttackState : HunterState
 
     public override void Enter()
     {
+        attackCooldown = 0f;
+
         pursue.SetTarget(target);
         agent.SetBehaviour(pursue);
+
+        Debug.Log($"Hunter entra en Attack. Objetivo: {target.name}");
     }
 
     public override void Update()
     {
+        attackCooldown += Time.deltaTime;
+        
         if (target == null)
         {
             hunter.ChangeState(
