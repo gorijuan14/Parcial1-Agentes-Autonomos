@@ -6,6 +6,7 @@ public class Boid : Agent
     private Flocking flocking;
     private bool isCollected;
     private BoidSensor sensor;
+    private Arrive arrive;
 
     [SerializeField] private int maxHealth = 3;
 
@@ -19,6 +20,7 @@ public class Boid : Agent
 
         currentHealth = maxHealth;
 
+        arrive = GetComponent<Arrive>();
         patrol = GetComponent<Patrol>();
         flocking = GetComponent<Flocking>();
         sensor = GetComponentInChildren<BoidSensor>();
@@ -26,16 +28,19 @@ public class Boid : Agent
 
     protected override void Update()
     {
+        if (isCollected || isDead)
+        {
+            return;
+        }
 
         Transform bait = sensor.GetClosestBait();
 
-        if (bait != null)
+        if (bait != null && arrive != null)
         {
-            Debug.Log($"{name} detectó Bait: {bait.name}");
-        }
+            arrive.SetTarget(bait);
 
-        if (isCollected)
-        {
+            SetBehaviour(arrive);
+
             return;
         }
 
