@@ -26,8 +26,6 @@ public class HunterAttackState : HunterState
 
         pursue.SetTarget(target);
         agent.SetBehaviour(pursue);
-
-        Debug.Log($"Hunter entra en Attack. Objetivo: {target.name}");
     }
 
     public override void Update()
@@ -119,8 +117,6 @@ public class HunterAttackState : HunterState
             return;
         }
 
-        Debug.Log("HUNTER MELEE ATTACK!");
-
         Boid boid = target.GetComponent<Boid>();
 
         if (boid != null)
@@ -137,8 +133,6 @@ public class HunterAttackState : HunterState
         {
             return;
         }
-
-        Debug.Log("HUNTER RANGED ATTACK!");
 
         Boid boid = target.GetComponent<Boid>();
 

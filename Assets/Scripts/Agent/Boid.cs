@@ -5,6 +5,7 @@ public class Boid : Agent
     private Patrol patrol;
     private Flocking flocking;
     private bool isCollected;
+    private BoidSensor sensor;
 
     [SerializeField] private int maxHealth = 3;
 
@@ -20,10 +21,19 @@ public class Boid : Agent
 
         patrol = GetComponent<Patrol>();
         flocking = GetComponent<Flocking>();
+        sensor = GetComponentInChildren<BoidSensor>();
     }
 
     protected override void Update()
     {
+
+        Transform bait = sensor.GetClosestBait();
+
+        if (bait != null)
+        {
+            Debug.Log($"{name} detectó Bait: {bait.name}");
+        }
+
         if (isCollected)
         {
             return;
@@ -64,8 +74,6 @@ public class Boid : Agent
 
         currentHealth -= damage;
 
-        Debug.Log($"{name} recibió {damage} de daño. HP: {currentHealth}");
-
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -78,8 +86,6 @@ public class Boid : Agent
         isDead = true;
 
         StopMovement();
-
-        Debug.Log($"{name} murió.");
     }
 
     public void Disappear()

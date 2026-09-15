@@ -58,8 +58,6 @@ public class Hunter : Agent
             spawnPosition,
             Quaternion.identity
         );
-
-        Debug.Log("Hunter generó un Bait.");
     }
 
     public bool ShouldSpawnBait()
