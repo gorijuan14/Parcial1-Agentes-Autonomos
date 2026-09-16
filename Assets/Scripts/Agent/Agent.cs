@@ -3,21 +3,21 @@ using UnityEngine;
 public abstract class Agent : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] protected float maxSpeed = 5f;
-    [SerializeField] protected float maxAcceleration = 10f;
-    [SerializeField] protected float maxTurnSpeed = 360f;
-    [SerializeField] protected Vector3 initialVelocity;
+    private Bounds bounds;
     protected SteeringBehaviour currentBehaviour;
-    
-    [Header("Stats")]
-    protected Vector3 velocity;
     public Vector3 Velocity => velocity;
     public float MaxSpeed => maxSpeed;
     public float MaxAcceleration => maxAcceleration;
 
+    [Header("Stats")]
+    [SerializeField] protected float maxSpeed = 5f;
+    [SerializeField] protected float maxAcceleration = 10f;
+    [SerializeField] protected float maxTurnSpeed = 360f;
+    protected Vector3 velocity;
+
     protected virtual void Start()
     {
-        velocity = initialVelocity;
+        bounds = FindFirstObjectByType<Bounds>();
     }
 
     protected virtual void Update()
@@ -28,6 +28,11 @@ public abstract class Agent : MonoBehaviour
         }
 
         Move(currentBehaviour.CalculateSteering());
+
+        if (bounds != null)
+        {
+            bounds.WrapPosition(transform);
+        }
     }
 
     public void SetBehaviour(SteeringBehaviour behaviour)
@@ -69,6 +74,14 @@ public abstract class Agent : MonoBehaviour
                 targetRotation,
                 maxTurnSpeed * Time.deltaTime
             );
+        }
+    }
+
+    protected void ApplyBounds()
+    {
+        if (bounds != null)
+        {
+            bounds.WrapPosition(transform);
         }
     }
 }

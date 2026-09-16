@@ -44,10 +44,6 @@ public class Bait : MonoBehaviour
 
         currentHealth -= damage;
 
-        Debug.Log(
-            $"{name} recibió {damage} de daño. HP: {currentHealth}"
-        );
-
         if (currentHealth <= 0)
         {
             DestroyObject();
@@ -56,8 +52,6 @@ public class Bait : MonoBehaviour
 
     private void DestroyObject()
     {
-        Debug.Log($"{name} fue destruido.");
-
         Destroy(gameObject);
     }
 }

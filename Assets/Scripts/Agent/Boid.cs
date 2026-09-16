@@ -50,6 +50,7 @@ public class Boid : Agent
             
             Vector3 _steering = evade.CalculateSteering();
             Move(_steering);
+            ApplyBounds();
 
             return;
         }
@@ -109,6 +110,8 @@ public class Boid : Agent
         }
 
         Move(steering);
+
+        ApplyBounds();
     }
 
     private void FinishEatingBait()
