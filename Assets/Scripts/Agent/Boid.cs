@@ -77,7 +77,7 @@ public class Boid : Agent
                 transform.position,
                 currentBait.transform.position
             );
-
+            
             if (distance > baitDamageDistance)
             {
                 steering = arrive.CalculateSteering();
@@ -92,12 +92,6 @@ public class Boid : Agent
                 {
                     baitDamageTimer = 0f;
                     currentBait.TakeDamage(1);
-                }
-
-                if (currentBait == null || currentBait.IsDestroyed)
-                {
-                    currentBait = null;
-                    baitDamageTimer = 0f;
                 }
             }
         }
@@ -115,6 +109,17 @@ public class Boid : Agent
         }
 
         Move(steering);
+    }
+
+    private void FinishEatingBait()
+    {
+        if (currentBait != null)
+        {
+            currentBait.ReleaseBoid(this);
+        }
+
+        currentBait = null;
+        baitDamageTimer = 0f;
     }
 
     public void Collect()

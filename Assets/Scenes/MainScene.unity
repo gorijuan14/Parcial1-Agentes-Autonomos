@@ -593,8 +593,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrive
   target: {fileID: 0}
-  slowRadius: 10
-  stopRadius: 5
+  slowRadius: 5
+  stopRadius: 1
 --- !u!114 &371792754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,8 +926,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrive
   target: {fileID: 0}
-  slowRadius: 10
-  stopRadius: 5
+  slowRadius: 5
+  stopRadius: 1
 --- !u!114 &464566870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1101,8 +1101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrive
   target: {fileID: 0}
-  slowRadius: 10
-  stopRadius: 5
+  slowRadius: 5
+  stopRadius: 1
 --- !u!114 &498713770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,7 +1454,6 @@ GameObject:
   - component: {fileID: 796407648}
   - component: {fileID: 796407653}
   - component: {fileID: 796407656}
-  - component: {fileID: 796407657}
   m_Layer: 0
   m_Name: Hunter_1
   m_TagString: Untagged
@@ -1560,7 +1559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2269613b536c8a14c84a83e2eb3131a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
-  maxSpeed: 6.5
+  maxSpeed: 5.1
   maxAcceleration: 10
   maxTurnSpeed: 360
   initialVelocity: {x: 0, y: 0, z: 0}
@@ -1594,21 +1593,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72fff684daf2a494fbf52607450663dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pursue
-  target: {fileID: 0}
-  maxPredictionTime: 2
-  predictionTime: 0
---- !u!114 &796407657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796407645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 681ee4ebc395bd74b81fb672b48c160a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Seek
   target: {fileID: 0}
 --- !u!1001 &828282525
 PrefabInstance:
@@ -2489,8 +2473,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrive
   target: {fileID: 0}
-  slowRadius: 10
-  stopRadius: 5
+  slowRadius: 5
+  stopRadius: 1
 --- !u!114 &1715591420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2609,8 +2593,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrive
   target: {fileID: 0}
-  slowRadius: 10
-  stopRadius: 5
+  slowRadius: 5
+  stopRadius: 1
 --- !u!114 &1721795446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2965,8 +2949,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrive
   target: {fileID: 0}
-  slowRadius: 10
-  stopRadius: 5
+  slowRadius: 5
+  stopRadius: 1
 --- !u!114 &1968253050
 MonoBehaviour:
   m_ObjectHideFlags: 0
