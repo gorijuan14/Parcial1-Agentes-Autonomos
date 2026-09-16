@@ -176,7 +176,7 @@ public class Boid : Agent
     {
         isCollected = true;
 
-        yield return new WaitForSeconds(respawnDelay);
+        yield return null;
 
         Vector3 respawnPosition = new Vector3(
             Random.Range(respawnMinX, respawnMaxX),
