@@ -5,13 +5,14 @@ public class Boid : Agent
     [Header("References")]
     private Patrol patrol;
     private Flocking flocking;
-    private bool isCollected;
-    private BoidSensor sensor;
+    private Evade evade;
     private Arrive arrive;
+    private BoidSensor sensor;
     private Bait currentBait;
+    private bool isCollected;
 
     [Header("Health")]
-    [SerializeField] private int maxHealth = 3;
+    [SerializeField] private int maxHealth = 5;
     private int currentHealth;
     private bool isDead;
     public bool IsDead => isDead;
@@ -27,6 +28,7 @@ public class Boid : Agent
 
         currentHealth = maxHealth;
 
+        evade = GetComponent<Evade>();
         arrive = GetComponent<Arrive>();
         patrol = GetComponent<Patrol>();
         flocking = GetComponent<Flocking>();
@@ -37,6 +39,18 @@ public class Boid : Agent
     {
         if (isCollected || isDead)
         {
+            return;
+        }
+
+        Transform hunter = sensor.GetClosestHunter();
+
+        if (hunter != null && evade != null)
+        {
+            evade.SetTarget(hunter);
+            
+            Vector3 _steering = evade.CalculateSteering();
+            Move(_steering);
+
             return;
         }
 

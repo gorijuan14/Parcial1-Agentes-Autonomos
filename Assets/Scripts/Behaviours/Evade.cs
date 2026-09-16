@@ -8,6 +8,7 @@ public class Evade : SteeringBehaviour
     
     [Header("Stats")]
     [SerializeField] private float predictionTime = 0.1f;
+    [SerializeField] private float evadeStrength = 0.5f;
 
     private void Awake()
     {
@@ -35,6 +36,16 @@ public class Evade : SteeringBehaviour
             return Vector3.zero;
         }
 
-        return direction.normalized * targetAgent.MaxAcceleration;
+        return direction.normalized * targetAgent.MaxAcceleration * evadeStrength;
     }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+
+        targetAgent = newTarget != null
+            ? newTarget.GetComponent<Agent>()
+            : null;
+    }
+
 }

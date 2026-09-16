@@ -3,7 +3,7 @@ using UnityEngine;
 public class HunterSensor : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField] private float perceptionRadius = 15f;
+    [SerializeField] private float perceptionRadius = 7f;
 
     public Transform GetClosestBoid()
     {
