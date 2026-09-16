@@ -5,16 +5,19 @@ public class HunterGatherState : HunterState
     [Header("References")]
     private Agent agent;
     private Transform target;
+    private Pursue pursue;
+
 
     [Header("Stats")]
     private float gatherDuration = 2f;
     private float gatherTimer;
-    private float gatherRadius = 0.5f;
+    private float gatherRadius = 1f;
     private bool hasReachedTarget;
 
     public HunterGatherState(HunterFSM hunter, Transform target) : base(hunter)
     {
         agent = hunter.GetComponent<Agent>();
+        pursue = hunter.GetComponent<Pursue>();
         this.target = target;
     }
 
@@ -22,6 +25,11 @@ public class HunterGatherState : HunterState
     {
         gatherTimer = 0f;
         hasReachedTarget = false;
+
+        pursue.SetTarget(target);
+        agent.SetBehaviour(pursue);
+
+        Debug.Log($"Hunter entra en Gather. Objetivo: {target.name}");
     }
 
     public override void Update()
