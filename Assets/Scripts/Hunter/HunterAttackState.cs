@@ -59,13 +59,15 @@ public class HunterAttackState : HunterState
             target.position
         );
 
+        bool targetDied = false;
+
         if (distance > hunterAgent.MeleeAttackRadius)
         {
             agent.SetBehaviour(pursue);
 
             if (distance <= hunterAgent.RangeAttackRadius)
             {
-                TryRangedAttack();
+                targetDied = TryRangedAttack();
             }
         }
         else
@@ -73,10 +75,17 @@ public class HunterAttackState : HunterState
             agent.SetBehaviour(null);
             agent.StopMovement();
 
-            TryMeleeAttack();
+            targetDied = TryMeleeAttack();
         }
 
-        EvaluateAttackRange(distance);
+        if (targetDied)
+        {
+            hunter.ChangeState(
+                new HunterGatherState(hunter, target)
+            );
+
+            return;
+        }
 
         Transform boid = sensor.GetClosestBoid();
 
@@ -96,27 +105,11 @@ public class HunterAttackState : HunterState
         }
     }
 
-    private void EvaluateAttackRange(float distance)
-    {
-        if (distance <= hunterAgent.MeleeAttackRadius)
-        {
-            Debug.Log("Hunter: MELEE");
-        }
-        else if (distance <= hunterAgent.RangeAttackRadius)
-        {
-            Debug.Log("Hunter: RANGED");
-        }
-        else
-        {
-            Debug.Log("Hunter: CHASE");
-        }
-    }
-
-    private void TryMeleeAttack()
+    private bool TryMeleeAttack()
     {
         if (attackCooldown < hunterAgent.TBA)
         {
-            return;
+            return false;
         }
 
         Boid boid = target.GetComponent<Boid>();
@@ -127,13 +120,15 @@ public class HunterAttackState : HunterState
         }
 
         attackCooldown = 0f;
+
+        return boid != null && boid.IsDead;
     }
 
-    private void TryRangedAttack()
+    private bool TryRangedAttack()
     {
         if (attackCooldown < hunterAgent.TBA)
         {
-            return;
+            return false;
         }
 
         Boid boid = target.GetComponent<Boid>();
@@ -144,6 +139,8 @@ public class HunterAttackState : HunterState
         }
 
         attackCooldown = 0f;
+
+        return boid != null && boid.IsDead;
     }
 
     public override void Exit()

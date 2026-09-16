@@ -19,7 +19,7 @@ public class HunterSensor : MonoBehaviour
         {
             Boid boid = collider.GetComponent<Boid>();
 
-            if (boid == null)
+            if (boid == null || boid.IsDead)
             {
                 continue;
             }

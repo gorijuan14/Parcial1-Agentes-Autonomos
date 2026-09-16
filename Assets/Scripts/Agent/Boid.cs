@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Boid : Agent
 {
@@ -16,6 +17,13 @@ public class Boid : Agent
     private int currentHealth;
     private bool isDead;
     public bool IsDead => isDead;
+
+    [Header("Respawn")]
+    [SerializeField] private float respawnDelay = 5f;
+    [SerializeField] private float respawnMinX = -20f;
+    [SerializeField] private float respawnMaxX = 20f;
+    [SerializeField] private float respawnMinZ = -20f;
+    [SerializeField] private float respawnMaxZ = 20f;
 
     [Header("Bait")]
     [SerializeField] private float baitDamageInterval = 1f;
@@ -161,6 +169,26 @@ public class Boid : Agent
 
     public void Disappear()
     {
-        gameObject.SetActive(false);
+        StartCoroutine(RespawnRoutine());
     }
+
+    private IEnumerator RespawnRoutine()
+    {
+        isCollected = true;
+
+        yield return new WaitForSeconds(respawnDelay);
+
+        Vector3 respawnPosition = new Vector3(
+            Random.Range(respawnMinX, respawnMaxX),
+            transform.position.y,
+            Random.Range(respawnMinZ, respawnMaxZ)
+        );
+
+        transform.position = respawnPosition;
+
+        currentHealth = maxHealth;
+        isDead = false;
+        isCollected = false;
+    }
+
 }
