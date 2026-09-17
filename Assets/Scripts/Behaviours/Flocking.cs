@@ -6,9 +6,9 @@ public class Flocking : SteeringBehaviour
     [SerializeField] private float separationRadius = 2f;
     [SerializeField] private float alignmentRadius = 5f;
     [SerializeField] private float cohesionRadius = 5f;
-    [SerializeField, Range(0f, 1f)] private float separationWeight = 1f;
-    [SerializeField, Range(0f, 1f)] private float alignmentWeight = 1f;
-    [SerializeField, Range(0f, 1f)] private float cohesionWeight = 1f;
+    [SerializeField, Range(0f, 5f)] private float separationWeight = 1f;
+    [SerializeField, Range(0f, 5f)] private float alignmentWeight = 1f;
+    [SerializeField, Range(0f, 5f)] private float cohesionWeight = 1f;
 
     
 

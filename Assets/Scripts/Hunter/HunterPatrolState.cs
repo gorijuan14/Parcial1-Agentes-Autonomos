@@ -6,6 +6,7 @@ public class HunterPatrolState : HunterState
     private Patrol patrol;
     private HunterSensor sensor;
     private Hunter hunterAgent;
+    private StateIndicator stateIndicator;
 
     [Header("Bait")]
     private float baitPlacementTimer;
@@ -16,11 +17,14 @@ public class HunterPatrolState : HunterState
         patrol = hunter.GetComponent<Patrol>();
         sensor = hunter.GetComponentInChildren<HunterSensor>();
         hunterAgent = hunter.GetComponent<Hunter>();
+        stateIndicator = hunter.GetComponentInChildren<StateIndicator>();
     }
 
     public override void Enter()
     {
         hunter.GetComponent<Hunter>().SetBehaviour(patrol);
+
+        stateIndicator.SetHunterPatrol();
     }
 
     public override void Update()
@@ -34,7 +38,7 @@ public class HunterPatrolState : HunterState
             if (baitPlacementTimer >= 1f)
             {
                 hunterAgent.SpawnBait();
-
+                stateIndicator.SetHunterPatrol();
                 isPlacingBait = false;
             }
 
@@ -45,7 +49,7 @@ public class HunterPatrolState : HunterState
         {
             isPlacingBait = true;
             baitPlacementTimer = 0f;
-
+            stateIndicator.SetHunterBait();
             hunter.GetComponent<Agent>().StopMovement();
 
             return;
@@ -59,6 +63,8 @@ public class HunterPatrolState : HunterState
                 new HunterAttackState(hunter, boid)
             );
         }
+
+
     }
     public override void Exit()
     {

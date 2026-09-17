@@ -11,6 +11,7 @@ public class Boid : Agent
     private BoidSensor sensor;
     private Bait currentBait;
     private bool isCollected;
+    private StateIndicator stateIndicator;
 
     [Header("Health")]
     [SerializeField] private int maxHealth = 5;
@@ -19,7 +20,6 @@ public class Boid : Agent
     public bool IsDead => isDead;
 
     [Header("Respawn")]
-    [SerializeField] private float respawnDelay = 5f;
     [SerializeField] private float respawnMinX = -20f;
     [SerializeField] private float respawnMaxX = 20f;
     [SerializeField] private float respawnMinZ = -20f;
@@ -41,6 +41,7 @@ public class Boid : Agent
         patrol = GetComponent<Patrol>();
         flocking = GetComponent<Flocking>();
         sensor = GetComponentInChildren<BoidSensor>();
+        stateIndicator = GetComponentInChildren<StateIndicator>();
     }
 
     protected override void Update()
@@ -55,8 +56,16 @@ public class Boid : Agent
         if (hunter != null && evade != null)
         {
             evade.SetTarget(hunter);
-            
+
             Vector3 _steering = evade.CalculateSteering();
+
+            if (flocking != null)
+            {
+                _steering += flocking.CalculateSteering();
+            }
+
+            stateIndicator.SetBoidEvade();
+
             Move(_steering);
             ApplyBounds();
 
@@ -95,6 +104,8 @@ public class Boid : Agent
             {
                 StopMovement();
 
+                stateIndicator.SetBoidDistracted();
+
                 baitDamageTimer += Time.deltaTime;
 
                 if (baitDamageTimer >= baitDamageInterval)
@@ -115,6 +126,8 @@ public class Boid : Agent
             {
                 steering += flocking.CalculateSteering();
             }
+
+            stateIndicator.SetBoidPatrol();
         }
 
         Move(steering);

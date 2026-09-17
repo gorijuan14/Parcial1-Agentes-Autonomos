@@ -6,6 +6,7 @@ public class HunterGatherState : HunterState
     private Agent agent;
     private Transform target;
     private Pursue pursue;
+    private StateIndicator stateIndicator;
 
 
     [Header("Stats")]
@@ -19,6 +20,7 @@ public class HunterGatherState : HunterState
         agent = hunter.GetComponent<Agent>();
         pursue = hunter.GetComponent<Pursue>();
         this.target = target;
+        stateIndicator = hunter.GetComponentInChildren<StateIndicator>();
     }
 
     public override void Enter()
@@ -29,7 +31,7 @@ public class HunterGatherState : HunterState
         pursue.SetTarget(target);
         agent.SetBehaviour(pursue);
 
-        Debug.Log($"Hunter entra en Gather. Objetivo: {target.name}");
+        stateIndicator.SetHunterGather();
     }
 
     public override void Update()

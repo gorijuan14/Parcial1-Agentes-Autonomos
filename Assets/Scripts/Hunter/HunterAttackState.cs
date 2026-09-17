@@ -7,6 +7,7 @@ public class HunterAttackState : HunterState
     private Pursue pursue;
     private HunterSensor sensor;
     private Hunter hunterAgent;
+    private StateIndicator stateIndicator;
     [SerializeField] private Transform target;
 
     [Header("Stats")]
@@ -18,6 +19,7 @@ public class HunterAttackState : HunterState
         hunterAgent = hunter.GetComponent<Hunter>();
         pursue = hunter.GetComponent<Pursue>();
         sensor = hunter.GetComponentInChildren<HunterSensor>();
+        stateIndicator = hunter.GetComponentInChildren<StateIndicator>();
 
         this.target = target;
     }
@@ -28,6 +30,8 @@ public class HunterAttackState : HunterState
 
         pursue.SetTarget(target);
         agent.SetBehaviour(pursue);
+
+        stateIndicator.SetHunterChase();
     }
 
     public override void Update()
@@ -67,7 +71,12 @@ public class HunterAttackState : HunterState
 
             if (distance <= hunterAgent.RangeAttackRadius)
             {
+                stateIndicator.SetHunterRangedAttack();
                 targetDied = TryRangedAttack();
+            }
+            else
+            {
+                stateIndicator.SetHunterChase();
             }
         }
         else
@@ -75,6 +84,7 @@ public class HunterAttackState : HunterState
             agent.SetBehaviour(null);
             agent.StopMovement();
 
+            stateIndicator.SetHunterMeleeAttack();
             targetDied = TryMeleeAttack();
         }
 
