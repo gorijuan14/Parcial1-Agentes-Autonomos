@@ -1,16 +1,40 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoidHealthBar : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private Image fill;
+
+    private Boid boid;
+
+    private void Awake()
     {
-        
+        boid = GetComponentInParent<Boid>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (boid == null)
+        {
+            return;
+        }
+
+        fill.fillAmount =
+            (float)boid.CurrentHealth / boid.MaxHealth;
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void LateUpdate()
+    {
+        transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
     }
 }

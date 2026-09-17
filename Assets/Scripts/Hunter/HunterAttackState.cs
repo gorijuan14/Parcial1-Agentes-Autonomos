@@ -31,6 +31,13 @@ public class HunterAttackState : HunterState
         pursue.SetTarget(target);
         agent.SetBehaviour(pursue);
 
+        Boid boid = target.GetComponent<Boid>();
+
+        if (boid != null)
+        {
+            boid.ShowHealthBar();
+        }
+
         stateIndicator.SetHunterChase();
     }
 
@@ -110,8 +117,25 @@ public class HunterAttackState : HunterState
 
         if (boid != target)
         {
+            Boid oldBoid = target != null
+                ? target.GetComponent<Boid>()
+                : null;
+
+            if (oldBoid != null)
+            {
+                oldBoid.HideHealthBar();
+            }
+
             target = boid;
+
             pursue.SetTarget(target);
+
+            Boid newBoid = target.GetComponent<Boid>();
+
+            if (newBoid != null)
+            {
+                newBoid.ShowHealthBar();
+            }
         }
     }
 
@@ -155,6 +179,14 @@ public class HunterAttackState : HunterState
 
     public override void Exit()
     {
-    }
+        if (target != null)
+        {
+            Boid boid = target.GetComponent<Boid>();
 
+            if (boid != null)
+            {
+                boid.HideHealthBar();
+            }
+        }
+    }
 }

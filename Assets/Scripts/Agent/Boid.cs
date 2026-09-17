@@ -12,12 +12,15 @@ public class Boid : Agent
     private Bait currentBait;
     private bool isCollected;
     private StateIndicator stateIndicator;
+    private BoidHealthBar healthBar;
 
     [Header("Health")]
     [SerializeField] private int maxHealth = 5;
     private int currentHealth;
     private bool isDead;
     public bool IsDead => isDead;
+    public int CurrentHealth => currentHealth;
+    public int MaxHealth => maxHealth;
 
     [Header("Respawn")]
     [SerializeField] private float respawnMinX = -20f;
@@ -42,6 +45,12 @@ public class Boid : Agent
         flocking = GetComponent<Flocking>();
         sensor = GetComponentInChildren<BoidSensor>();
         stateIndicator = GetComponentInChildren<StateIndicator>();
+        healthBar = GetComponentInChildren<BoidHealthBar>(true);
+
+        if (healthBar != null)
+        {
+            healthBar.Hide();
+        }
     }
 
     protected override void Update()
@@ -155,6 +164,22 @@ public class Boid : Agent
 
         isCollected = true;
         StopMovement();
+    }
+
+    public void ShowHealthBar()
+    {
+        if (healthBar != null)
+        {
+            healthBar.Show();
+        }
+    }
+
+    public void HideHealthBar()
+    {
+        if (healthBar != null)
+        {
+            healthBar.Hide();
+        }
     }
 
     public void TakeDamage(int damage)
