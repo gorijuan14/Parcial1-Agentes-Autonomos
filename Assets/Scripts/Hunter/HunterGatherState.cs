@@ -4,10 +4,9 @@ public class HunterGatherState : HunterState
 {
     [Header("References")]
     private Agent agent;
-    private Transform target;
     private Pursue pursue;
+    private Hunter hunterAgent;
     private StateIndicator stateIndicator;
-
 
     [Header("Stats")]
     private float gatherDuration = 2f;
@@ -15,11 +14,12 @@ public class HunterGatherState : HunterState
     private float gatherRadius = 1f;
     private bool hasReachedTarget;
 
-    public HunterGatherState(HunterFSM hunter, Transform target) : base(hunter)
+    public HunterGatherState(HunterFSM hunterFSM, Hunter hunter)
+        : base(hunterFSM, hunter)
     {
         agent = hunter.GetComponent<Agent>();
         pursue = hunter.GetComponent<Pursue>();
-        this.target = target;
+        hunterAgent = hunter;
         stateIndicator = hunter.GetComponentInChildren<StateIndicator>();
     }
 
@@ -27,6 +27,14 @@ public class HunterGatherState : HunterState
     {
         gatherTimer = 0f;
         hasReachedTarget = false;
+
+        Transform target = hunterAgent.CurrentTarget;
+
+        if (target == null)
+        {
+            hunterFSM.ChangeState(HunterStates.Patrol);
+            return;
+        }
 
         pursue.SetTarget(target);
         agent.SetBehaviour(pursue);
@@ -36,12 +44,11 @@ public class HunterGatherState : HunterState
 
     public override void Update()
     {
+        Transform target = hunterAgent.CurrentTarget;
+
         if (target == null)
         {
-            hunter.ChangeState(
-                new HunterPatrolState(hunter)
-            );
-
+            hunterFSM.ChangeState(HunterStates.Patrol);
             return;
         }
 
@@ -83,9 +90,9 @@ public class HunterGatherState : HunterState
                 boid.Disappear();
             }
 
-            hunter.ChangeState(
-                new HunterPatrolState(hunter)
-            );
+            hunterAgent.ClearTarget();
+
+            hunterFSM.ChangeState(HunterStates.Patrol);
         }
     }
 

@@ -35,9 +35,17 @@ public class StateIndicator : MonoBehaviour
 
     private IndicatorState currentState;
 
-    private void Awake()
+    private SpriteRenderer SpriteRenderer
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        get
+        {
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = GetComponent<SpriteRenderer>();
+            }
+
+            return spriteRenderer;
+        }
     }
 
     private void Update()
@@ -45,14 +53,14 @@ public class StateIndicator : MonoBehaviour
         if (currentState != IndicatorState.Patrol)
         return;
 
-        if (!spriteRenderer.enabled)
+        if (!SpriteRenderer.enabled)
             return;
 
         patrolTimer += Time.deltaTime;
 
         if (patrolTimer >= patrolHideDelay)
         {
-            spriteRenderer.enabled = false;
+            SpriteRenderer.enabled = false;
         }
     }
 
@@ -67,8 +75,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.Patrol;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = hunterPatrol;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = hunterPatrol;   
         }
     }
 
@@ -78,8 +86,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.Chase;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = hunterChase;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = hunterChase;   
         }
     }
 
@@ -89,8 +97,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.RangedAttack;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = hunterRangedAttack;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = hunterRangedAttack;   
         }
     }
 
@@ -100,8 +108,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.MeleeAttack;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = hunterMeleeAttack;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = hunterMeleeAttack;   
         }
     }
 
@@ -111,8 +119,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.Gather;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = hunterGather;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = hunterGather;   
         }
     }
 
@@ -122,8 +130,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.Bait;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = hunterBait;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = hunterBait;   
         }
     }
 
@@ -133,8 +141,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.Patrol;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = boidPatrol;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = boidPatrol;   
         }
     }
 
@@ -144,8 +152,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.Evade;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = boidEvade;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = boidEvade;   
         }
     }
 
@@ -155,8 +163,8 @@ public class StateIndicator : MonoBehaviour
         {
             currentState = IndicatorState.Distracted;
             patrolTimer = 0f;
-            spriteRenderer.enabled = true; 
-            spriteRenderer.sprite = boidDistracted;   
+            SpriteRenderer.enabled = true; 
+            SpriteRenderer.sprite = boidDistracted;   
         }
     }
 }

@@ -1,35 +1,31 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
 
-public class HunterFSM : MonoBehaviour
+public class HunterFSM
 {
-    [Header("References")]
     private HunterState currentState;
+    private Dictionary<Enum, HunterState> states = new Dictionary<Enum, HunterState>();
 
-    private void Start()
+    public void RegisterState(Enum key, HunterState state)
     {
-        ChangeState(new HunterPatrolState(this));
+        states[key] = state;
     }
 
-    private void Update()
+    public void ChangeState(Enum key)
     {
-        if (currentState != null)
-        {
-            currentState.Update();
-        }
-    }
+        if(!states.ContainsKey(key)) return;
 
-    public void ChangeState(HunterState newState)
-    {
-        if (currentState != null)
-        {
-            currentState.Exit();
-        }
+        HunterState newState = states[key];
 
+        if (newState == currentState) return;
+            
+        currentState?.Exit();
         currentState = newState;
+        currentState.Enter();
+    }
 
-        if (currentState != null)
-        {
-            currentState.Enter();
-        }
+    public void Update()
+    {
+        currentState?.Update();
     }
 }

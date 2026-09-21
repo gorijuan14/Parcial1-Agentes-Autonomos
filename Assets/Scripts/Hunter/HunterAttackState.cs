@@ -8,25 +8,30 @@ public class HunterAttackState : HunterState
     private HunterSensor sensor;
     private Hunter hunterAgent;
     private StateIndicator stateIndicator;
-    [SerializeField] private Transform target;
 
     [Header("Stats")]
     private float attackCooldown;
-    
-    public HunterAttackState(HunterFSM hunter, Transform target) : base(hunter)
+
+    public HunterAttackState(HunterFSM hunterFSM, Hunter hunter) : base(hunterFSM, hunter)
     {
         agent = hunter.GetComponent<Agent>();
         hunterAgent = hunter.GetComponent<Hunter>();
         pursue = hunter.GetComponent<Pursue>();
         sensor = hunter.GetComponentInChildren<HunterSensor>();
         stateIndicator = hunter.GetComponentInChildren<StateIndicator>();
-
-        this.target = target;
     }
 
     public override void Enter()
     {
         attackCooldown = 0f;
+
+        Transform target = hunterAgent.CurrentTarget;
+
+        if (target == null)
+        {
+            hunterFSM.ChangeState(HunterStates.Patrol);
+            return;
+        }
 
         pursue.SetTarget(target);
         agent.SetBehaviour(pursue);
@@ -45,23 +50,21 @@ public class HunterAttackState : HunterState
     {
         attackCooldown += Time.deltaTime;
 
+        Transform target = hunterAgent.CurrentTarget;
+
+        // No tenemos objetivo
         if (target == null)
         {
-            hunter.ChangeState(
-                new HunterPatrolState(hunter)
-            );
-
+            hunterFSM.ChangeState(HunterStates.Patrol);
             return;
         }
 
         Boid targetBoid = target.GetComponent<Boid>();
 
+        // El objetivo murió
         if (targetBoid != null && targetBoid.IsDead)
         {
-            hunter.ChangeState(
-                new HunterGatherState(hunter, target)
-            );
-
+            hunterFSM.ChangeState(HunterStates.Gather);
             return;
         }
 
@@ -79,7 +82,7 @@ public class HunterAttackState : HunterState
             if (distance <= hunterAgent.RangeAttackRadius)
             {
                 stateIndicator.SetHunterRangedAttack();
-                targetDied = TryRangedAttack();
+                targetDied = TryRangedAttack(target);
             }
             else
             {
@@ -92,45 +95,39 @@ public class HunterAttackState : HunterState
             agent.StopMovement();
 
             stateIndicator.SetHunterMeleeAttack();
-            targetDied = TryMeleeAttack();
+            targetDied = TryMeleeAttack(target);
         }
 
         if (targetDied)
         {
-            hunter.ChangeState(
-                new HunterGatherState(hunter, target)
-            );
-
+            hunterFSM.ChangeState(HunterStates.Gather);
             return;
         }
 
+        // Buscar si apareció un objetivo más cercano
         Transform boid = sensor.GetClosestBoid();
 
         if (boid == null)
         {
-            hunter.ChangeState(
-                new HunterPatrolState(hunter)
-            );
-
+            hunterAgent.ClearTarget();
+            hunterFSM.ChangeState(HunterStates.Patrol);
             return;
         }
 
         if (boid != target)
         {
-            Boid oldBoid = target != null
-                ? target.GetComponent<Boid>()
-                : null;
+            Boid oldBoid = target.GetComponent<Boid>();
 
             if (oldBoid != null)
             {
                 oldBoid.HideHealthBar();
             }
 
-            target = boid;
+            hunterAgent.SetTarget(boid);
 
-            pursue.SetTarget(target);
+            pursue.SetTarget(boid);
 
-            Boid newBoid = target.GetComponent<Boid>();
+            Boid newBoid = boid.GetComponent<Boid>();
 
             if (newBoid != null)
             {
@@ -139,7 +136,7 @@ public class HunterAttackState : HunterState
         }
     }
 
-    private bool TryMeleeAttack()
+    private bool TryMeleeAttack(Transform target)
     {
         if (attackCooldown < hunterAgent.TBA)
         {
@@ -158,7 +155,7 @@ public class HunterAttackState : HunterState
         return boid != null && boid.IsDead;
     }
 
-    private bool TryRangedAttack()
+    private bool TryRangedAttack(Transform target)
     {
         if (attackCooldown < hunterAgent.TBA)
         {
@@ -179,6 +176,8 @@ public class HunterAttackState : HunterState
 
     public override void Exit()
     {
+        Transform target = hunterAgent.CurrentTarget;
+
         if (target != null)
         {
             Boid boid = target.GetComponent<Boid>();

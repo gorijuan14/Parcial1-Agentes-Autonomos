@@ -2,23 +2,18 @@ using UnityEngine;
 
 public abstract class HunterState
 {
-    [Header("References")]
-    protected HunterFSM hunter;
+    protected HunterFSM hunterFSM;
+    protected Hunter hunter;
 
-    public HunterState(HunterFSM hunter)
+    protected HunterState(HunterFSM hunterFSM, Hunter hunter)
     {
+        this.hunterFSM = hunterFSM;
         this.hunter = hunter;
     }
 
-    public virtual void Enter()
-    {
-    }
+    public abstract void Enter();
 
-    public virtual void Update()
-    {
-    }
+    public abstract void Update();
 
-    public virtual void Exit()
-    {
-    }
+    public abstract void Exit();
 }

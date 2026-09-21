@@ -12,7 +12,7 @@ public class HunterPatrolState : HunterState
     private float baitPlacementTimer;
     private bool isPlacingBait;
 
-    public HunterPatrolState(HunterFSM hunter) : base(hunter)
+    public HunterPatrolState(HunterFSM hunterFSM, Hunter hunter) : base(hunterFSM, hunter)
     {
         patrol = hunter.GetComponent<Patrol>();
         sensor = hunter.GetComponentInChildren<HunterSensor>();
@@ -33,7 +33,7 @@ public class HunterPatrolState : HunterState
         {
             baitPlacementTimer += Time.deltaTime;
 
-            hunter.GetComponent<Agent>().StopMovement();
+            hunter.StopMovement();
 
             if (baitPlacementTimer >= 1f)
             {
@@ -49,21 +49,20 @@ public class HunterPatrolState : HunterState
         {
             isPlacingBait = true;
             baitPlacementTimer = 0f;
+
             stateIndicator.SetHunterBait();
-            hunter.GetComponent<Agent>().StopMovement();
+            hunter.StopMovement();
 
             return;
         }
 
         Transform boid = sensor.GetClosestBoid();
 
-        if (boid != null)
+       if (boid != null)
         {
-            hunter.ChangeState(
-                new HunterAttackState(hunter, boid)
-            );
+            hunter.SetTarget(boid);
+            hunterFSM.ChangeState(HunterStates.Attack);
         }
-
 
     }
     public override void Exit()
