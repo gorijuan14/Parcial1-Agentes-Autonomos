@@ -45,7 +45,7 @@ public class HunterPatrolState : HunterState
             return;
         }
 
-        if (hunterAgent.ShouldSpawnBait())
+        if (hunterAgent.UpdateBaits())
         {
             isPlacingBait = true;
             baitPlacementTimer = 0f;

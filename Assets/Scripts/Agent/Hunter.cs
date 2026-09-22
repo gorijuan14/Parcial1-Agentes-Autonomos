@@ -25,6 +25,7 @@ public class Hunter : Agent
 
     [Header("Bait")]
     [SerializeField] private GameObject baitPrefab;
+    private int activeBaits;
     [SerializeField] private int maxBaits = 5;
     [SerializeField] private float baitSpawnInterval = 5f;
     private float baitTimer;
@@ -72,10 +73,6 @@ public class Hunter : Agent
 
         baitTimer = 0f;
 
-        int activeBaits = FindObjectsByType<Bait>(
-            FindObjectsSortMode.None
-        ).Length;
-
         if (activeBaits >= maxBaits)
         {
             return false;
@@ -96,32 +93,28 @@ public class Hunter : Agent
 
         Vector3 spawnPosition = transform.position;
 
-        Instantiate(
+        GameObject baitObject = Instantiate(
             baitPrefab,
             spawnPosition,
             Quaternion.identity
         );
-    }
 
-    public bool ShouldSpawnBait()
+        Bait bait = baitObject.GetComponent<Bait>();
+
+        if (bait != null)
+        {
+            bait.SetOwner(this);
+            activeBaits++;
+        }
+    }
+    
+    public void RemoveBait()
     {
-        baitTimer += Time.deltaTime;
+        activeBaits--;
 
-        if (baitTimer < baitSpawnInterval)
+        if (activeBaits < 0)
         {
-            return false;
+            activeBaits = 0;
         }
-
-        int activeBaits = FindObjectsByType<Bait>(
-            FindObjectsSortMode.None
-        ).Length;
-
-        if (activeBaits >= maxBaits)
-        {
-            return false;
-        }
-
-        return true;
     }
-
 }
