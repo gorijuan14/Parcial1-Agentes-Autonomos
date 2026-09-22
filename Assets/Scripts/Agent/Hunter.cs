@@ -71,14 +71,12 @@ public class Hunter : Agent
             return false;
         }
 
-        baitTimer = 0f;
-
         if (activeBaits >= maxBaits)
         {
             return false;
         }
 
-        SpawnBait();
+        baitTimer = 0f;
         return true;
     }
 

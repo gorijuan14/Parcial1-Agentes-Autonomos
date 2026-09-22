@@ -8,7 +8,7 @@ public class Bait : MonoBehaviour
 
     [Header("Stats")]
     [SerializeField] private int maxHealth = 5;
-    private int currentHealth;
+    [SerializeField] private int currentHealth;
 
     public bool IsDestroyed => currentHealth <= 0;
     public bool IsAvailable => assignedBoid == null;

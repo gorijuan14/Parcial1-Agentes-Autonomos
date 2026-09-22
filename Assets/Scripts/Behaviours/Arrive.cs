@@ -7,8 +7,8 @@ public class Arrive : SteeringBehaviour
     [SerializeField] private Transform target;
 
     [Header("Stats")]
-    [SerializeField] private float slowRadius = 10f;
-    [SerializeField] private float stopRadius = 5f;
+    [SerializeField] private float slowRadius = 5f;
+    [SerializeField] private float stopRadius = 1f;
     
 
     private void Awake()

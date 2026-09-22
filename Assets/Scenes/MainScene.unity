@@ -1039,7 +1039,7 @@ MonoBehaviour:
   respawnMinZ: -20
   respawnMaxZ: 20
   baitDamageInterval: 1
-  baitDamageDistance: 0.5
+  baitDamageDistance: 1.1
 --- !u!114 &371792756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1605,7 +1605,7 @@ MonoBehaviour:
   respawnMinZ: -20
   respawnMaxZ: 20
   baitDamageInterval: 1
-  baitDamageDistance: 0.5
+  baitDamageDistance: 1.1
 --- !u!114 &464566872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1785,7 +1785,7 @@ MonoBehaviour:
   respawnMinZ: -20
   respawnMaxZ: 20
   baitDamageInterval: 1
-  baitDamageDistance: 0.5
+  baitDamageDistance: 1.1
 --- !u!114 &498713772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4239,7 +4239,7 @@ MonoBehaviour:
   respawnMinZ: -20
   respawnMaxZ: 20
   baitDamageInterval: 1
-  baitDamageDistance: 0.5
+  baitDamageDistance: 1.1
 --- !u!1 &1721795441
 GameObject:
   m_ObjectHideFlags: 0
@@ -4317,7 +4317,7 @@ MonoBehaviour:
   respawnMinZ: -20
   respawnMaxZ: 20
   baitDamageInterval: 1
-  baitDamageDistance: 0.5
+  baitDamageDistance: 1.1
 --- !u!114 &1721795445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5040,7 +5040,7 @@ MonoBehaviour:
   respawnMinZ: -20
   respawnMaxZ: 20
   baitDamageInterval: 1
-  baitDamageDistance: 0.5
+  baitDamageDistance: 1.1
 --- !u!114 &1968253052
 MonoBehaviour:
   m_ObjectHideFlags: 0
