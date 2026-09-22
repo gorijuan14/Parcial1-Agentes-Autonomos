@@ -6,14 +6,38 @@ public class BoidSensor : MonoBehaviour
     [SerializeField] private float baitPerceptionRadius = 7f;
     [SerializeField] private float hunterPerceptionRadius = 5f;
 
-    public Bait GetClosestBait()
+    [Header("Detection")]
+    [SerializeField] private float detectionInterval = 0.2f;
+
+    private float detectionTimer;
+
+    private Bait closestBait;
+    private Transform closestHunter;
+
+    private void Update()
+    {
+        detectionTimer += Time.deltaTime;
+
+        if (detectionTimer < detectionInterval)
+        {
+            return;
+        }
+
+        detectionTimer = 0f;
+
+        DetectClosestBait();
+        DetectClosestHunter();
+    }
+
+    private void DetectClosestBait()
     {
         Collider[] colliders = Physics.OverlapSphere(
             transform.position,
             baitPerceptionRadius
         );
 
-        Bait closestBait = null;
+        closestBait = null;
+
         float closestDistance = Mathf.Infinity;
 
         foreach (Collider collider in colliders)
@@ -36,18 +60,17 @@ public class BoidSensor : MonoBehaviour
                 closestBait = bait;
             }
         }
-
-        return closestBait;
     }
 
-    public Transform GetClosestHunter()
+    private void DetectClosestHunter()
     {
         Collider[] colliders = Physics.OverlapSphere(
             transform.position,
             hunterPerceptionRadius
         );
 
-        Transform closestHunter = null;
+        closestHunter = null;
+
         float closestDistance = Mathf.Infinity;
 
         foreach (Collider collider in colliders)
@@ -75,7 +98,15 @@ public class BoidSensor : MonoBehaviour
                 closestHunter = hunter.transform;
             }
         }
+    }
 
+    public Bait GetClosestBait()
+    {
+        return closestBait;
+    }
+
+    public Transform GetClosestHunter()
+    {
         return closestHunter;
     }
 }

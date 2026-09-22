@@ -5,14 +5,35 @@ public class HunterSensor : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private float perceptionRadius = 7f;
 
-    public Transform GetClosestBoid()
+    [Header("Detection")]
+    [SerializeField] private float detectionInterval = 0.2f;
+
+    private float detectionTimer;
+    private Transform closestBoid;
+
+    private void Update()
+    {
+        detectionTimer += Time.deltaTime;
+
+        if (detectionTimer < detectionInterval)
+        {
+            return;
+        }
+
+        detectionTimer = 0f;
+
+        DetectClosestBoid();
+    }
+
+    private void DetectClosestBoid()
     {
         Collider[] colliders = Physics.OverlapSphere(
             transform.position,
             perceptionRadius
         );
 
-        Transform closestBoid = null;
+        closestBoid = null;
+
         float closestDistance = Mathf.Infinity;
 
         foreach (Collider collider in colliders)
@@ -35,7 +56,10 @@ public class HunterSensor : MonoBehaviour
                 closestBoid = boid.transform;
             }
         }
+    }
 
+    public Transform GetClosestBoid()
+    {
         return closestBoid;
     }
 }
