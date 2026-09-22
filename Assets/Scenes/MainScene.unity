@@ -166,6 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoidSensor
   baitPerceptionRadius: 7
   hunterPerceptionRadius: 5
+  detectionInterval: 0.2
 --- !u!135 &32545971
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2182,6 +2183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoidSensor
   baitPerceptionRadius: 7
   hunterPerceptionRadius: 5
+  detectionInterval: 0.2
 --- !u!135 &738834306
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3120,6 +3122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoidSensor
   baitPerceptionRadius: 7
   hunterPerceptionRadius: 5
+  detectionInterval: 0.2
 --- !u!135 &1234062781
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3617,6 +3620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoidSensor
   baitPerceptionRadius: 7
   hunterPerceptionRadius: 5
+  detectionInterval: 0.2
 --- !u!135 &1408660737
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4565,6 +4569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoidSensor
   baitPerceptionRadius: 7
   hunterPerceptionRadius: 5
+  detectionInterval: 0.2
 --- !u!135 &1787650646
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4799,6 +4804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoidSensor
   baitPerceptionRadius: 7
   hunterPerceptionRadius: 5
+  detectionInterval: 0.2
 --- !u!1 &1866502523
 GameObject:
   m_ObjectHideFlags: 0
@@ -5174,6 +5180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HunterSensor
   perceptionRadius: 7
+  detectionInterval: 0.2
 --- !u!1 &2102873322
 GameObject:
   m_ObjectHideFlags: 0
