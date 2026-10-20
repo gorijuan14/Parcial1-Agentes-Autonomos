@@ -3,7 +3,6 @@ using UnityEngine;
 public abstract class Agent : MonoBehaviour
 {
     [Header("References")]
-    private Bounds bounds;
     protected SteeringBehaviour currentBehaviour;
     public Vector3 Velocity => velocity;
     public float MaxSpeed => maxSpeed;
@@ -17,7 +16,7 @@ public abstract class Agent : MonoBehaviour
 
     protected virtual void Start()
     {
-        bounds = FindFirstObjectByType<Bounds>();
+        
     }
 
     protected virtual void Update()
@@ -29,9 +28,9 @@ public abstract class Agent : MonoBehaviour
 
         Move(currentBehaviour.CalculateSteering());
 
-        if (bounds != null)
+        if (Bounds.Instance != null)
         {
-            bounds.WrapPosition(transform);
+            Bounds.Instance.WrapPosition(transform);
         }
     }
 
@@ -79,9 +78,9 @@ public abstract class Agent : MonoBehaviour
 
     protected void ApplyBounds()
     {
-        if (bounds != null)
+        if (Bounds.Instance != null)
         {
-            bounds.WrapPosition(transform);
+            Bounds.Instance.WrapPosition(transform);
         }
     }
 }

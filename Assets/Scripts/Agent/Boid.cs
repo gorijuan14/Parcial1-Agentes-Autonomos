@@ -14,6 +14,7 @@ public class Boid : Agent
     private StateIndicator stateIndicator;
     private BoidHealthBar healthBar;
 
+
     [Header("Health")]
     [SerializeField] private int maxHealth = 5;
     private int currentHealth;

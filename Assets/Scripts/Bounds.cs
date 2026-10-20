@@ -2,10 +2,17 @@ using UnityEngine;
 
 public class Bounds : MonoBehaviour
 {
+    public static Bounds Instance { get; private set; }
+
     [SerializeField] private float minX = -25f;
     [SerializeField] private float maxX = 25f;
     [SerializeField] private float minZ = -25f;
     [SerializeField] private float maxZ = 25f;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public void WrapPosition(Transform agent)
     {
