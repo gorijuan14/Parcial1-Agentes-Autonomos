@@ -21,6 +21,9 @@ public abstract class Agent : MonoBehaviour
     [Header("Collision")]
     [SerializeField] private float collisionSkin = 0.02f;
 
+    [Header("Navigation")]
+    [SerializeField] protected AStarMovement aStarMovement;
+
     [Header("Obstacle Avoidance")]
     [SerializeField] protected bool useObstacleAvoidance = false;
     [SerializeField] protected float avoidDistance = 3f;
@@ -31,6 +34,8 @@ public abstract class Agent : MonoBehaviour
 
     protected virtual void Start()
     {
+        if (aStarMovement == null)
+        aStarMovement = GetComponent<AStarMovement>();
     }
 
     protected virtual void Update()
@@ -149,34 +154,104 @@ public abstract class Agent : MonoBehaviour
         }
     }
 
+    
+    
     protected Vector3 AvoidObstacles()
     {
+        Vector3 forward = velocity.sqrMagnitude > 0.1f
+            ? velocity.normalized
+            : transform.forward;
+
+        forward.y = 0f;
+        forward.Normalize();
+
         Vector3 origin =
             transform.position + Vector3.up * eyeHeight;
 
-        Vector3 avoidance =
-            Whisker(origin, transform.forward, 1f);
+        Vector3 leftDirection =
+            Quaternion.Euler(0f, -avoidAngle, 0f) * forward;
 
-        avoidance += Whisker(
-            origin,
-            Quaternion.Euler(0f, avoidAngle, 0f)
-                * transform.forward,
-            0.5f
-        );
+        Vector3 rightDirection =
+            Quaternion.Euler(0f, avoidAngle, 0f) * forward;
 
-        avoidance += Whisker(
-            origin,
-            Quaternion.Euler(0f, -avoidAngle, 0f)
-                * transform.forward,
-            0.5f
-        );
+        bool frontBlocked = Physics.Raycast(
+            origin, forward, out RaycastHit frontHit,
+            avoidDistance, obstacleMask,
+            QueryTriggerInteraction.Ignore);
 
-        return Vector3.ClampMagnitude(
-            avoidance,
-            avoidWeight
-        );
+        bool leftBlocked = Physics.Raycast(
+            origin, leftDirection, out RaycastHit leftHit,
+            avoidDistance, obstacleMask,
+            QueryTriggerInteraction.Ignore);
+
+        bool rightBlocked = Physics.Raycast(
+            origin, rightDirection, out RaycastHit rightHit,
+            avoidDistance, obstacleMask,
+            QueryTriggerInteraction.Ignore);
+
+        Vector3 avoidance = Vector3.zero;
+
+        avoidance += Whisker(origin, forward, avoidWeight);
+
+        if (!frontBlocked && !leftBlocked && !rightBlocked)
+            return avoidance;
+
+        // Preferir el lado que permita avanzar hacia el waypoint actual.
+        Vector3 desiredDirection = forward;
+
+        if (aStarMovement != null &&
+            aStarMovement.CurrentTargetNode != null)
+        {
+            desiredDirection =
+                aStarMovement.CurrentTargetNode.Position - transform.position;
+
+            desiredDirection.y = 0f;
+
+            if (desiredDirection.sqrMagnitude > 0.001f)
+                desiredDirection.Normalize();
+            else
+                desiredDirection = forward;
+        }
+
+        float leftScore = Vector3.Dot(leftDirection, desiredDirection);
+        float rightScore = Vector3.Dot(rightDirection, desiredDirection);
+
+        if (leftBlocked)
+            leftScore -= 2f;
+
+        if (rightBlocked)
+            rightScore -= 2f;
+
+        Vector3 chosenDirection =
+            leftScore >= rightScore ? leftDirection : rightDirection;
+
+        // Si solo hay obstáculos laterales, no forzar un giro.
+        if (!frontBlocked)
+            return Vector3.zero;
+
+        // Intensificar la evasión cuanto más cerca esté la pared.
+        float proximity =
+        1f - Mathf.Clamp01(frontHit.distance / avoidDistance);
+
+        // La evasión aumenta cuando la pared está cerca.
+        float urgency = Mathf.Lerp(1f, 2f, proximity);
+
+        // Añadir una componente lateral fuerte para cambiar
+        // la trayectoria antes de alcanzar la pared.
+        Vector3 lateralDirection =
+            Vector3.Cross(Vector3.up, forward).normalized;
+
+        float lateralSign =
+            Vector3.Dot(lateralDirection, chosenDirection) >= 0f
+                ? 1f
+                : -1f;
+
+        Vector3 avoidanceDirection =
+            (forward * 0.2f + lateralDirection * lateralSign).normalized;
+
+        return avoidanceDirection * avoidWeight * urgency;
     }
-
+    
     private Vector3 Whisker(
         Vector3 origin,
         Vector3 direction,
@@ -187,31 +262,33 @@ public abstract class Agent : MonoBehaviour
             direction,
             out RaycastHit hit,
             avoidDistance,
-            obstacleMask))
+            obstacleMask,
+            QueryTriggerInteraction.Ignore))
         {
             return Vector3.zero;
         }
 
         if (hit.transform.IsChildOf(transform))
-        {
             return Vector3.zero;
-        }
 
         float proximity =
-            1f - hit.distance / avoidDistance;
+            1f - Mathf.Clamp01(hit.distance / avoidDistance);
 
-        Vector3 away =
-            Vector3.ProjectOnPlane(hit.normal, Vector3.up).normalized;
+        Vector3 forward = velocity.sqrMagnitude > 0.1f
+            ? velocity.normalized
+            : transform.forward;
+
+        forward.y = 0f;
+        forward.Normalize();
 
         Vector3 lateral =
-            Vector3.ProjectOnPlane(away, transform.forward);
+            Vector3.Cross(Vector3.up, forward).normalized;
 
-        if (lateral.sqrMagnitude < 0.0001f)
-        {
-            lateral = transform.right;
-        }
+        // Elegir el sentido que se aleja de la pared.
+        if (Vector3.Dot(lateral, hit.normal) < 0f)
+            lateral = -lateral;
 
-        return lateral.normalized * proximity * weight;
+        return lateral * proximity * weight;
     }
 
     protected void ApplyBounds()

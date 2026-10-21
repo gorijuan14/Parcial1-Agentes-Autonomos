@@ -30,6 +30,9 @@ public class Hunter : Agent
     [SerializeField] private float baitSpawnInterval = 5f;
     private float baitTimer;
 
+    [Header("Pathfinding Test")]
+    [SerializeField] private bool testAStarOnly = false;
+
     private void Awake()
     {
         hunterFSM = new HunterFSM();
@@ -47,7 +50,11 @@ public class Hunter : Agent
 
     protected override void Update()
     {
-        hunterFSM.Update();
+        if (!testAStarOnly)
+        {
+            hunterFSM.Update();
+        }
+        
         base.Update();
     }
 

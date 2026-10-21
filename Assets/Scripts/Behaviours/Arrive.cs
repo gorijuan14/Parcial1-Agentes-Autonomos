@@ -48,4 +48,11 @@ public class Arrive : SteeringBehaviour
         target = newTarget;
     }
 
+    public void SetTargetNew(Transform newTarget, float newSlowRadius, float newStopRadius)
+    {
+        target = newTarget;
+        slowRadius = newSlowRadius;
+        stopRadius = newStopRadius;
+    }
+
 }
