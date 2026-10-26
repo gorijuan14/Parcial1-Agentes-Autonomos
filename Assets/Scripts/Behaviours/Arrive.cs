@@ -18,6 +18,11 @@ public class Arrive : SteeringBehaviour
 
     public override Vector3 CalculateSteering()
     {
+        return CalculateSteering(slowRadius, stopRadius);
+    }
+
+    public Vector3 CalculateSteering(float slowRadius, float stopRadius)
+    {
         if (target == null || agent == null)
         {
             return Vector3.zero;

@@ -22,6 +22,9 @@ public class HunterPatrolState : HunterState
 
     public override void Enter()
     {
+        isPlacingBait = false;
+        baitPlacementTimer = 0f;
+        hunterAgent.SetBaitPlacementPaused(false);
         hunter.GetComponent<Hunter>().SetBehaviour(patrol);
 
         stateIndicator.SetHunterPatrol();
@@ -40,6 +43,7 @@ public class HunterPatrolState : HunterState
                 hunterAgent.SpawnBait();
                 stateIndicator.SetHunterPatrol();
                 isPlacingBait = false;
+                hunterAgent.SetBaitPlacementPaused(false);
             }
 
             return;
@@ -48,6 +52,7 @@ public class HunterPatrolState : HunterState
         if (hunterAgent.UpdateBaits())
         {
             isPlacingBait = true;
+            hunterAgent.SetBaitPlacementPaused(true);
             baitPlacementTimer = 0f;
 
             stateIndicator.SetHunterBait();
@@ -67,5 +72,8 @@ public class HunterPatrolState : HunterState
     }
     public override void Exit()
     {
+        isPlacingBait = false;
+        baitPlacementTimer = 0f;
+        hunterAgent.SetBaitPlacementPaused(false);
     }
 }

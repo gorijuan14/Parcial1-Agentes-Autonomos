@@ -29,6 +29,7 @@ public class Hunter : Agent
     [SerializeField] private int maxBaits = 5;
     [SerializeField] private float baitSpawnInterval = 5f;
     private float baitTimer;
+    private bool isPlacingBait;
 
     [Header("Pathfinding Test")]
     [SerializeField] private bool testAStarOnly = false;
@@ -55,7 +56,10 @@ public class Hunter : Agent
             hunterFSM.Update();
         }
         
-        base.Update();
+        if (!isPlacingBait)
+        {
+            base.Update();
+        }
     }
 
     public void SetTarget(Transform target)
@@ -71,14 +75,14 @@ public class Hunter : Agent
 
     public bool UpdateBaits()
     {
-        baitTimer += Time.deltaTime;
-
-        if (baitTimer < baitSpawnInterval)
+        if (baitPrefab == null || activeBaits >= maxBaits)
         {
             return false;
         }
 
-        if (activeBaits >= maxBaits)
+        baitTimer += Time.deltaTime;
+
+        if (baitTimer < baitSpawnInterval)
         {
             return false;
         }
@@ -89,12 +93,18 @@ public class Hunter : Agent
 
     public void SpawnBait()
     {
-        baitTimer = 0f;
-
-        if (baitPrefab == null)
+        if (baitPrefab == null || activeBaits >= maxBaits)
         {
             return;
         }
+
+        if (baitPrefab.GetComponent<Bait>() == null)
+        {
+            Debug.LogWarning($"{name}: el prefab de cebo necesita un componente Bait.", this);
+            return;
+        }
+
+        baitTimer = 0f;
 
         Vector3 spawnPosition = transform.position;
 
@@ -120,6 +130,15 @@ public class Hunter : Agent
         if (activeBaits < 0)
         {
             activeBaits = 0;
+        }
+    }
+
+    public void SetBaitPlacementPaused(bool paused)
+    {
+        isPlacingBait = paused;
+        if (paused)
+        {
+            StopMovement();
         }
     }
 }

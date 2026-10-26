@@ -11,11 +11,11 @@ public class Bait : MonoBehaviour
     [SerializeField] private int currentHealth;
 
     public bool IsDestroyed => currentHealth <= 0;
-    public bool IsAvailable => assignedBoid == null;
+    public bool IsAvailable => isActiveAndEnabled && !IsDestroyed && assignedBoid == null;
 
-    private void Start()
+    private void Awake()
     {
-        currentHealth = maxHealth;
+        currentHealth = Mathf.Max(1, maxHealth);
     }
 
     public void SetOwner(Hunter hunter)
@@ -25,7 +25,7 @@ public class Bait : MonoBehaviour
 
     public bool TryAssignBoid(Boid boid)
     {
-        if (assignedBoid != null)
+        if (!IsAvailable || boid == null || boid.IsDead || !boid.isActiveAndEnabled)
         {
             return false;
         }
@@ -44,12 +44,12 @@ public class Bait : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (IsDestroyed)
+        if (IsDestroyed || damage <= 0)
         {
             return;
         }
 
-        currentHealth -= damage;
+        currentHealth = Mathf.Max(0, currentHealth - damage);
 
         if (currentHealth <= 0)
         {

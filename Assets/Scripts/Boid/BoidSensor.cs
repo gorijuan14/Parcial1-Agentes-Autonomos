@@ -25,7 +25,6 @@ public class BoidSensor : MonoBehaviour
 
         detectionTimer = 0f;
 
-        DetectClosestBait();
         DetectClosestHunter();
     }
 
@@ -42,9 +41,9 @@ public class BoidSensor : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            Bait bait = collider.GetComponent<Bait>();
+            Bait bait = collider.GetComponentInParent<Bait>();
 
-            if (bait == null)
+            if (bait == null || !bait.IsAvailable)
             {
                 continue;
             }
@@ -102,6 +101,8 @@ public class BoidSensor : MonoBehaviour
 
     public Bait GetClosestBait()
     {
+        // Another boid may have reserved the cached bait since the last scan.
+        DetectClosestBait();
         return closestBait;
     }
 

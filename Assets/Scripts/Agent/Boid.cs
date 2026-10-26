@@ -65,6 +65,7 @@ public class Boid : Agent
 
         if (hunter != null && evade != null)
         {
+            FinishEatingBait();
             evade.SetTarget(hunter);
 
             Vector3 _steering = evade.CalculateSteering();
@@ -82,8 +83,9 @@ public class Boid : Agent
             return;
         }
 
-        if (currentBait == null)
+        if (currentBait == null || currentBait.IsDestroyed || !currentBait.isActiveAndEnabled)
         {
+            FinishEatingBait();
             Bait bait = sensor.GetClosestBait();
 
             if (bait != null && bait.IsAvailable)
@@ -101,6 +103,7 @@ public class Boid : Agent
 
         if (currentBait != null)
         {
+            stateIndicator.SetBoidDistracted();
             float distance = Vector3.Distance(
                 transform.position,
                 currentBait.transform.position
@@ -108,7 +111,11 @@ public class Boid : Agent
             
             if (distance > baitDamageDistance)
             {
-                steering = arrive.CalculateSteering();
+                baitDamageTimer = 0f;
+                // Stop inside eating range without changing patrol's Arrive settings.
+                steering = arrive.CalculateSteering(
+                    Mathf.Max(1f, baitDamageDistance * 2f),
+                    baitDamageDistance * 0.5f);
             }
             else
             {
@@ -122,6 +129,10 @@ public class Boid : Agent
                 {
                     baitDamageTimer = 0f;
                     currentBait.TakeDamage(1);
+                    if (currentBait.IsDestroyed)
+                    {
+                        FinishEatingBait();
+                    }
                 }
             }
         }
@@ -156,6 +167,11 @@ public class Boid : Agent
         baitDamageTimer = 0f;
     }
 
+    private void OnDisable()
+    {
+        FinishEatingBait();
+    }
+
     public void Collect()
     {
         if (isCollected)
@@ -164,6 +180,7 @@ public class Boid : Agent
         }
 
         isCollected = true;
+        FinishEatingBait();
         StopMovement();
     }
 
@@ -202,6 +219,7 @@ public class Boid : Agent
     private void Die()
     {
         isDead = true;
+        FinishEatingBait();
 
         StopMovement();
     }
@@ -214,6 +232,8 @@ public class Boid : Agent
     private IEnumerator RespawnRoutine()
     {
         isCollected = true;
+        FinishEatingBait();
+        StopMovement();
 
         yield return null;
 
