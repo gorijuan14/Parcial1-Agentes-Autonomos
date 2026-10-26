@@ -549,7 +549,7 @@ Transform:
   m_GameObject: {fileID: 45218899}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.29, y: 0, z: 13.68}
+  m_LocalPosition: {x: -1.86, y: 0, z: 16.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2556,7 +2556,7 @@ Transform:
   m_GameObject: {fileID: 346248638}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.7, y: 0, z: 0.5}
+  m_LocalPosition: {x: -7.57, y: 0, z: 9.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3974,7 +3974,7 @@ Transform:
   m_GameObject: {fileID: 565146977}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.1, y: 0, z: 14.3}
+  m_LocalPosition: {x: -11.28, y: 0, z: 16.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4816,7 +4816,7 @@ Transform:
   m_GameObject: {fileID: 754009699}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.1, y: 0, z: -17.2}
+  m_LocalPosition: {x: -12.8, y: 0, z: -2.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8146,6 +8146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51e0e44e89db1cf4b833a2cffae383b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bounds
+  huntingZone: {fileID: 1810392911}
   minX: -50
   maxX: 30
   minZ: -27
@@ -9100,13 +9101,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavigationGraph
   nodes:
-  - {fileID: 2093440196}
-  - {fileID: 1626126634}
-  - {fileID: 1922609482}
+  - {fileID: 257337146}
   - {fileID: 341333311}
-  - {fileID: 1277399619}
+  - {fileID: 452153964}
+  - {fileID: 501855634}
+  - {fileID: 753409209}
   - {fileID: 900003925}
+  - {fileID: 1044176802}
+  - {fileID: 1277399619}
   - {fileID: 1379711763}
+  - {fileID: 1417041404}
+  - {fileID: 1461462570}
+  - {fileID: 1504266403}
+  - {fileID: 1583058593}
+  - {fileID: 1626126634}
+  - {fileID: 1667014072}
+  - {fileID: 1862458009}
+  - {fileID: 1876917799}
+  - {fileID: 1922609482}
+  - {fileID: 1948910382}
+  - {fileID: 2091999275}
+  - {fileID: 2093440196}
+  - {fileID: 2096980867}
+  - {fileID: 2101001002}
+  - {fileID: 2101001012}
+  - {fileID: 2101001022}
+  - {fileID: 2101001032}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
@@ -9612,6 +9632,10 @@ MonoBehaviour:
   - {fileID: 1277399619}
   - {fileID: 257337146}
   - {fileID: 501855634}
+  - {fileID: 2101001002}
+  - {fileID: 2101001012}
+  - {fileID: 2101001022}
+  - {fileID: 2101001032}
 --- !u!1 &1381271113
 GameObject:
   m_ObjectHideFlags: 0
@@ -10425,6 +10449,10 @@ Transform:
   - {fileID: 1876917800}
   - {fileID: 1667014073}
   - {fileID: 1948910383}
+  - {fileID: 2101001001}
+  - {fileID: 2101001011}
+  - {fileID: 2101001021}
+  - {fileID: 2101001031}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1544593832
@@ -11532,7 +11560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1701029399
 Transform:
   m_ObjectHideFlags: 0
@@ -11542,7 +11570,7 @@ Transform:
   m_GameObject: {fileID: 1701029398}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.99149, y: 0, z: -0.70167}
+  m_LocalPosition: {x: -9.52, y: 0, z: 1.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12514,7 +12542,7 @@ Transform:
   m_GameObject: {fileID: 1811320326}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.9, y: 0, z: -12.3}
+  m_LocalPosition: {x: -2.08, y: 0, z: -3.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13646,7 +13674,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HunterSensor
   perceptionRadius: 7
+  viewAngle: 90
   detectionInterval: 0.2
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 64
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  sightHeight: 0.6
 --- !u!1 &1999351666
 GameObject:
   m_ObjectHideFlags: 0
@@ -14929,6 +14965,190 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1185592608947728542, guid: f2917b314c4f9e643bf81d7fa3f2cb64, type: 3}
   m_PrefabInstance: {fileID: 7487441213854751822}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2101001000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2101001001}
+  - component: {fileID: 2101001002}
+  m_Layer: 0
+  m_Name: HuntNode_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2101001001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101001000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.68389, y: 0, z: -5.82101}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1529323567}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2101001002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101001000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4af4599bef333348b58279b4a0495f3, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GraphNode
+  connections:
+  - {fileID: 1379711763}
+--- !u!1 &2101001010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2101001011}
+  - component: {fileID: 2101001012}
+  m_Layer: 0
+  m_Name: HuntNode_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2101001011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101001010}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.68389, y: 0, z: -5.82101}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1529323567}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2101001012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101001010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4af4599bef333348b58279b4a0495f3, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GraphNode
+  connections:
+  - {fileID: 1379711763}
+--- !u!1 &2101001020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2101001021}
+  - component: {fileID: 2101001022}
+  m_Layer: 0
+  m_Name: HuntNode_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2101001021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101001020}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.68389, y: 0, z: 6.17899}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1529323567}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2101001022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101001020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4af4599bef333348b58279b4a0495f3, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GraphNode
+  connections:
+  - {fileID: 1379711763}
+--- !u!1 &2101001030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2101001031}
+  - component: {fileID: 2101001032}
+  m_Layer: 0
+  m_Name: HuntNode_4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2101001031
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101001030}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.68389, y: 0, z: 6.17899}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1529323567}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2101001032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101001030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4af4599bef333348b58279b4a0495f3, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GraphNode
+  connections:
+  - {fileID: 1379711763}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

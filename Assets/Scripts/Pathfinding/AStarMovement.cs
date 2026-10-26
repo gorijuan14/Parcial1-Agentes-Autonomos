@@ -21,6 +21,7 @@ public class AStarMovement : MonoBehaviour
     private bool hasDestination;
     private Vector3 destination;
     public bool IsFollowingPath => followingPath;
+    public NavigationGraph Graph => navigationGraph;
 
     [Header("Node Arrive")]
     [SerializeField] private float nodeSlowRadius = 2f;
@@ -181,6 +182,26 @@ public class AStarMovement : MonoBehaviour
 
         if (arriveBehaviour != null)
             arriveBehaviour.SetTarget(null);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!followingPath || path == null)
+            return;
+
+        Gizmos.color = Color.cyan;
+        Vector3 previous = transform.position + Vector3.up * 0.2f;
+        for (int i = currentIndex; i < path.Count; i++)
+        {
+            if (path[i] == null)
+                continue;
+            Vector3 next = path[i].Position + Vector3.up * 0.2f;
+            Gizmos.DrawLine(previous, next);
+            Gizmos.DrawWireSphere(next, 0.2f);
+            previous = next;
+        }
+        if (hasDestination)
+            Gizmos.DrawLine(previous, destination + Vector3.up * 0.2f);
     }
 
     [ContextMenu("Follow Configured Path")]

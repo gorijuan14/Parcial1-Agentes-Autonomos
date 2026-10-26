@@ -51,7 +51,6 @@ public abstract class Agent : MonoBehaviour
         }
 
         Move(steering);
-        ApplyBounds();
     }
 
     public void SetBehaviour(SteeringBehaviour behaviour)
@@ -278,7 +277,7 @@ public abstract class Agent : MonoBehaviour
         bestClearance = clearance;
     }
 
-    protected void ApplyBounds()
+    protected virtual void ApplyBounds()
     {
         if (Bounds.Instance != null)
         {

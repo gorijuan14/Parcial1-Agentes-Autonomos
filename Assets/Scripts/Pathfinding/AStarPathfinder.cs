@@ -15,8 +15,9 @@ public class AStarPathfinder : MonoBehaviour
         if (start == goal)
             return new List<GraphNode> { start };
 
-        var openSet = new List<GraphNode> { start };
-        var closedSet = new HashSet<GraphNode>();
+        var frontier = new PriorityQueue<GraphNode>();
+        frontier.Enqueue(start, Heuristic(start, goal));
+        var processed = new HashSet<GraphNode>();
 
         var cameFrom = new Dictionary<GraphNode, GraphNode>();
         var gScore = new Dictionary<GraphNode, float>
@@ -24,24 +25,19 @@ public class AStarPathfinder : MonoBehaviour
             [start] = 0f
         };
 
-        var fScore = new Dictionary<GraphNode, float>
+        while (frontier.Count > 0)
         {
-            [start] = Heuristic(start, goal)
-        };
-
-        while (openSet.Count > 0)
-        {
-            GraphNode current = GetLowestScore(openSet, fScore);
+            GraphNode current = frontier.Dequeue();
+            // A cheaper route can enqueue the same node again; ignore stale entries.
+            if (!processed.Add(current))
+                continue;
 
             if (current == goal)
                 return ReconstructPath(cameFrom, current);
 
-            openSet.Remove(current);
-            closedSet.Add(current);
-
             foreach (GraphNode neighbor in current.Connections)
             {
-                if (neighbor == null || closedSet.Contains(neighbor))
+                if (neighbor == null)
                     continue;
 
                 // Nunca utilizar una conexión que atraviese una pared.
@@ -63,11 +59,8 @@ public class AStarPathfinder : MonoBehaviour
 
                 cameFrom[neighbor] = current;
                 gScore[neighbor] = tentativeGScore;
-                fScore[neighbor] =
-                    tentativeGScore + Heuristic(neighbor, goal);
-
-                if (!openSet.Contains(neighbor))
-                    openSet.Add(neighbor);
+                frontier.Enqueue(neighbor, tentativeGScore + Heuristic(neighbor, goal));
+                processed.Remove(neighbor);
             }
         }
 
@@ -78,33 +71,6 @@ public class AStarPathfinder : MonoBehaviour
     private float Heuristic(GraphNode a, GraphNode b)
     {
         return Vector3.Distance(a.Position, b.Position);
-    }
-
-    private GraphNode GetLowestScore(
-        List<GraphNode> openSet,
-        Dictionary<GraphNode, float> fScore)
-    {
-        GraphNode bestNode = openSet[0];
-        float bestScore = fScore.TryGetValue(bestNode, out float score)
-            ? score
-            : float.PositiveInfinity;
-
-        for (int i = 1; i < openSet.Count; i++)
-        {
-            GraphNode candidate = openSet[i];
-            float candidateScore =
-                fScore.TryGetValue(candidate, out float value)
-                    ? value
-                    : float.PositiveInfinity;
-
-            if (candidateScore < bestScore)
-            {
-                bestNode = candidate;
-                bestScore = candidateScore;
-            }
-        }
-
-        return bestNode;
     }
 
     private List<GraphNode> ReconstructPath(

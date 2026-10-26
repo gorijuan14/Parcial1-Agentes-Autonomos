@@ -11,6 +11,7 @@ public class Boid : Agent
     private BoidSensor sensor;
     private Bait currentBait;
     private bool isCollected;
+    public bool IsCollected => isCollected;
     private StateIndicator stateIndicator;
     private BoidHealthBar healthBar;
 
@@ -24,6 +25,10 @@ public class Boid : Agent
     public int MaxHealth => maxHealth;
 
     [Header("Respawn")]
+    [SerializeField, Min(0f)] private float respawnDelay = 3f;
+    [SerializeField, Min(0f)] private float boundaryPadding = 0.55f;
+    private bool isRespawning;
+    private Vector3 initialPosition;
     [SerializeField] private float respawnMinX = -20f;
     [SerializeField] private float respawnMaxX = 20f;
     [SerializeField] private float respawnMinZ = -20f;
@@ -47,6 +52,8 @@ public class Boid : Agent
         sensor = GetComponentInChildren<BoidSensor>();
         stateIndicator = GetComponentInChildren<StateIndicator>();
         healthBar = GetComponentInChildren<BoidHealthBar>(true);
+        ApplyBounds();
+        initialPosition = transform.position;
 
         if (healthBar != null)
         {
@@ -77,7 +84,7 @@ public class Boid : Agent
 
             stateIndicator.SetBoidEvade();
 
-            Move(_steering);
+            MoveInsideZone(_steering);
             ApplyBounds();
 
             return;
@@ -151,9 +158,36 @@ public class Boid : Agent
             stateIndicator.SetBoidPatrol();
         }
 
-        Move(steering);
+        MoveInsideZone(steering);
 
         ApplyBounds();
+    }
+
+    private void MoveInsideZone(Vector3 steering)
+    {
+        if (Bounds.Instance != null)
+        {
+            Vector3 predicted = transform.position + velocity * 0.6f + steering * 0.1f;
+            Vector3 correction = Bounds.Instance.ClampPosition(predicted, boundaryPadding) - predicted;
+            correction.y = 0f;
+            if (correction.sqrMagnitude > 0.0001f)
+                steering += correction.normalized * maxAcceleration * 2f;
+        }
+        Move(steering);
+    }
+
+    protected override void ApplyBounds()
+    {
+        if (Bounds.Instance == null)
+            return;
+
+        Vector3 position = transform.position;
+        Vector3 clamped = Bounds.Instance.ClampPosition(position, boundaryPadding);
+        if (Mathf.Abs(position.x - clamped.x) > 0.0001f)
+            velocity.x = 0f;
+        if (Mathf.Abs(position.z - clamped.z) > 0.0001f)
+            velocity.z = 0f;
+        transform.position = clamped;
     }
 
     private void FinishEatingBait()
@@ -192,6 +226,12 @@ public class Boid : Agent
         }
     }
 
+    public void CancelCollection()
+    {
+        if (isDead && !isRespawning)
+            isCollected = false;
+    }
+
     public void HideHealthBar()
     {
         if (healthBar != null)
@@ -226,16 +266,35 @@ public class Boid : Agent
 
     public void Disappear()
     {
+        if (isRespawning)
+            return;
         StartCoroutine(RespawnRoutine());
     }
 
     private IEnumerator RespawnRoutine()
     {
+        isRespawning = true;
         isCollected = true;
         FinishEatingBait();
         StopMovement();
 
-        yield return null;
+        HideHealthBar();
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+        bool[] rendererStates = new bool[renderers.Length];
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            rendererStates[i] = renderers[i].enabled;
+            renderers[i].enabled = false;
+        }
+        Collider[] colliders = GetComponentsInChildren<Collider>(true);
+        bool[] colliderStates = new bool[colliders.Length];
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliderStates[i] = colliders[i].enabled;
+            colliders[i].enabled = false;
+        }
+
+        yield return new WaitForSeconds(respawnDelay);
 
         Vector3 respawnPosition = new Vector3(
             Random.Range(respawnMinX, respawnMaxX),
@@ -243,11 +302,31 @@ public class Boid : Agent
             Random.Range(respawnMinZ, respawnMaxZ)
         );
 
+        if (Bounds.Instance != null)
+        {
+            respawnPosition = initialPosition;
+            for (int attempt = 0; attempt < 32; attempt++)
+            {
+                Vector3 candidate = Bounds.Instance.RandomPosition(transform.position.y, boundaryPadding);
+                if (!Physics.CheckSphere(candidate, boundaryPadding, obstacleMask, QueryTriggerInteraction.Ignore))
+                {
+                    respawnPosition = candidate;
+                    break;
+                }
+            }
+        }
+
         transform.position = respawnPosition;
+        ApplyBounds();
+        for (int i = 0; i < renderers.Length; i++)
+            renderers[i].enabled = rendererStates[i];
+        for (int i = 0; i < colliders.Length; i++)
+            colliders[i].enabled = colliderStates[i];
 
         currentHealth = maxHealth;
         isDead = false;
         isCollected = false;
+        isRespawning = false;
     }
 
 }

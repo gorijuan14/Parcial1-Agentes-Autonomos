@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum HunterStates
 {
-    Patrol,
+    Search,
     Attack,
     Gather
 }
@@ -18,6 +18,13 @@ public class Hunter : Agent
     public float TBA => tba;
     public float RangeAttackRadius => rangeAttackRadius;
     public float MeleeAttackRadius => meleeAttackRadius;
+    public bool CanAttack => attackTimer >= tba;
+    public AStarMovement Navigation => aStarMovement;
+    public bool IsInHuntingZone => Bounds.Instance != null && Bounds.Instance.Contains(transform.position, 0.55f);
+    [SerializeField, Min(0f)] private float gatherDuration = 2f;
+    public float GatherDuration => gatherDuration;
+    public int GatherCount { get; private set; }
+    private float attackTimer;
     private HunterFSM hunterFSM;
     private Transform currentTarget;
     public Transform CurrentTarget => currentTarget;
@@ -35,19 +42,20 @@ public class Hunter : Agent
     {
         hunterFSM = new HunterFSM();
 
-        HunterPatrolState patrolState = new HunterPatrolState(hunterFSM, this);
+        HunterSearchState searchState = new HunterSearchState(hunterFSM, this);
         HunterAttackState attackState = new HunterAttackState(hunterFSM, this);
         HunterGatherState gatherState = new HunterGatherState(hunterFSM, this);
 
-        hunterFSM.RegisterState(HunterStates.Patrol, patrolState);
+        hunterFSM.RegisterState(HunterStates.Search, searchState);
         hunterFSM.RegisterState(HunterStates.Attack, attackState);
         hunterFSM.RegisterState(HunterStates.Gather, gatherState);
 
-        hunterFSM.ChangeState(HunterStates.Patrol);
+        hunterFSM.ChangeState(HunterStates.Search);
     }
 
     protected override void Update()
     {
+        attackTimer += Time.deltaTime;
         hunterFSM.Update();
         
         if (!isPlacingBait)
@@ -69,7 +77,7 @@ public class Hunter : Agent
 
     public bool UpdateBaits()
     {
-        if (baitPrefab == null || activeBaits >= maxBaits)
+        if (!IsInHuntingZone || baitPrefab == null || activeBaits >= maxBaits)
         {
             return false;
         }
@@ -87,7 +95,7 @@ public class Hunter : Agent
 
     public void SpawnBait()
     {
-        if (baitPrefab == null || activeBaits >= maxBaits)
+        if (!IsInHuntingZone || baitPrefab == null || activeBaits >= maxBaits)
         {
             return;
         }
@@ -100,7 +108,7 @@ public class Hunter : Agent
 
         baitTimer = 0f;
 
-        Vector3 spawnPosition = transform.position;
+        Vector3 spawnPosition = Bounds.Instance.ClampPosition(transform.position, 1f);
 
         GameObject baitObject = Instantiate(
             baitPrefab,
@@ -134,5 +142,15 @@ public class Hunter : Agent
         {
             StopMovement();
         }
+    }
+
+    public void RegisterAttack()
+    {
+        attackTimer = 0f;
+    }
+
+    public void RegisterGather()
+    {
+        GatherCount++;
     }
 }

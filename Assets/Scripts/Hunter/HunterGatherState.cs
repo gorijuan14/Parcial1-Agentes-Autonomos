@@ -2,101 +2,102 @@ using UnityEngine;
 
 public class HunterGatherState : HunterState
 {
-    [Header("References")]
-    private Agent agent;
-    private Pursue pursue;
-    private Hunter hunterAgent;
-    private StateIndicator stateIndicator;
-
-    [Header("Stats")]
-    private float gatherDuration = 2f;
+    private readonly HunterSensor sensor;
+    private readonly Arrive arrive;
+    private readonly StateIndicator indicator;
+    private Boid claimedBoid;
     private float gatherTimer;
-    private float gatherRadius = 1f;
-    private bool hasReachedTarget;
+    private float nextRouteAttempt;
+    private bool completed;
 
-    public HunterGatherState(HunterFSM hunterFSM, Hunter hunter)
-        : base(hunterFSM, hunter)
+    public HunterGatherState(HunterFSM fsm, Hunter hunter) : base(fsm, hunter)
     {
-        agent = hunter.GetComponent<Agent>();
-        pursue = hunter.GetComponent<Pursue>();
-        hunterAgent = hunter;
-        stateIndicator = hunter.GetComponentInChildren<StateIndicator>();
+        sensor = hunter.GetComponentInChildren<HunterSensor>();
+        arrive = hunter.GetComponent<Arrive>();
+        indicator = hunter.GetComponentInChildren<StateIndicator>();
     }
 
     public override void Enter()
     {
+        claimedBoid = null;
+        completed = false;
         gatherTimer = 0f;
-        hasReachedTarget = false;
-
-        Transform target = hunterAgent.CurrentTarget;
-
-        if (target == null)
-        {
-            hunterFSM.ChangeState(HunterStates.Patrol);
-            return;
-        }
-
-        pursue.SetTarget(target);
-        agent.SetBehaviour(pursue);
-
-        stateIndicator.SetHunterGather();
+        nextRouteAttempt = 0f;
+        indicator.SetHunterGather();
     }
 
     public override void Update()
     {
-        Transform target = hunterAgent.CurrentTarget;
-
-        if (target == null)
+        Transform target = hunter.CurrentTarget;
+        Boid boid = target != null ? target.GetComponent<Boid>() : null;
+        if (boid == null || !boid.IsDead || !boid.gameObject.activeInHierarchy ||
+            (claimedBoid == null && boid.IsCollected))
         {
-            hunterFSM.ChangeState(HunterStates.Patrol);
+            ReturnToSearch();
             return;
         }
 
-        float distance = Vector3.Distance(
-            hunter.transform.position,
-            target.position
-        );
-
-        if (!hasReachedTarget)
+        if (claimedBoid == null)
         {
-            if (distance <= gatherRadius)
+            if (sensor.CanSee(target) && hunter.CanMoveDirectlyTo(target.position))
             {
-                hasReachedTarget = true;
-
-                agent.StopMovement();
-                agent.SetBehaviour(null);
-
-                Boid boid = target.GetComponent<Boid>();
-
-                if (boid != null)
+                StopNavigation();
+                if (Vector3.Distance(hunter.transform.position, target.position) <= 1f)
                 {
+                    hunter.SetBehaviour(null);
+                    hunter.StopMovement();
                     boid.Collect();
+                    claimedBoid = boid;
+                }
+                else
+                {
+                    arrive.SetTargetNew(target, 2f, 0.5f);
+                    hunter.SetBehaviour(arrive);
                 }
             }
-
+            else if (Time.time >= nextRouteAttempt)
+            {
+                if (hunter.Navigation == null || !hunter.Navigation.TryFollowPosition(target.position))
+                {
+                    sensor.IgnoreTemporarily(target);
+                    ReturnToSearch();
+                    return;
+                }
+                nextRouteAttempt = Time.time + 0.75f;
+            }
             return;
         }
 
+        hunter.StopMovement();
         gatherTimer += Time.deltaTime;
-
-        agent.StopMovement();
-
-        if (gatherTimer >= gatherDuration)
+        if (gatherTimer >= hunter.GatherDuration)
         {
-            Boid boid = target.GetComponent<Boid>();
-
-            if (boid != null)
-            {
-                boid.Disappear();
-            }
-
-            hunterAgent.ClearTarget();
-
-            hunterFSM.ChangeState(HunterStates.Patrol);
+            completed = true;
+            claimedBoid.Disappear();
+            hunter.RegisterGather();
+            ReturnToSearch();
         }
+    }
+
+    private void StopNavigation()
+    {
+        if (hunter.Navigation != null && hunter.Navigation.IsFollowingPath)
+            hunter.Navigation.StopFollowingPath();
+    }
+
+    private void ReturnToSearch()
+    {
+        hunter.ClearTarget();
+        hunterFSM.ChangeState(HunterStates.Search);
     }
 
     public override void Exit()
     {
+        StopNavigation();
+        if (!completed && claimedBoid != null)
+            claimedBoid.CancelCollection();
+        claimedBoid = null;
+        hunter.SetBehaviour(null);
+        hunter.StopMovement();
     }
 }

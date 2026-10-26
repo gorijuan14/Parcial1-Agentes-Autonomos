@@ -7,6 +7,9 @@ public class ZoneGizmo : MonoBehaviour
     [SerializeField] private Vector3 zoneSize = new Vector3(10f, 0.1f, 10f);
     [SerializeField] private Color zoneColor = Color.green;
 
+    public Vector3 Center => transform.position;
+    public Vector3 Size => zoneSize;
+
     private void OnDrawGizmos()
     {
         Gizmos.color = zoneColor;

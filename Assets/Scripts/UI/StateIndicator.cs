@@ -69,7 +69,7 @@ public class StateIndicator : MonoBehaviour
         transform.rotation = Quaternion.Euler(-90, 0, 0);
     }
 
-    public void SetHunterPatrol()
+    public void SetHunterSearch()
     {
         if (currentState != IndicatorState.Patrol)
         {
