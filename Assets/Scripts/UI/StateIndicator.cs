@@ -1,4 +1,7 @@
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class StateIndicator : MonoBehaviour
 {
@@ -19,6 +22,78 @@ public class StateIndicator : MonoBehaviour
 
     [SerializeField] private float patrolHideDelay = 2f;
     private float patrolTimer;
+
+    [Header("Scene View")]
+    [SerializeField, Min(8f)] private float sceneIconSize = 28f;
+
+#if UNITY_EDITOR
+    [InitializeOnLoadMethod]
+    private static void RegisterSceneOverlay()
+    {
+        SceneView.duringSceneGui -= DrawSceneIndicators;
+        SceneView.duringSceneGui += DrawSceneIndicators;
+    }
+
+    private static void DrawSceneIndicators(SceneView sceneView)
+    {
+        if (!sceneView.drawGizmos || Event.current.type != EventType.Repaint)
+            return;
+
+        Handles.BeginGUI();
+        int previousDepth = GUI.depth;
+        Color previousColor = GUI.color;
+        try
+        {
+            // Draw in Scene View's GUI pass, above world gizmos and ordinary GUI.
+            GUI.depth = int.MinValue + 1;
+            foreach (StateIndicator indicator in FindObjectsByType<StateIndicator>(FindObjectsSortMode.None))
+            {
+                if (indicator.isActiveAndEnabled)
+                    indicator.DrawSceneIcon(sceneView);
+            }
+
+            // Health is the final overlay, above the state icons as well.
+            GUI.depth = int.MinValue;
+            GUI.color = Color.white;
+            foreach (BoidHealthBar healthBar in FindObjectsByType<BoidHealthBar>(FindObjectsSortMode.None))
+            {
+                if (healthBar.isActiveAndEnabled)
+                    healthBar.DrawSceneOverlay(sceneView);
+            }
+        }
+        finally
+        {
+            GUI.depth = previousDepth;
+            GUI.color = previousColor;
+            Handles.EndGUI();
+        }
+    }
+
+    private void DrawSceneIcon(SceneView sceneView)
+    {
+        SpriteRenderer renderer = SpriteRenderer;
+        if (renderer == null || !renderer.enabled || renderer.sprite == null)
+            return;
+
+        Camera camera = sceneView.camera;
+        if (Vector3.Dot(camera.transform.forward, transform.position - camera.transform.position) <= 0f)
+            return;
+
+        Sprite sprite = renderer.sprite;
+        Rect textureRect = sprite.textureRect;
+        Rect uv = new Rect(textureRect.x / sprite.texture.width,
+            textureRect.y / sprite.texture.height,
+            textureRect.width / sprite.texture.width,
+            textureRect.height / sprite.texture.height);
+        Vector2 position = HandleUtility.WorldToGUIPoint(transform.position);
+        float width = sceneIconSize * textureRect.width / Mathf.Max(textureRect.width, textureRect.height);
+        float height = sceneIconSize * textureRect.height / Mathf.Max(textureRect.width, textureRect.height);
+
+        GUI.color = renderer.color;
+        GUI.DrawTextureWithTexCoords(new Rect(position.x - width * 0.5f,
+            position.y - height * 0.5f, width, height), sprite.texture, uv, true);
+    }
+#endif
 
     private enum IndicatorState
     {
