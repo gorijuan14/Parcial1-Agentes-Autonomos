@@ -75,7 +75,8 @@ public class HunterGatherState : HunterState
             completed = true;
             claimedBoid.Disappear();
             hunter.RegisterGather();
-            ReturnToSearch();
+            hunter.ClearTarget();
+            hunterFSM.ChangeState(hunter.HasCompletedHunting ? HunterStates.Exit : HunterStates.Search);
         }
     }
 

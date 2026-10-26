@@ -30,7 +30,8 @@ public class StateIndicator : MonoBehaviour
         RangedAttack,
         MeleeAttack,
         Bait,
-        Gather
+        Gather,
+        Exit
     }
 
     private IndicatorState currentState;
@@ -71,6 +72,7 @@ public class StateIndicator : MonoBehaviour
 
     public void SetHunterSearch()
     {
+        SpriteRenderer.color = Color.white;
         if (currentState != IndicatorState.Patrol)
         {
             currentState = IndicatorState.Patrol;
@@ -78,6 +80,14 @@ public class StateIndicator : MonoBehaviour
             SpriteRenderer.enabled = true; 
             SpriteRenderer.sprite = hunterPatrol;   
         }
+    }
+
+    public void SetHunterExit()
+    {
+        currentState = IndicatorState.Exit;
+        SpriteRenderer.enabled = true;
+        SpriteRenderer.sprite = hunterPatrol;
+        SpriteRenderer.color = Color.green;
     }
 
     public void SetHunterChase()

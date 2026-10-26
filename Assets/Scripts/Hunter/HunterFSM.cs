@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class HunterFSM
 {
     private HunterState currentState;
+    public Enum CurrentState { get; private set; }
     private Dictionary<Enum, HunterState> states = new Dictionary<Enum, HunterState>();
 
     public void RegisterState(Enum key, HunterState state)
@@ -21,6 +22,7 @@ public class HunterFSM
             
         currentState?.Exit();
         currentState = newState;
+        CurrentState = key;
         currentState.Enter();
     }
 

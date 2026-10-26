@@ -40,18 +40,21 @@ public class HunterAttackState : HunterState
         float distance = Vector3.Distance(hunter.transform.position, target.position);
         if (distance <= hunter.RangeAttackRadius || distance <= hunter.MeleeAttackRadius)
         {
+            hunter.FaceTarget(target);
+            int damage;
             if (distance <= hunter.MeleeAttackRadius)
             {
                 indicator.SetHunterMeleeAttack();
-                boid.TakeDamage(3);
+                damage = 3;
             }
             else
             {
                 indicator.SetHunterRangedAttack();
-                boid.TakeDamage(1);
+                damage = 1;
             }
-            hunter.RegisterAttack();
-            ReturnToSearch();
+            boid.TakeDamage(damage);
+            hunter.RegisterAttack(damage);
+            ReturnToSearch(!boid.IsDead);
             return;
         }
 
@@ -74,11 +77,14 @@ public class HunterAttackState : HunterState
         }
     }
 
-    private void ReturnToSearch()
+    private void ReturnToSearch(bool keepTarget = false)
     {
-        if (hunter.CurrentTarget != null)
-            hunter.CurrentTarget.GetComponent<Boid>()?.HideHealthBar();
-        hunter.ClearTarget();
+        if (!keepTarget)
+        {
+            if (hunter.CurrentTarget != null)
+                hunter.CurrentTarget.GetComponent<Boid>()?.HideHealthBar();
+            hunter.ClearTarget();
+        }
         hunterFSM.ChangeState(HunterStates.Search);
     }
 
@@ -91,10 +97,9 @@ public class HunterAttackState : HunterState
     public override void Exit()
     {
         StopNavigation();
-        if (hunter.CurrentTarget != null)
-            hunter.CurrentTarget.GetComponent<Boid>()?.HideHealthBar();
         pursue.SetTarget(null);
         hunter.SetBehaviour(null);
-        hunter.StopMovement();
+        if (hunter.CurrentTarget == null)
+            hunter.StopMovement();
     }
 }

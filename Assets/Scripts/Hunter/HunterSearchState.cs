@@ -5,15 +5,18 @@ public class HunterSearchState : HunterState
 {
     private readonly HunterSensor sensor;
     private readonly StateIndicator indicator;
+    private readonly Pursue pursue;
     private bool isPlacingBait;
     private float baitPlacementTimer;
     private float nextRouteAttempt;
     private bool travellingToHuntingZone;
+    private float timeWithoutBoids;
 
     public HunterSearchState(HunterFSM fsm, Hunter hunter) : base(fsm, hunter)
     {
         sensor = hunter.GetComponentInChildren<HunterSensor>();
         indicator = hunter.GetComponentInChildren<StateIndicator>();
+        pursue = hunter.GetComponent<Pursue>();
     }
 
     public override void Enter()
@@ -22,14 +25,21 @@ public class HunterSearchState : HunterState
         baitPlacementTimer = 0f;
         nextRouteAttempt = 0f;
         travellingToHuntingZone = false;
+        timeWithoutBoids = 0f;
         hunter.SetBaitPlacementPaused(false);
         hunter.SetBehaviour(null);
-        hunter.StopMovement();
+        if (hunter.CurrentTarget == null)
+            hunter.StopMovement();
         indicator.SetHunterSearch();
     }
 
     public override void Update()
     {
+        if (hunter.HasCompletedHunting)
+        {
+            hunterFSM.ChangeState(HunterStates.Exit);
+            return;
+        }
         AStarMovement navigation = hunter.Navigation;
         Bounds area = Bounds.Instance;
         if (navigation == null || area == null)
@@ -52,6 +62,7 @@ public class HunterSearchState : HunterState
             travellingToHuntingZone = false;
         }
 
+        bool baitReady = hunter.UpdateBaits();
         // Search transitions have priority over waiting to place another bait.
         Transform deadBoid = sensor.GetClosestDeadBoid();
         if (deadBoid != null)
@@ -60,7 +71,28 @@ public class HunterSearchState : HunterState
             hunterFSM.ChangeState(HunterStates.Gather);
             return;
         }
-        Transform liveBoid = sensor.GetClosestBoid();
+        Transform previousTarget = hunter.CurrentTarget;
+        Boid focusedBoid = previousTarget != null ? previousTarget.GetComponent<Boid>() : null;
+        Transform liveBoid = focusedBoid != null && !focusedBoid.IsDead && !focusedBoid.IsCollected &&
+            sensor.CanSee(previousTarget) ? previousTarget : sensor.GetClosestBoid();
+        if (previousTarget != null && previousTarget != liveBoid)
+            previousTarget.GetComponent<Boid>()?.HideHealthBar();
+        hunter.SetTarget(liveBoid);
+        if (liveBoid != null)
+        {
+            timeWithoutBoids = 0f;
+            // Even during TBA, visible prey cancels bait placement.
+            if (isPlacingBait)
+            {
+                isPlacingBait = false;
+                hunter.SetBaitPlacementPaused(false);
+                indicator.SetHunterSearch();
+            }
+        }
+        else
+        {
+            timeWithoutBoids += Time.deltaTime;
+        }
         if (hunter.CanAttack && liveBoid != null)
         {
             hunter.SetTarget(liveBoid);
@@ -68,10 +100,16 @@ public class HunterSearchState : HunterState
             return;
         }
 
+        if (liveBoid != null)
+        {
+            TrackVisibleBoid(liveBoid, navigation);
+            return;
+        }
+
         if (isPlacingBait)
         {
             baitPlacementTimer += Time.deltaTime;
-            if (baitPlacementTimer >= 1f)
+            if (baitPlacementTimer >= hunter.BaitPlacementDuration)
             {
                 hunter.SpawnBait();
                 hunter.SetBaitPlacementPaused(false);
@@ -80,7 +118,7 @@ public class HunterSearchState : HunterState
             }
             return;
         }
-        if (hunter.UpdateBaits())
+        if (liveBoid == null && timeWithoutBoids >= hunter.BaitSearchDelay && baitReady)
         {
             navigation.StopFollowingPath();
             hunter.SetBaitPlacementPaused(true);
@@ -94,6 +132,38 @@ public class HunterSearchState : HunterState
         {
             TrySearchRoute(navigation, area, false);
             nextRouteAttempt = Time.time + 1f;
+        }
+    }
+
+    private void TrackVisibleBoid(Transform target, AStarMovement navigation)
+    {
+        target.GetComponent<Boid>()?.ShowHealthBar();
+        if (hunter.CanMoveDirectlyTo(target.position))
+        {
+            if (navigation.IsFollowingPath)
+                navigation.StopFollowingPath();
+
+            if (Vector3.Distance(hunter.transform.position, target.position) <= hunter.MeleeAttackRadius)
+            {
+                hunter.SetBehaviour(null);
+                hunter.StopMovement();
+                hunter.FaceTarget(target);
+            }
+            else
+            {
+                pursue.SetTarget(target);
+                hunter.SetBehaviour(pursue);
+            }
+        }
+        else if (Time.time >= nextRouteAttempt)
+        {
+            if (!navigation.TryFollowPosition(target.position))
+            {
+                target.GetComponent<Boid>()?.HideHealthBar();
+                sensor.IgnoreTemporarily(target);
+                hunter.ClearTarget();
+            }
+            nextRouteAttempt = Time.time + 0.75f;
         }
     }
 
@@ -135,5 +205,6 @@ public class HunterSearchState : HunterState
             hunter.Navigation.StopFollowingPath();
         hunter.SetBaitPlacementPaused(false);
         isPlacingBait = false;
+        pursue.SetTarget(null);
     }
 }
