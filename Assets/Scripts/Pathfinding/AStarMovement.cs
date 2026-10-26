@@ -23,7 +23,7 @@ public class AStarMovement : MonoBehaviour
     [SerializeField] private float nodeSlowRadius = 2f;
     [SerializeField] private float nodeStopRadius = 0.3f;
 
-    private void Start()
+    private void Awake()
     {
         if (agent == null)
             agent = GetComponent<Agent>();
@@ -37,8 +37,11 @@ public class AStarMovement : MonoBehaviour
         if (!followingPath || path == null || path.Count == 0)
             return;
 
-        if (agent == null || arriveBehaviour == null)
+        if (agent == null || arriveBehaviour == null || path.Exists(node => node == null))
+        {
+            StopFollowingPath();
             return;
+        }
 
         GraphNode targetNode = path[currentIndex];
 
@@ -53,8 +56,7 @@ public class AStarMovement : MonoBehaviour
 
             if (currentIndex >= path.Count)
             {
-                followingPath = false;
-                agent.StopMovement();
+                StopFollowingPath();
                 return;
             }
 
@@ -70,6 +72,7 @@ public class AStarMovement : MonoBehaviour
         if (pathfinder == null || agent == null ||
             arriveBehaviour == null || start == null || goal == null)
         {
+            StopFollowingPath();
             return;
         }
 
@@ -77,13 +80,28 @@ public class AStarMovement : MonoBehaviour
 
         if (path.Count == 0)
         {
-            followingPath = false;
-            agent.StopMovement();
+            StopFollowingPath();
             return;
         }
 
         currentIndex = path.Count > 1 ? 1 : 0;
         followingPath = true;
+    }
+
+    public void StopFollowingPath()
+    {
+        followingPath = false;
+        path.Clear();
+        currentIndex = 0;
+
+        if (agent != null)
+        {
+            agent.SetBehaviour(null);
+            agent.StopMovement();
+        }
+
+        if (arriveBehaviour != null)
+            arriveBehaviour.SetTarget(null);
     }
 
     [ContextMenu("Follow Configured Path")]
@@ -132,7 +150,7 @@ public class AStarMovement : MonoBehaviour
     {
         get
         {
-            if (path == null ||
+            if (!followingPath || path == null ||
                 currentIndex < 0 ||
                 currentIndex >= path.Count)
             {

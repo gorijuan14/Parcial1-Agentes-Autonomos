@@ -16,8 +16,11 @@ public class Patrol : SteeringBehaviour
 
     public override Vector3 CalculateSteering()
     {
-        if (waypointPatrol == null || arrive == null)
+        if (waypointPatrol == null || arrive == null || waypointPatrol.CurrentWaypoint == null)
         {
+            if (agent != null)
+                agent.StopMovement();
+
             return Vector3.zero;
         }
 

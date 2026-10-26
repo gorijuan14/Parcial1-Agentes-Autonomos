@@ -4,7 +4,25 @@ public class WaypointPatrol : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Transform[] waypoints;
-    public Transform CurrentWaypoint => waypoints[currentWaypoint];
+    public Transform CurrentWaypoint
+    {
+        get
+        {
+            if (waypoints == null || waypoints.Length == 0)
+                return null;
+
+            currentWaypoint %= waypoints.Length;
+            for (int i = 0; i < waypoints.Length; i++)
+            {
+                if (waypoints[currentWaypoint] != null)
+                    return waypoints[currentWaypoint];
+
+                currentWaypoint = (currentWaypoint + 1) % waypoints.Length;
+            }
+
+            return null;
+        }
+    }
 
     [Header("Stats")]
     [SerializeField] private float arrivalDistance = 5f;
@@ -12,7 +30,7 @@ public class WaypointPatrol : MonoBehaviour
 
     private void Start()
     {
-        if (waypoints.Length == 0)
+        if (CurrentWaypoint == null)
         {
             Debug.LogWarning($"{name} no tiene waypoints asignados.");
         }
@@ -20,12 +38,13 @@ public class WaypointPatrol : MonoBehaviour
 
     public bool HasReachedWaypoint()
     {
-        if (waypoints.Length == 0)
+        Transform waypoint = CurrentWaypoint;
+        if (waypoint == null)
         {
             return false;
         }
 
-        Vector3 offset = CurrentWaypoint.position - transform.position;
+        Vector3 offset = waypoint.position - transform.position;
         offset.y = 0f;
 
         return offset.magnitude <= arrivalDistance;
@@ -33,7 +52,7 @@ public class WaypointPatrol : MonoBehaviour
 
     public void GoToNextWaypoint()
     {
-        if (waypoints.Length == 0)
+        if (waypoints == null || waypoints.Length == 0)
         {
             return;
         }
