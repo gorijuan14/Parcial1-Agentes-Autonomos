@@ -2665,14 +2665,14 @@ MonoBehaviour:
   maxTurnSpeed: 360
   collisionSkin: 0.02
   aStarMovement: {fileID: 0}
-  useObstacleAvoidance: 0
+  useObstacleAvoidance: 1
   avoidDistance: 3
   avoidAngle: 35
   avoidWeight: 6
   eyeHeight: 0.6
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   maxHealth: 5
   respawnMinX: -20
   respawnMaxX: 20
@@ -3288,14 +3288,14 @@ MonoBehaviour:
   maxTurnSpeed: 360
   collisionSkin: 0.02
   aStarMovement: {fileID: 0}
-  useObstacleAvoidance: 0
+  useObstacleAvoidance: 1
   avoidDistance: 3
   avoidAngle: 35
   avoidWeight: 6
   eyeHeight: 0.6
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   maxHealth: 5
   respawnMinX: -20
   respawnMaxX: 20
@@ -3814,14 +3814,14 @@ MonoBehaviour:
   maxTurnSpeed: 360
   collisionSkin: 0.02
   aStarMovement: {fileID: 0}
-  useObstacleAvoidance: 0
+  useObstacleAvoidance: 1
   avoidDistance: 3
   avoidAngle: 35
   avoidWeight: 6
   eyeHeight: 0.6
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   maxHealth: 5
   respawnMinX: -20
   respawnMaxX: 20
@@ -11779,14 +11779,14 @@ MonoBehaviour:
   maxTurnSpeed: 360
   collisionSkin: 0.02
   aStarMovement: {fileID: 0}
-  useObstacleAvoidance: 0
+  useObstacleAvoidance: 1
   avoidDistance: 3
   avoidAngle: 35
   avoidWeight: 6
   eyeHeight: 0.6
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   maxHealth: 5
   respawnMinX: -20
   respawnMaxX: 20
@@ -11867,14 +11867,14 @@ MonoBehaviour:
   maxTurnSpeed: 360
   collisionSkin: 0.02
   aStarMovement: {fileID: 0}
-  useObstacleAvoidance: 0
+  useObstacleAvoidance: 1
   avoidDistance: 3
   avoidAngle: 35
   avoidWeight: 6
   eyeHeight: 0.6
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   maxHealth: 5
   respawnMinX: -20
   respawnMaxX: 20
@@ -13542,14 +13542,14 @@ MonoBehaviour:
   maxTurnSpeed: 360
   collisionSkin: 0.02
   aStarMovement: {fileID: 0}
-  useObstacleAvoidance: 0
+  useObstacleAvoidance: 1
   avoidDistance: 3
   avoidAngle: 35
   avoidWeight: 6
   eyeHeight: 0.6
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   maxHealth: 5
   respawnMinX: -20
   respawnMaxX: 20

@@ -16,7 +16,9 @@ public abstract class Agent : MonoBehaviour
 
     protected Vector3 velocity;
 
-    private readonly RaycastHit[] movementHits = new RaycastHit[16];
+    private readonly RaycastHit[] movementHits = new RaycastHit[32];
+    private CapsuleCollider bodyCollider;
+    private float avoidanceSide = 1f;
 
     [Header("Collision")]
     [SerializeField] private float collisionSkin = 0.02f;
@@ -34,8 +36,9 @@ public abstract class Agent : MonoBehaviour
 
     protected virtual void Start()
     {
+        bodyCollider = GetComponent<CapsuleCollider>();
         if (aStarMovement == null)
-        aStarMovement = GetComponent<AStarMovement>();
+            aStarMovement = GetComponent<AStarMovement>();
     }
 
     protected virtual void Update()
@@ -45,11 +48,6 @@ public abstract class Agent : MonoBehaviour
         if (currentBehaviour != null)
         {
             steering = currentBehaviour.CalculateSteering();
-        }
-
-        if (useObstacleAvoidance)
-        {
-            steering += AvoidObstacles();
         }
 
         Move(steering);
@@ -68,6 +66,9 @@ public abstract class Agent : MonoBehaviour
 
     protected void Move(Vector3 steering)
     {
+        if (useObstacleAvoidance)
+            steering = AvoidObstacles(steering);
+
         Vector3 acceleration = Vector3.ClampMagnitude(
             steering,
             maxAcceleration
@@ -83,62 +84,34 @@ public abstract class Agent : MonoBehaviour
             maxSpeed
         );
 
-        Collider agentCollider = GetComponent<Collider>();
-
         Vector3 displacement = velocity * Time.deltaTime;
-        float distance = displacement.magnitude;
-
-        if (distance > 0.0001f &&
-            agentCollider is CapsuleCollider capsule &&
-            capsule.enabled)
+        // Resolve up to three surfaces so a second wall cannot be crossed at a corner.
+        for (int i = 0; i < 3 && displacement.sqrMagnitude > 0.00000001f; i++)
         {
-            Transform t = capsule.transform;
-
-            Vector3 point1 = t.TransformPoint(
-                capsule.center + Vector3.up *
-                (capsule.height * 0.5f - capsule.radius)
-            );
-
-            Vector3 point2 = t.TransformPoint(
-                capsule.center - Vector3.up *
-                (capsule.height * 0.5f - capsule.radius)
-            );
-
-            float scale = Mathf.Max(
-                t.lossyScale.x,
-                t.lossyScale.z
-            );
-
-            float radius = capsule.radius * scale;
-
-            if (Physics.CapsuleCast(
-                point1,
-                point2,
-                radius,
-                displacement.normalized,
-                out RaycastHit hit,
-                distance + collisionSkin,
-                obstacleMask,
-                QueryTriggerInteraction.Ignore))
-            {
-                float allowedDistance = Mathf.Max(
-                    0f,
-                    hit.distance - collisionSkin
-                );
-
-                transform.position +=
-                    displacement.normalized * allowedDistance;
-
-                velocity = Vector3.zero;
-            }
-            else
+            float distance = displacement.magnitude;
+            Vector3 direction = displacement / distance;
+            if (!CastBody(direction, distance + collisionSkin, out RaycastHit hit))
             {
                 transform.position += displacement;
+                break;
             }
-        }
-        else
-        {
-            transform.position += displacement;
+
+            float allowedDistance = Mathf.Clamp(hit.distance - collisionSkin, 0f, distance);
+            transform.position += direction * allowedDistance;
+
+            Vector3 normal = hit.normal;
+            normal.y = 0f;
+            if (normal.sqrMagnitude < 0.001f)
+            {
+                velocity = Vector3.zero;
+                break;
+            }
+
+            normal.Normalize();
+            displacement -= direction * allowedDistance;
+            // Remove only motion into the wall, preserving motion along it.
+            displacement -= normal * Mathf.Min(0f, Vector3.Dot(displacement, normal));
+            velocity -= normal * Mathf.Min(0f, Vector3.Dot(velocity, normal));
         }
 
         if (velocity.sqrMagnitude > 0.001f)
@@ -154,141 +127,99 @@ public abstract class Agent : MonoBehaviour
         }
     }
 
-    
-    
-    protected Vector3 AvoidObstacles()
+    private bool CastBody(Vector3 direction, float distance, out RaycastHit nearestHit)
     {
-        Vector3 forward = velocity.sqrMagnitude > 0.1f
-            ? velocity.normalized
-            : transform.forward;
+        nearestHit = default;
+        if (bodyCollider == null || !bodyCollider.enabled)
+            return false;
 
-        forward.y = 0f;
-        forward.Normalize();
+        Transform body = bodyCollider.transform;
+        Vector3 scale = body.lossyScale;
+        scale = new Vector3(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z));
+        int axis = bodyCollider.direction;
+        Vector3 localAxis = axis == 0 ? Vector3.right : axis == 1 ? Vector3.up : Vector3.forward;
+        float radiusScale = axis == 0 ? Mathf.Max(scale.y, scale.z)
+            : axis == 1 ? Mathf.Max(scale.x, scale.z) : Mathf.Max(scale.x, scale.y);
+        float radius = bodyCollider.radius * radiusScale;
+        float halfSegment = Mathf.Max(0f, bodyCollider.height * scale[axis] * 0.5f - radius);
+        Vector3 center = body.TransformPoint(bodyCollider.center);
+        Vector3 offset = body.TransformDirection(localAxis) * halfSegment;
 
-        Vector3 origin =
-            transform.position + Vector3.up * eyeHeight;
+        int count = Physics.CapsuleCastNonAlloc(
+            center + offset, center - offset, radius, direction, movementHits,
+            distance, obstacleMask, QueryTriggerInteraction.Ignore);
 
-        Vector3 leftDirection =
-            Quaternion.Euler(0f, -avoidAngle, 0f) * forward;
-
-        Vector3 rightDirection =
-            Quaternion.Euler(0f, avoidAngle, 0f) * forward;
-
-        bool frontBlocked = Physics.Raycast(
-            origin, forward, out RaycastHit frontHit,
-            avoidDistance, obstacleMask,
-            QueryTriggerInteraction.Ignore);
-
-        bool leftBlocked = Physics.Raycast(
-            origin, leftDirection, out RaycastHit leftHit,
-            avoidDistance, obstacleMask,
-            QueryTriggerInteraction.Ignore);
-
-        bool rightBlocked = Physics.Raycast(
-            origin, rightDirection, out RaycastHit rightHit,
-            avoidDistance, obstacleMask,
-            QueryTriggerInteraction.Ignore);
-
-        Vector3 avoidance = Vector3.zero;
-
-        avoidance += Whisker(origin, forward, avoidWeight);
-
-        if (!frontBlocked && !leftBlocked && !rightBlocked)
-            return avoidance;
-
-        // Preferir el lado que permita avanzar hacia el waypoint actual.
-        Vector3 desiredDirection = forward;
-
-        if (aStarMovement != null &&
-            aStarMovement.CurrentTargetNode != null)
+        float nearestDistance = float.PositiveInfinity;
+        for (int i = 0; i < count; i++)
         {
-            desiredDirection =
-                aStarMovement.CurrentTargetNode.Position - transform.position;
+            RaycastHit hit = movementHits[i];
+            if (hit.collider.transform.IsChildOf(transform) || hit.distance >= nearestDistance)
+                continue;
 
-            desiredDirection.y = 0f;
-
-            if (desiredDirection.sqrMagnitude > 0.001f)
-                desiredDirection.Normalize();
-            else
-                desiredDirection = forward;
+            nearestHit = hit;
+            nearestDistance = hit.distance;
         }
 
-        float leftScore = Vector3.Dot(leftDirection, desiredDirection);
-        float rightScore = Vector3.Dot(rightDirection, desiredDirection);
-
-        if (leftBlocked)
-            leftScore -= 2f;
-
-        if (rightBlocked)
-            rightScore -= 2f;
-
-        Vector3 chosenDirection =
-            leftScore >= rightScore ? leftDirection : rightDirection;
-
-        // Si solo hay obstáculos laterales, no forzar un giro.
-        if (!frontBlocked)
-            return Vector3.zero;
-
-        // Intensificar la evasión cuanto más cerca esté la pared.
-        float proximity =
-        1f - Mathf.Clamp01(frontHit.distance / avoidDistance);
-
-        // La evasión aumenta cuando la pared está cerca.
-        float urgency = Mathf.Lerp(1f, 2f, proximity);
-
-        // Añadir una componente lateral fuerte para cambiar
-        // la trayectoria antes de alcanzar la pared.
-        Vector3 lateralDirection =
-            Vector3.Cross(Vector3.up, forward).normalized;
-
-        float lateralSign =
-            Vector3.Dot(lateralDirection, chosenDirection) >= 0f
-                ? 1f
-                : -1f;
-
-        Vector3 avoidanceDirection =
-            (forward * 0.2f + lateralDirection * lateralSign).normalized;
-
-        return avoidanceDirection * avoidWeight * urgency;
+        return nearestDistance < float.PositiveInfinity;
     }
-    
-    private Vector3 Whisker(
-        Vector3 origin,
-        Vector3 direction,
-        float weight)
+
+    protected Vector3 AvoidObstacles(Vector3 steering)
     {
-        if (!Physics.Raycast(
-            origin,
-            direction,
-            out RaycastHit hit,
-            avoidDistance,
-            obstacleMask,
-            QueryTriggerInteraction.Ignore))
+        Vector3 intendedVelocity = velocity + Vector3.ClampMagnitude(steering, maxAcceleration) * Time.deltaTime;
+        intendedVelocity.y = 0f;
+        if (intendedVelocity.sqrMagnitude < 0.0001f)
+            return steering;
+
+        Vector3 forward = intendedVelocity.normalized;
+        float brakingDistance = velocity.sqrMagnitude / (2f * Mathf.Max(0.01f, maxAcceleration));
+        float lookAhead = Mathf.Max(avoidDistance, brakingDistance + velocity.magnitude * Time.deltaTime + collisionSkin);
+        if (!CastBody(forward, lookAhead, out RaycastHit frontHit))
+            return steering;
+
+        Vector3 desiredDirection = forward;
+        if (aStarMovement != null && aStarMovement.CurrentTargetNode != null)
         {
-            return Vector3.zero;
+            desiredDirection = aStarMovement.CurrentTargetNode.Position - transform.position;
+            desiredDirection.y = 0f;
+            desiredDirection.Normalize();
         }
 
-        if (hit.transform.IsChildOf(transform))
-            return Vector3.zero;
+        Vector3 bestDirection = Vector3.zero;
+        float bestClearance = 0f;
+        float bestScore = float.NegativeInfinity;
+        // Check both sides, including turns wide enough to escape a corner.
+        for (int step = 1; step <= 4; step++)
+        {
+            float angle = step == 4 ? 180f : Mathf.Min(150f, Mathf.Max(30f, avoidAngle) * step);
+            for (int side = -1; side <= 1; side += 2)
+            {
+                Vector3 candidate = Quaternion.Euler(0f, angle * side, 0f) * forward;
+                float clearance = CastBody(candidate, lookAhead, out RaycastHit hit)
+                    ? Mathf.Max(0f, hit.distance - collisionSkin) : lookAhead;
+                float score = clearance / lookAhead * 3f + Vector3.Dot(candidate, desiredDirection);
+                // Keep the previous side when alternatives are nearly equivalent.
+                if (side == avoidanceSide)
+                    score += 0.2f;
 
-        float proximity =
-            1f - Mathf.Clamp01(hit.distance / avoidDistance);
+                if (score <= bestScore)
+                    continue;
 
-        Vector3 forward = velocity.sqrMagnitude > 0.1f
-            ? velocity.normalized
-            : transform.forward;
+                bestScore = score;
+                bestDirection = candidate;
+                bestClearance = clearance;
+            }
+        }
 
-        forward.y = 0f;
-        forward.Normalize();
+        float turn = Vector3.Dot(Vector3.Cross(forward, bestDirection), Vector3.up);
+        if (Mathf.Abs(turn) > 0.01f)
+            avoidanceSide = Mathf.Sign(turn);
 
-        Vector3 lateral =
-            Vector3.Cross(Vector3.up, forward).normalized;
-
-        // Elegir el sentido que se aleja de la pared.
-        if (Vector3.Dot(lateral, hit.normal) < 0f)
-            lateral = -lateral;
-
-        return lateral * proximity * weight;
+        float safeSpeed = Mathf.Min(maxSpeed,
+            Mathf.Sqrt(2f * Mathf.Max(0f, maxAcceleration) * bestClearance));
+        Vector3 avoidance = (bestDirection * safeSpeed - velocity) * Mathf.Max(1f, avoidWeight);
+        float urgency = 1f - Mathf.Clamp01(frontHit.distance / lookAhead);
+        // Prioritize avoidance over pursuit as the wall approaches.
+        return Vector3.Lerp(steering, avoidance, Mathf.Lerp(0.5f, 1f, urgency));
     }
 
     protected void ApplyBounds()
