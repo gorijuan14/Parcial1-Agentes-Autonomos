@@ -17,6 +17,7 @@ public class HunterSensor : MonoBehaviour
     private Transform closestDeadBoid;
     private Transform ignoredTarget;
     private float ignoreUntil;
+    private int lastDetectionFrame = -1;
 
     public bool CanSee(Transform target)
     {
@@ -63,6 +64,7 @@ public class HunterSensor : MonoBehaviour
 
     private void DetectClosestBoid()
     {
+        lastDetectionFrame = Time.frameCount;
         Collider[] colliders = Physics.OverlapSphere(
             transform.position,
             perceptionRadius,
@@ -123,10 +125,14 @@ public class HunterSensor : MonoBehaviour
 
     public Transform GetClosestDeadBoid()
     {
+        // Do not start another hunt using the previous interval's corpse cache.
+        if (lastDetectionFrame != Time.frameCount)
+            DetectClosestBoid();
+
         if (closestDeadBoid != null)
         {
             Boid boid = closestDeadBoid.GetComponent<Boid>();
-            if (boid == null || !boid.IsDead || boid.IsCollected || !CanSee(closestDeadBoid))
+            if (boid == null || !boid.IsDead || boid.IsCollected || !boid.isActiveAndEnabled || !CanSee(closestDeadBoid))
                 closestDeadBoid = null;
         }
         return closestDeadBoid;

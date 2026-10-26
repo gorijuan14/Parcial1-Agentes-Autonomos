@@ -41,6 +41,9 @@ public class HunterSearchState : HunterState
             return;
         }
         AStarMovement navigation = hunter.Navigation;
+        if (TryEnterGather(sensor))
+            return;
+
         Bounds area = Bounds.Instance;
         if (navigation == null || area == null)
             return;
@@ -64,13 +67,6 @@ public class HunterSearchState : HunterState
 
         bool baitReady = hunter.UpdateBaits();
         // Search transitions have priority over waiting to place another bait.
-        Transform deadBoid = sensor.GetClosestDeadBoid();
-        if (deadBoid != null)
-        {
-            hunter.SetTarget(deadBoid);
-            hunterFSM.ChangeState(HunterStates.Gather);
-            return;
-        }
         Transform previousTarget = hunter.CurrentTarget;
         Boid focusedBoid = previousTarget != null ? previousTarget.GetComponent<Boid>() : null;
         Transform liveBoid = focusedBoid != null && !focusedBoid.IsDead && !focusedBoid.IsCollected &&

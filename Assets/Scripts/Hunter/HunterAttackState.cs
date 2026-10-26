@@ -16,6 +16,9 @@ public class HunterAttackState : HunterState
 
     public override void Enter()
     {
+        if (TryEnterGather(sensor))
+            return;
+
         nextRouteAttempt = 0f;
         Transform target = hunter.CurrentTarget;
         if (!hunter.CanAttack || target == null || !sensor.CanSee(target))
@@ -29,6 +32,10 @@ public class HunterAttackState : HunterState
 
     public override void Update()
     {
+        // An available corpse interrupts pursuit before another attack is applied.
+        if (TryEnterGather(sensor))
+            return;
+
         Transform target = hunter.CurrentTarget;
         Boid boid = target != null ? target.GetComponent<Boid>() : null;
         if (boid == null || boid.IsDead || boid.IsCollected || !sensor.CanSee(target))
@@ -54,6 +61,9 @@ public class HunterAttackState : HunterState
             }
             boid.TakeDamage(damage);
             hunter.RegisterAttack(damage);
+            if (boid.IsDead && TryEnterGather(sensor))
+                return;
+
             ReturnToSearch(!boid.IsDead);
             return;
         }
