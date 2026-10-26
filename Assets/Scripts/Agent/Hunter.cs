@@ -31,9 +31,6 @@ public class Hunter : Agent
     private float baitTimer;
     private bool isPlacingBait;
 
-    [Header("Pathfinding Test")]
-    [SerializeField] private bool testAStarOnly = false;
-
     private void Awake()
     {
         hunterFSM = new HunterFSM();
@@ -51,10 +48,7 @@ public class Hunter : Agent
 
     protected override void Update()
     {
-        if (!testAStarOnly)
-        {
-            hunterFSM.Update();
-        }
+        hunterFSM.Update();
         
         if (!isPlacingBait)
         {

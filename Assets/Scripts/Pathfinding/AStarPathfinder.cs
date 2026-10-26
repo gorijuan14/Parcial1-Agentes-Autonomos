@@ -7,7 +7,7 @@ public class AStarPathfinder : MonoBehaviour
     [Header("References")]
     [SerializeField] private NavigationGraph graph;
 
-    public List<GraphNode> FindPath(GraphNode start, GraphNode goal)
+    public List<GraphNode> FindPath(GraphNode start, GraphNode goal, Agent agent = null)
     {
         if (graph == null || start == null || goal == null)
             return new List<GraphNode>();
@@ -46,6 +46,9 @@ public class AStarPathfinder : MonoBehaviour
 
                 // Nunca utilizar una conexión que atraviese una pared.
                 if (!graph.CanConnect(current, neighbor))
+                    continue;
+
+                if (agent != null && !agent.CanTraverseSegment(current.Position, neighbor.Position))
                     continue;
 
                 float tentativeGScore =

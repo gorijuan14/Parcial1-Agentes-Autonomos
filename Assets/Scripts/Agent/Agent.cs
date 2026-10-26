@@ -127,7 +127,21 @@ public abstract class Agent : MonoBehaviour
         }
     }
 
-    private bool CastBody(Vector3 direction, float distance, out RaycastHit nearestHit)
+    public bool CanMoveDirectlyTo(Vector3 destination)
+    {
+        return CanTraverseSegment(transform.position, destination);
+    }
+
+    public bool CanTraverseSegment(Vector3 from, Vector3 to)
+    {
+        Vector3 offset = to - from;
+        offset.y = 0f;
+        return offset.sqrMagnitude < 0.0001f ||
+            !CastBody(offset.normalized, offset.magnitude, out _, from - transform.position);
+    }
+
+    private bool CastBody(Vector3 direction, float distance, out RaycastHit nearestHit,
+        Vector3 originOffset = default)
     {
         nearestHit = default;
         if (bodyCollider == null || !bodyCollider.enabled)
@@ -142,7 +156,7 @@ public abstract class Agent : MonoBehaviour
             : axis == 1 ? Mathf.Max(scale.x, scale.z) : Mathf.Max(scale.x, scale.y);
         float radius = bodyCollider.radius * radiusScale;
         float halfSegment = Mathf.Max(0f, bodyCollider.height * scale[axis] * 0.5f - radius);
-        Vector3 center = body.TransformPoint(bodyCollider.center);
+        Vector3 center = body.TransformPoint(bodyCollider.center) + originOffset;
         Vector3 offset = body.TransformDirection(localAxis) * halfSegment;
 
         int count = Physics.CapsuleCastNonAlloc(

@@ -30,7 +30,6 @@ public class Flocking : SteeringBehaviour
     private Vector3 CalculateSeparation(Collider[] neighbors)
     {
         Vector3 separation = Vector3.zero;
-        Boid boid = GetComponent<Boid>();
 
         foreach (Collider neighbor in neighbors)
         {

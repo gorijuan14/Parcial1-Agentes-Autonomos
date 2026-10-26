@@ -18,6 +18,9 @@ public class AStarMovement : MonoBehaviour
     private List<GraphNode> path = new List<GraphNode>();
     private int currentIndex;
     private bool followingPath;
+    private bool hasDestination;
+    private Vector3 destination;
+    public bool IsFollowingPath => followingPath;
 
     [Header("Node Arrive")]
     [SerializeField] private float nodeSlowRadius = 2f;
@@ -43,6 +46,12 @@ public class AStarMovement : MonoBehaviour
             return;
         }
 
+        if (currentIndex >= path.Count)
+        {
+            FollowDestination();
+            return;
+        }
+
         GraphNode targetNode = path[currentIndex];
 
         Vector3 offset = targetNode.Position - transform.position;
@@ -56,7 +65,10 @@ public class AStarMovement : MonoBehaviour
 
             if (currentIndex >= path.Count)
             {
-                StopFollowingPath();
+                if (hasDestination)
+                    FollowDestination();
+                else
+                    StopFollowingPath();
                 return;
             }
 
@@ -69,6 +81,7 @@ public class AStarMovement : MonoBehaviour
 
     public void CalculateAndFollowPath(GraphNode start, GraphNode goal)
     {
+        hasDestination = false;
         if (pathfinder == null || agent == null ||
             arriveBehaviour == null || start == null || goal == null)
         {
@@ -88,9 +101,75 @@ public class AStarMovement : MonoBehaviour
         followingPath = true;
     }
 
+    public bool TryFollowPosition(Vector3 position)
+    {
+        if (navigationGraph == null)
+            navigationGraph = FindFirstObjectByType<NavigationGraph>();
+        if (pathfinder == null)
+            pathfinder = FindFirstObjectByType<AStarPathfinder>();
+        if (agent == null || arriveBehaviour == null || navigationGraph == null || pathfinder == null)
+            return false;
+
+        GraphNode start = FindAccessibleNode(transform.position);
+        GraphNode goal = FindAccessibleNode(position);
+        if (start == null || goal == null)
+            return false;
+
+        List<GraphNode> newPath = pathfinder.FindPath(start, goal, agent);
+        if (newPath.Count == 0)
+            return false;
+
+        path = newPath;
+        currentIndex = 0;
+        // Replanning must not send us back to the nearest node already behind us.
+        while (currentIndex + 1 < path.Count && agent.CanMoveDirectlyTo(path[currentIndex + 1].Position))
+            currentIndex++;
+
+        destination = position;
+        hasDestination = true;
+        followingPath = true;
+        arriveBehaviour.SetTargetNew(path[currentIndex].transform, nodeSlowRadius, nodeStopRadius);
+        agent.SetBehaviour(arriveBehaviour);
+        return true;
+    }
+
+    private GraphNode FindAccessibleNode(Vector3 position)
+    {
+        GraphNode closest = null;
+        float bestDistance = float.PositiveInfinity;
+        foreach (GraphNode node in navigationGraph.Nodes)
+        {
+            if (node == null)
+                continue;
+
+            float distance = (node.Position - position).sqrMagnitude;
+            if (distance >= bestDistance || !agent.CanTraverseSegment(position, node.Position))
+                continue;
+
+            closest = node;
+            bestDistance = distance;
+        }
+        return closest;
+    }
+
+    private void FollowDestination()
+    {
+        Vector3 offset = destination - transform.position;
+        offset.y = 0f;
+        if (!hasDestination || offset.magnitude <= Mathf.Max(waypointRadius, nodeStopRadius))
+        {
+            StopFollowingPath();
+            return;
+        }
+
+        arriveBehaviour.SetPositionTarget(destination, nodeSlowRadius, nodeStopRadius);
+        agent.SetBehaviour(arriveBehaviour);
+    }
+
     public void StopFollowingPath()
     {
         followingPath = false;
+        hasDestination = false;
         path.Clear();
         currentIndex = 0;
 
@@ -219,12 +298,6 @@ public class AStarMovement : MonoBehaviour
         if (nextDistance < 0.001f)
             return false;
 
-        return !Physics.Raycast(
-            transform.position + Vector3.up * 0.5f,
-            nextDirection.normalized,
-            nextDistance,
-            navigationGraph.ObstacleMask,
-            QueryTriggerInteraction.Ignore
-        );
+        return agent != null && agent.CanMoveDirectlyTo(nextNode.Position);
     }
 }
