@@ -156,6 +156,10 @@ public abstract class Agent : MonoBehaviour
             if (hit.collider.transform.IsChildOf(transform) || hit.distance >= nearestDistance)
                 continue;
 
+            // A touching side wall must not block motion parallel to or away from it.
+            if (Vector3.Dot(direction, hit.normal) >= -0.0001f)
+                continue;
+
             nearestHit = hit;
             nearestDistance = hit.distance;
         }
@@ -187,6 +191,34 @@ public abstract class Agent : MonoBehaviour
         Vector3 bestDirection = Vector3.zero;
         float bestClearance = 0f;
         float bestScore = float.NegativeInfinity;
+        // Once there is enough room to brake, favor progress over distant open space.
+        // Otherwise an open corridor behind us can outweigh the narrow route ahead.
+        float scoringDistance = Mathf.Min(lookAhead, Mathf.Max(1f, brakingDistance + 0.5f));
+        ScoreAvoidanceDirection(forward, forward, desiredDirection, lookAhead, scoringDistance,
+            ref bestDirection, ref bestClearance, ref bestScore);
+
+        Vector3 wallNormal = frontHit.normal;
+        wallNormal.y = 0f;
+        if (wallNormal.sqrMagnitude > 0.001f)
+        {
+            // Follow the wall exactly: a 35-degree minimum turn cannot fit a tight passage.
+            Vector3 tangent = Vector3.Cross(Vector3.up, wallNormal).normalized;
+            ScoreAvoidanceDirection(tangent, forward, desiredDirection, lookAhead, scoringDistance,
+                ref bestDirection, ref bestClearance, ref bestScore);
+            ScoreAvoidanceDirection(-tangent, forward, desiredDirection, lookAhead, scoringDistance,
+                ref bestDirection, ref bestClearance, ref bestScore);
+        }
+
+        for (int side = -1; side <= 1; side += 2)
+        {
+            for (int step = 1; step <= 2; step++)
+            {
+                Vector3 candidate = Quaternion.Euler(0f, 5f * step * side, 0f) * forward;
+                ScoreAvoidanceDirection(candidate, forward, desiredDirection, lookAhead, scoringDistance,
+                    ref bestDirection, ref bestClearance, ref bestScore);
+            }
+        }
+
         // Check both sides, including turns wide enough to escape a corner.
         for (int step = 1; step <= 4; step++)
         {
@@ -194,19 +226,8 @@ public abstract class Agent : MonoBehaviour
             for (int side = -1; side <= 1; side += 2)
             {
                 Vector3 candidate = Quaternion.Euler(0f, angle * side, 0f) * forward;
-                float clearance = CastBody(candidate, lookAhead, out RaycastHit hit)
-                    ? Mathf.Max(0f, hit.distance - collisionSkin) : lookAhead;
-                float score = clearance / lookAhead * 3f + Vector3.Dot(candidate, desiredDirection);
-                // Keep the previous side when alternatives are nearly equivalent.
-                if (side == avoidanceSide)
-                    score += 0.2f;
-
-                if (score <= bestScore)
-                    continue;
-
-                bestScore = score;
-                bestDirection = candidate;
-                bestClearance = clearance;
+                ScoreAvoidanceDirection(candidate, forward, desiredDirection, lookAhead, scoringDistance,
+                    ref bestDirection, ref bestClearance, ref bestScore);
             }
         }
 
@@ -217,9 +238,30 @@ public abstract class Agent : MonoBehaviour
         float safeSpeed = Mathf.Min(maxSpeed,
             Mathf.Sqrt(2f * Mathf.Max(0f, maxAcceleration) * bestClearance));
         Vector3 avoidance = (bestDirection * safeSpeed - velocity) * Mathf.Max(1f, avoidWeight);
-        float urgency = 1f - Mathf.Clamp01(frontHit.distance / lookAhead);
-        // Prioritize avoidance over pursuit as the wall approaches.
-        return Vector3.Lerp(steering, avoidance, Mathf.Lerp(0.5f, 1f, urgency));
+        // Blending pursuit back in here reintroduces the component aimed into the wall,
+        // making the agent alternate between both sides in a tight corridor.
+        return avoidance;
+    }
+
+    private void ScoreAvoidanceDirection(
+        Vector3 candidate, Vector3 forward, Vector3 desiredDirection,
+        float lookAhead, float scoringDistance,
+        ref Vector3 bestDirection, ref float bestClearance, ref float bestScore)
+    {
+        float clearance = CastBody(candidate, lookAhead, out RaycastHit hit)
+            ? Mathf.Max(0f, hit.distance - collisionSkin) : lookAhead;
+        float score = Mathf.Clamp01(clearance / scoringDistance) * 3f
+            + Vector3.Dot(candidate, desiredDirection) * 2f;
+        float turn = Vector3.Dot(Vector3.Cross(forward, candidate), Vector3.up);
+        if (Mathf.Abs(turn) > 0.01f && Mathf.Sign(turn) == avoidanceSide)
+            score += 0.1f;
+
+        if (score <= bestScore)
+            return;
+
+        bestScore = score;
+        bestDirection = candidate;
+        bestClearance = clearance;
     }
 
     protected void ApplyBounds()
