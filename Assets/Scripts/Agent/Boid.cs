@@ -39,6 +39,9 @@ public class Boid : Agent
     [SerializeField] private float baitDamageDistance = 0.5f;
     private float baitDamageTimer;
 
+    [Header("Flocking")]
+    [SerializeField, Range(0f, 1f)] private float groupedPatrolWeight = 0.1f;
+
     protected override void Start()
     {
         base.Start();
@@ -140,14 +143,16 @@ public class Boid : Agent
         }
         else
         {
-            if (patrol != null)
-            {
-                steering += patrol.CalculateSteering();
-            }
-
+            bool hasNearbyFlock = false;
             if (flocking != null)
             {
-                steering += flocking.CalculateSteering();
+                steering = flocking.CalculateSteering(out hasNearbyFlock);
+            }
+
+            if (patrol != null)
+            {
+                // Nearby flock takes precedence over reaching a pending waypoint.
+                steering += patrol.CalculateSteering() * (hasNearbyFlock ? groupedPatrolWeight : 1f);
             }
 
             stateIndicator.SetBoidPatrol();

@@ -2732,6 +2732,7 @@ MonoBehaviour:
   respawnMaxZ: 20
   baitDamageInterval: 1
   baitDamageDistance: 1.1
+  groupedPatrolWeight: 0.5
 --- !u!114 &371792756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3359,6 +3360,7 @@ MonoBehaviour:
   respawnMaxZ: 20
   baitDamageInterval: 1
   baitDamageDistance: 1.1
+  groupedPatrolWeight: 0.5
 --- !u!114 &464566872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3887,6 +3889,7 @@ MonoBehaviour:
   respawnMaxZ: 20
   baitDamageInterval: 1
   baitDamageDistance: 1.1
+  groupedPatrolWeight: 0.5
 --- !u!114 &498713772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5426,6 +5429,9 @@ MonoBehaviour:
   rangeAttackRadius: 5
   meleeAttackRadius: 2
   gatherDuration: 2
+  gatherRange: 1.25
+  gatherStuckTimeout: 5
+  gatherApproachTimeout: 45
   requiredGathers: 3
   initialZone: {fileID: 952196620}
   exitZone: {fileID: 992961384}
@@ -11866,6 +11872,7 @@ MonoBehaviour:
   respawnMaxZ: 20
   baitDamageInterval: 1
   baitDamageDistance: 1.1
+  groupedPatrolWeight: 0.5
 --- !u!1 &1721795441
 GameObject:
   m_ObjectHideFlags: 0
@@ -11956,6 +11963,7 @@ MonoBehaviour:
   respawnMaxZ: 20
   baitDamageInterval: 1
   baitDamageDistance: 1.1
+  groupedPatrolWeight: 0.5
 --- !u!114 &1721795445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13634,6 +13642,7 @@ MonoBehaviour:
   respawnMaxZ: 20
   baitDamageInterval: 1
   baitDamageDistance: 1.1
+  groupedPatrolWeight: 0.5
 --- !u!114 &1968253052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15051,6 +15060,7 @@ GameObject:
   - component: {fileID: 2113000103}
   - component: {fileID: 2113000104}
   - component: {fileID: 2113000105}
+  - component: {fileID: 2113000106}
   m_Layer: 0
   m_Name: Wolf_1
   m_TagString: Untagged
@@ -15111,6 +15121,8 @@ MonoBehaviour:
   - {fileID: 272335185}
   - {fileID: 1106034586}
   - {fileID: 952196620}
+  randomizeStartPosition: 1
+  initialSpawnSeparation: 2
   visionRadius: 9
   viewAngle: 110
   captureRadius: 0.85
@@ -15179,6 +15191,19 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &2113000106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113000100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27c653737c64351a6f06f6e9fbebcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WolfHowl
+  volume: 0.25
 --- !u!1 &2113000110
 GameObject:
   m_ObjectHideFlags: 0
@@ -15282,6 +15307,7 @@ GameObject:
   - component: {fileID: 2113000203}
   - component: {fileID: 2113000204}
   - component: {fileID: 2113000205}
+  - component: {fileID: 2113000206}
   m_Layer: 0
   m_Name: Wolf_2
   m_TagString: Untagged
@@ -15341,6 +15367,8 @@ MonoBehaviour:
   - {fileID: 272335185}
   - {fileID: 1106034586}
   - {fileID: 952196620}
+  randomizeStartPosition: 1
+  initialSpawnSeparation: 2
   visionRadius: 9
   viewAngle: 110
   captureRadius: 0.85
@@ -15409,6 +15437,19 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &2113000206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113000200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27c653737c64351a6f06f6e9fbebcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WolfHowl
+  volume: 0.25
 --- !u!1 &2113000210
 GameObject:
   m_ObjectHideFlags: 0
@@ -15512,6 +15553,7 @@ GameObject:
   - component: {fileID: 2113000303}
   - component: {fileID: 2113000304}
   - component: {fileID: 2113000305}
+  - component: {fileID: 2113000306}
   m_Layer: 0
   m_Name: Wolf_3
   m_TagString: Untagged
@@ -15574,6 +15616,8 @@ MonoBehaviour:
   - {fileID: 272335185}
   - {fileID: 1106034586}
   - {fileID: 952196620}
+  randomizeStartPosition: 1
+  initialSpawnSeparation: 2
   visionRadius: 9
   viewAngle: 110
   captureRadius: 0.85
@@ -15642,6 +15686,19 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &2113000306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113000300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27c653737c64351a6f06f6e9fbebcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WolfHowl
+  volume: 0.25
 --- !u!1 &2113000310
 GameObject:
   m_ObjectHideFlags: 0
@@ -15745,6 +15802,7 @@ GameObject:
   - component: {fileID: 2113000403}
   - component: {fileID: 2113000404}
   - component: {fileID: 2113000405}
+  - component: {fileID: 2113000406}
   m_Layer: 0
   m_Name: Wolf_4
   m_TagString: Untagged
@@ -15803,6 +15861,8 @@ MonoBehaviour:
   - {fileID: 272335185}
   - {fileID: 1106034586}
   - {fileID: 952196620}
+  randomizeStartPosition: 1
+  initialSpawnSeparation: 2
   visionRadius: 9
   viewAngle: 110
   captureRadius: 0.85
@@ -15871,6 +15931,19 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &2113000406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113000400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27c653737c64351a6f06f6e9fbebcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WolfHowl
+  volume: 0.25
 --- !u!1 &2113000410
 GameObject:
   m_ObjectHideFlags: 0

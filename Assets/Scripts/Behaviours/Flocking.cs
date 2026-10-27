@@ -25,10 +25,27 @@ public class Flocking : SteeringBehaviour
 
     public override Vector3 CalculateSteering()
     {
+        return CalculateSteering(out _);
+    }
+
+    public Vector3 CalculateSteering(out bool hasNearbyFlock)
+    {
         Collider[] neighbors = Physics.OverlapSphere(
             transform.position,
             Mathf.Max(alignmentRadius, cohesionRadius)
         );
+
+        hasNearbyFlock = false;
+        foreach (Collider neighbor in neighbors)
+        {
+            Boid boid = neighbor.GetComponent<Boid>();
+            if (boid != null && boid.transform != transform &&
+                !boid.IsDead && !boid.IsCollected && boid.isActiveAndEnabled)
+            {
+                hasNearbyFlock = true;
+                break;
+            }
+        }
 
         Vector3 separation = CalculateSeparation(neighbors);
         Vector3 alignment = CalculateAlignment(neighbors);
@@ -50,7 +67,7 @@ public class Flocking : SteeringBehaviour
 
             Boid neighborBoid = neighbor.GetComponent<Boid>();
 
-            if (neighborBoid == null)
+            if (neighborBoid == null || neighborBoid.IsCollected || !neighborBoid.isActiveAndEnabled)
                 continue;
 
             Vector3 direction = transform.position - neighborBoid.transform.position;
@@ -81,7 +98,7 @@ public class Flocking : SteeringBehaviour
 
             Boid neighborBoid = neighbor.GetComponent<Boid>();
 
-            if (neighborBoid == null)
+            if (neighborBoid == null || neighborBoid.IsDead || neighborBoid.IsCollected || !neighborBoid.isActiveAndEnabled)
                 continue;
 
             Vector3 direction = transform.position - neighborBoid.transform.position;
@@ -121,7 +138,7 @@ public class Flocking : SteeringBehaviour
 
             Boid neighborBoid = neighbor.GetComponent<Boid>();
 
-            if (neighborBoid == null)
+            if (neighborBoid == null || neighborBoid.IsDead || neighborBoid.IsCollected || !neighborBoid.isActiveAndEnabled)
                 continue;
 
             Vector3 direction = transform.position - neighborBoid.transform.position;
