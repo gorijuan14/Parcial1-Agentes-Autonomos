@@ -181,14 +181,14 @@ public class HunterSensor : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = closestWolf != null ? Color.red : Color.cyan;
+        Gizmos.color = closestWolf != null ? StateIndicator.HunterWarning : StateIndicator.HunterGreen;
         Gizmos.DrawWireSphere(transform.position, wolfPerceptionRadius);
         if (closestWolf != null)
             Gizmos.DrawLine(transform.position, closestWolf.transform.position);
         Vector3 origin = transform.position + Vector3.up * sightHeight;
         Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
         Vector3 previous = origin + Quaternion.Euler(0f, -viewAngle * 0.5f, 0f) * forward * perceptionRadius;
-        Gizmos.color = Color.yellow;
+        Gizmos.color = StateIndicator.HunterYellow;
         Gizmos.DrawLine(origin, previous);
         const int segments = 32;
         for (int i = 1; i <= segments; i++)

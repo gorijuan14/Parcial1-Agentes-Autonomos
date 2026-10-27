@@ -5402,7 +5402,7 @@ MonoBehaviour:
   - {fileID: 992961384}
   respawnTime: 5
   safeZoneWaitTime: 4
-  fleeRouteTolerance: 0.1
+  fleeRouteTolerance: 0.2
   wolfSafetyRadius: 2.25
   wolfPredictionTime: 0.35
   cautionDistance: 5
@@ -15044,9 +15044,9 @@ MonoBehaviour:
   visionRadius: 9
   viewAngle: 110
   captureRadius: 0.85
-  patrolSpeed: 2.8
-  chaseSpeed: 3.5
-  searchSpeed: 3
+  patrolSpeed: 3.2
+  chaseSpeed: 4.25
+  searchSpeed: 3.6
   searchDuration: 8
   searchRadius: 7
   howlInterval: 2
@@ -15291,9 +15291,9 @@ MonoBehaviour:
   visionRadius: 9
   viewAngle: 110
   captureRadius: 0.85
-  patrolSpeed: 2.8
-  chaseSpeed: 3.5
-  searchSpeed: 3
+  patrolSpeed: 3.2
+  chaseSpeed: 4.25
+  searchSpeed: 3.6
   searchDuration: 8
   searchRadius: 7
   howlInterval: 2
@@ -15541,9 +15541,9 @@ MonoBehaviour:
   visionRadius: 9
   viewAngle: 110
   captureRadius: 0.85
-  patrolSpeed: 2.8
-  chaseSpeed: 3.5
-  searchSpeed: 3
+  patrolSpeed: 3.2
+  chaseSpeed: 4.25
+  searchSpeed: 3.6
   searchDuration: 8
   searchRadius: 7
   howlInterval: 2
@@ -15787,9 +15787,9 @@ MonoBehaviour:
   visionRadius: 9
   viewAngle: 110
   captureRadius: 0.85
-  patrolSpeed: 2.8
-  chaseSpeed: 3.5
-  searchSpeed: 3
+  patrolSpeed: 3.2
+  chaseSpeed: 4.25
+  searchSpeed: 3.6
   searchDuration: 8
   searchRadius: 7
   howlInterval: 2

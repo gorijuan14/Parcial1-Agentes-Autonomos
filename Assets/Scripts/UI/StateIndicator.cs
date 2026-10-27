@@ -5,6 +5,9 @@ using UnityEditor;
 
 public class StateIndicator : MonoBehaviour
 {
+    public static readonly Color HunterGreen = new Color(0.23f, 1f, 0f);
+    public static readonly Color HunterYellow = new Color(1f, 0.97f, 0.14f);
+    public static readonly Color HunterWarning = new Color(1f, 0.65f, 0.15f);
     [Header("Hunter Sprites")]
     [SerializeField] private Sprite hunterPatrol;
     [SerializeField] private Sprite hunterChase;
@@ -152,7 +155,7 @@ public class StateIndicator : MonoBehaviour
 
     public void SetHunterSearch()
     {
-        SpriteRenderer.color = Color.white;
+        SpriteRenderer.color = HunterGreen;
         if (currentState != IndicatorState.Patrol)
         {
             currentState = IndicatorState.Patrol;
@@ -167,7 +170,7 @@ public class StateIndicator : MonoBehaviour
         currentState = IndicatorState.Exit;
         SpriteRenderer.enabled = true;
         SpriteRenderer.sprite = hunterPatrol;
-        SpriteRenderer.color = Color.green;
+        SpriteRenderer.color = HunterGreen;
     }
 
     public void SetHunterFlee()
@@ -175,7 +178,7 @@ public class StateIndicator : MonoBehaviour
         currentState = IndicatorState.Flee;
         SpriteRenderer.enabled = true;
         SpriteRenderer.sprite = hunterChase;
-        SpriteRenderer.color = Color.red;
+        SpriteRenderer.color = HunterWarning;
     }
 
     public void SetHunterCautious()
@@ -183,11 +186,12 @@ public class StateIndicator : MonoBehaviour
         currentState = IndicatorState.Cautious;
         SpriteRenderer.enabled = true;
         SpriteRenderer.sprite = hunterPatrol;
-        SpriteRenderer.color = Color.yellow;
+        SpriteRenderer.color = HunterYellow;
     }
 
     public void SetHunterChase()
     {
+        SpriteRenderer.color = HunterYellow;
         if (currentState != IndicatorState.Chase)
         {
             currentState = IndicatorState.Chase;
@@ -199,6 +203,7 @@ public class StateIndicator : MonoBehaviour
 
     public void SetHunterRangedAttack()
     {
+        SpriteRenderer.color = HunterYellow;
         if (currentState != IndicatorState.RangedAttack)
         {
             currentState = IndicatorState.RangedAttack;
@@ -210,6 +215,7 @@ public class StateIndicator : MonoBehaviour
 
     public void SetHunterMeleeAttack()
     {
+        SpriteRenderer.color = HunterYellow;
         if (currentState != IndicatorState.MeleeAttack)
         {
             currentState = IndicatorState.MeleeAttack;
@@ -221,6 +227,7 @@ public class StateIndicator : MonoBehaviour
 
     public void SetHunterGather()
     {
+        SpriteRenderer.color = HunterGreen;
         if (currentState != IndicatorState.Gather)
         {
             currentState = IndicatorState.Gather;
@@ -232,6 +239,7 @@ public class StateIndicator : MonoBehaviour
 
     public void SetHunterBait()
     {
+        SpriteRenderer.color = HunterYellow;
         if (currentState != IndicatorState.Bait)
         {
             currentState = IndicatorState.Bait;

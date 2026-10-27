@@ -454,33 +454,47 @@ public class Hunter : Agent
     private void OnGUI()
     {
         if (showStatus && hunterFSM != null)
-            GUI.Box(new Rect(12f, 12f, 330f, 215f),
-                $"Cazador: {hunterFSM.CurrentState}\nRecolecciones: {GatherCount}/{requiredGathers}\n" +
-                $"Ataques: {SuccessfulAttacks} | Ultimo dano: {lastAttackDamage}\n" +
-                $"TBA restante: {Mathf.Max(0f, tba - attackTimer):0.0} s\nCiclos completados: {CompletedCycles}\n" +
-                $"Capturas: {Deaths} | Lobo visible: {(HasVisibleWolf ? "SI" : "NO")}\n" +
-                $"Detectado por un lobo: {(IsSpottedByVisibleWolf ? "SI" : "NO")}\n" +
-                $"Refugio: {(SelectedSafeZone != null ? SelectedSafeZone.name : "-")}\n" +
-                $"Evasion de emergencia: {(EmergencyEvasion ? "SI" : "NO")}\n" +
-                $"Recoleccion: {GatherStatus}");
+        {
+            Color previousBackground = GUI.backgroundColor;
+            Color previousContent = GUI.contentColor;
+            GUI.backgroundColor = new Color(0.18f, 0.28f, 0.1f);
+            GUI.contentColor = new Color(0.88f, 1f, 0.75f);
+            try
+            {
+                GUI.Box(new Rect(12f, 12f, 330f, 215f),
+                    $"Cazador: {hunterFSM.CurrentState}\nRecolecciones: {GatherCount}/{requiredGathers}\n" +
+                    $"Ataques: {SuccessfulAttacks} | Ultimo dano: {lastAttackDamage}\n" +
+                    $"TBA restante: {Mathf.Max(0f, tba - attackTimer):0.0} s\nCiclos completados: {CompletedCycles}\n" +
+                    $"Capturas: {Deaths} | Lobo visible: {(HasVisibleWolf ? "SI" : "NO")}\n" +
+                    $"Detectado por un lobo: {(IsSpottedByVisibleWolf ? "SI" : "NO")}\n" +
+                    $"Refugio: {(SelectedSafeZone != null ? SelectedSafeZone.name : "-")}\n" +
+                    $"Evasion de emergencia: {(EmergencyEvasion ? "SI" : "NO")}\n" +
+                    $"Recoleccion: {GatherStatus}");
+            }
+            finally
+            {
+                GUI.backgroundColor = previousBackground;
+                GUI.contentColor = previousContent;
+            }
+        }
     }
 
     protected override void OnDrawGizmosSelected()
     {
         base.OnDrawGizmosSelected();
-        Gizmos.color = Color.red;
+        Gizmos.color = StateIndicator.HunterYellow;
         Gizmos.DrawWireSphere(transform.position, rangeAttackRadius);
-        Gizmos.color = Color.magenta;
+        Gizmos.color = StateIndicator.HunterGreen;
         Gizmos.DrawWireSphere(transform.position, meleeAttackRadius);
         if (AvoidWolvesDuringNavigation)
         {
-            Gizmos.color = new Color(1f, 0.45f, 0f);
+            Gizmos.color = StateIndicator.HunterWarning;
             foreach (Vector3 threat in GetThreatPositions())
                 Gizmos.DrawWireSphere(threat, threatSafetyRadius);
         }
         if (SelectedSafeZone != null)
         {
-            Gizmos.color = Color.green;
+            Gizmos.color = StateIndicator.HunterGreen;
             Gizmos.DrawLine(transform.position, SelectedSafeZone.Center);
         }
     }

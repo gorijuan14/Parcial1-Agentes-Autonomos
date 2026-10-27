@@ -24,9 +24,9 @@ public class Wolf : Agent
     [SerializeField, Range(0f, 360f)] private float viewAngle = 110f;
     [SerializeField, Min(0f)] private float captureRadius = 0.85f;
     [Header("Movement")]
-    [SerializeField, Min(0f)] private float patrolSpeed = 2.8f;
-    [SerializeField, Min(0f)] private float chaseSpeed = 3.5f;
-    [SerializeField, Min(0f)] private float searchSpeed = 3f;
+    [SerializeField, Min(0f)] private float patrolSpeed = 3.2f;
+    [SerializeField, Min(0f)] private float chaseSpeed = 4.25f;
+    [SerializeField, Min(0f)] private float searchSpeed = 3.6f;
     [Header("Search and alert")]
     [SerializeField, Min(0.1f)] private float searchDuration = 8f;
     [SerializeField, Min(0.1f)] private float searchRadius = 7f;

@@ -210,7 +210,7 @@ public class AStarMovement : MonoBehaviour
         if (!followingPath || path == null)
             return;
 
-        Gizmos.color = Color.cyan;
+        Gizmos.color = agent is Hunter ? StateIndicator.HunterGreen : Color.cyan;
         Vector3 previous = transform.position + Vector3.up * 0.2f;
         for (int i = currentIndex; i < path.Count; i++)
         {
