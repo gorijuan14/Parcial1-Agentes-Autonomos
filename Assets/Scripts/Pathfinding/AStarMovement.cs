@@ -21,6 +21,8 @@ public class AStarMovement : MonoBehaviour
     private bool hasDestination;
     private Vector3 destination;
     public bool IsFollowingPath => followingPath;
+    public Vector3 Destination => hasDestination ? destination :
+        CurrentTargetNode != null ? CurrentTargetNode.Position : transform.position;
     public NavigationGraph Graph => navigationGraph;
 
     [Header("Node Arrive")]
@@ -104,6 +106,25 @@ public class AStarMovement : MonoBehaviour
 
     public bool TryFollowPosition(Vector3 position)
     {
+        if (!TryPlanPath(position, out List<GraphNode> newPath, out _))
+            return false;
+
+        path = newPath;
+        currentIndex = 0;
+        while (currentIndex + 1 < path.Count && agent.CanMoveDirectlyTo(path[currentIndex + 1].Position))
+            currentIndex++;
+        destination = position;
+        hasDestination = true;
+        followingPath = true;
+        arriveBehaviour.SetTargetNew(path[currentIndex].transform, nodeSlowRadius, nodeStopRadius);
+        agent.SetBehaviour(arriveBehaviour);
+        return true;
+    }
+
+    public bool TryPlanPath(Vector3 position, out List<GraphNode> plannedPath, out float length)
+    {
+        plannedPath = null;
+        length = float.PositiveInfinity;
         if (navigationGraph == null)
             navigationGraph = FindFirstObjectByType<NavigationGraph>();
         if (pathfinder == null)
@@ -116,21 +137,21 @@ public class AStarMovement : MonoBehaviour
         if (start == null || goal == null)
             return false;
 
-        List<GraphNode> newPath = pathfinder.FindPath(start, goal, agent);
-        if (newPath.Count == 0)
+        plannedPath = pathfinder.FindPath(start, goal, agent);
+        if (plannedPath.Count == 0)
             return false;
-
-        path = newPath;
-        currentIndex = 0;
-        // Replanning must not send us back to the nearest node already behind us.
-        while (currentIndex + 1 < path.Count && agent.CanMoveDirectlyTo(path[currentIndex + 1].Position))
-            currentIndex++;
-
-        destination = position;
-        hasDestination = true;
-        followingPath = true;
-        arriveBehaviour.SetTargetNew(path[currentIndex].transform, nodeSlowRadius, nodeStopRadius);
-        agent.SetBehaviour(arriveBehaviour);
+        Vector3 previous = transform.position;
+        length = 0f;
+        foreach (GraphNode node in plannedPath)
+        {
+            Vector3 offset = node.Position - previous;
+            offset.y = 0f;
+            length += offset.magnitude;
+            previous = node.Position;
+        }
+        Vector3 finalOffset = position - previous;
+        finalOffset.y = 0f;
+        length += finalOffset.magnitude;
         return true;
     }
 
@@ -140,7 +161,7 @@ public class AStarMovement : MonoBehaviour
         float bestDistance = float.PositiveInfinity;
         foreach (GraphNode node in navigationGraph.Nodes)
         {
-            if (node == null)
+            if (node == null || !agent.CanUseNode(node))
                 continue;
 
             float distance = (node.Position - position).sqrMagnitude;

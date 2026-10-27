@@ -12,6 +12,9 @@ public class AStarPathfinder : MonoBehaviour
         if (graph == null || start == null || goal == null)
             return new List<GraphNode>();
 
+        if (agent != null && (!agent.CanUseNode(start) || !agent.CanUseNode(goal)))
+            return new List<GraphNode>();
+
         if (start == goal)
             return new List<GraphNode> { start };
 
@@ -38,6 +41,9 @@ public class AStarPathfinder : MonoBehaviour
             foreach (GraphNode neighbor in current.Connections)
             {
                 if (neighbor == null)
+                    continue;
+
+                if (agent != null && !agent.CanUseNode(neighbor))
                     continue;
 
                 // Nunca utilizar una conexión que atraviese una pared.

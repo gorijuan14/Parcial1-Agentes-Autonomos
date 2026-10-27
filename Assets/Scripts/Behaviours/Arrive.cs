@@ -23,6 +23,12 @@ public class Arrive : SteeringBehaviour
         return CalculateSteering(slowRadius, stopRadius);
     }
 
+    public bool TryGetTargetPosition(out Vector3 position)
+    {
+        position = hasPositionTarget ? positionTarget : target != null ? target.position : transform.position;
+        return hasPositionTarget || target != null;
+    }
+
     public Vector3 CalculateSteering(float slowRadius, float stopRadius)
     {
         if ((!hasPositionTarget && target == null) || agent == null)

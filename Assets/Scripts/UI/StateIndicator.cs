@@ -51,6 +51,9 @@ public class StateIndicator : MonoBehaviour
                 if (indicator.isActiveAndEnabled)
                     indicator.DrawSceneIcon(sceneView);
             }
+            foreach (Wolf wolf in FindObjectsByType<Wolf>(FindObjectsSortMode.None))
+                if (wolf.isActiveAndEnabled)
+                    wolf.DrawSceneOverlay(sceneView);
 
             // Health is the final overlay, above the state icons as well.
             GUI.depth = int.MinValue;
@@ -106,7 +109,9 @@ public class StateIndicator : MonoBehaviour
         MeleeAttack,
         Bait,
         Gather,
-        Exit
+        Exit,
+        Flee,
+        Cautious
     }
 
     private IndicatorState currentState;
@@ -163,6 +168,22 @@ public class StateIndicator : MonoBehaviour
         SpriteRenderer.enabled = true;
         SpriteRenderer.sprite = hunterPatrol;
         SpriteRenderer.color = Color.green;
+    }
+
+    public void SetHunterFlee()
+    {
+        currentState = IndicatorState.Flee;
+        SpriteRenderer.enabled = true;
+        SpriteRenderer.sprite = hunterChase;
+        SpriteRenderer.color = Color.red;
+    }
+
+    public void SetHunterCautious()
+    {
+        currentState = IndicatorState.Cautious;
+        SpriteRenderer.enabled = true;
+        SpriteRenderer.sprite = hunterPatrol;
+        SpriteRenderer.color = Color.yellow;
     }
 
     public void SetHunterChase()

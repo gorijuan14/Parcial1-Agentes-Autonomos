@@ -36,6 +36,11 @@ public abstract class Agent : MonoBehaviour
 
     protected virtual void Start()
     {
+        InitializeAgentReferences();
+    }
+
+    protected void InitializeAgentReferences()
+    {
         bodyCollider = GetComponent<CapsuleCollider>();
         if (aStarMovement == null)
             aStarMovement = GetComponent<AStarMovement>();
@@ -82,6 +87,7 @@ public abstract class Agent : MonoBehaviour
             velocity,
             maxSpeed
         );
+        velocity = ConstrainVelocity(velocity);
 
         Vector3 displacement = velocity * Time.deltaTime;
         // Resolve up to three surfaces so a second wall cannot be crossed at a corner.
@@ -131,7 +137,11 @@ public abstract class Agent : MonoBehaviour
         return CanTraverseSegment(transform.position, destination);
     }
 
-    public bool CanTraverseSegment(Vector3 from, Vector3 to)
+    protected virtual Vector3 ConstrainVelocity(Vector3 proposed) => proposed;
+
+    public virtual bool CanUseNode(GraphNode node) => node != null;
+
+    public virtual bool CanTraverseSegment(Vector3 from, Vector3 to)
     {
         Vector3 offset = to - from;
         offset.y = 0f;
@@ -190,6 +200,16 @@ public abstract class Agent : MonoBehaviour
         Vector3 forward = intendedVelocity.normalized;
         float brakingDistance = velocity.sqrMagnitude / (2f * Mathf.Max(0.01f, maxAcceleration));
         float lookAhead = Mathf.Max(avoidDistance, brakingDistance + velocity.magnitude * Time.deltaTime + collisionSkin);
+        // A wall beyond the arrival target must not prevent reaching that target.
+        // The movement capsule sweep still prevents contact or penetration.
+        if (currentBehaviour is Arrive arrive && arrive.TryGetTargetPosition(out Vector3 targetPosition))
+        {
+            Vector3 targetOffset = targetPosition - transform.position;
+            targetOffset.y = 0f;
+            lookAhead = Mathf.Min(lookAhead, targetOffset.magnitude);
+        }
+        if (lookAhead <= 0.0001f)
+            return steering;
         if (!CastBody(forward, lookAhead, out RaycastHit frontHit))
             return steering;
 

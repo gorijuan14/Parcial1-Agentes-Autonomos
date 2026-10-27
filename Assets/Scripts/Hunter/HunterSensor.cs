@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class HunterSensor : MonoBehaviour
 {
@@ -18,6 +19,46 @@ public class HunterSensor : MonoBehaviour
     private Transform ignoredTarget;
     private float ignoreUntil;
     private int lastDetectionFrame = -1;
+    [Header("Wolf perception")]
+    [SerializeField, Min(0.1f)] private float wolfPerceptionRadius = 8f;
+    private int lastWolfFrame = -1;
+    private Wolf closestWolf;
+    private readonly List<Wolf> visibleWolves = new List<Wolf>();
+
+    public IReadOnlyList<Wolf> GetVisibleWolves()
+    {
+        GetClosestWolf();
+        return visibleWolves;
+    }
+
+    public Wolf GetClosestWolf()
+    {
+        if (lastWolfFrame == Time.frameCount)
+            return closestWolf;
+        lastWolfFrame = Time.frameCount;
+        closestWolf = null;
+        visibleWolves.Clear();
+        float bestDistance = wolfPerceptionRadius * wolfPerceptionRadius;
+        foreach (Collider candidate in Physics.OverlapSphere(transform.position, wolfPerceptionRadius,
+            ~0, QueryTriggerInteraction.Ignore))
+        {
+            Wolf wolf = candidate.GetComponentInParent<Wolf>();
+            if (wolf == null || !wolf.isActiveAndEnabled)
+                continue;
+            float distance = (wolf.transform.position - transform.position).sqrMagnitude;
+            if (distance > wolfPerceptionRadius * wolfPerceptionRadius || Physics.Linecast(transform.position + Vector3.up * sightHeight,
+                wolf.transform.position + Vector3.up * sightHeight, obstacleMask, QueryTriggerInteraction.Ignore))
+                continue;
+            if (!visibleWolves.Contains(wolf))
+                visibleWolves.Add(wolf);
+            if (distance <= bestDistance)
+            {
+                closestWolf = wolf;
+                bestDistance = distance;
+            }
+        }
+        return closestWolf;
+    }
 
     public bool CanSee(Transform target)
     {
@@ -41,10 +82,10 @@ public class HunterSensor : MonoBehaviour
             target.position + Vector3.up * sightHeight, obstacleMask, QueryTriggerInteraction.Ignore);
     }
 
-    public void IgnoreTemporarily(Transform target)
+    public void IgnoreTemporarily(Transform target, float duration = 2f)
     {
         ignoredTarget = target;
-        ignoreUntil = Time.time + 2f;
+        ignoreUntil = Time.time + duration;
         closestBoid = null;
     }
 
@@ -140,6 +181,10 @@ public class HunterSensor : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.color = closestWolf != null ? Color.red : Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, wolfPerceptionRadius);
+        if (closestWolf != null)
+            Gizmos.DrawLine(transform.position, closestWolf.transform.position);
         Vector3 origin = transform.position + Vector3.up * sightHeight;
         Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
         Vector3 previous = origin + Quaternion.Euler(0f, -viewAngle * 0.5f, 0f) * forward * perceptionRadius;
