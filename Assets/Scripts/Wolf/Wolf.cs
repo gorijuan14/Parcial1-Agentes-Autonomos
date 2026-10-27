@@ -16,6 +16,9 @@ public class Wolf : Agent
     [SerializeField] private Hunter hunter;
     [SerializeField] private GraphNode[] patrolNodes;
     [SerializeField] private ZoneGizmo[] safeZones;
+    [Header("Initial placement")]
+    [SerializeField] private bool randomizeStartPosition = true;
+    [SerializeField, Min(1f)] private float initialSpawnSeparation = 2f;
     [Header("Perception")]
     [SerializeField, Min(0.1f)] private float visionRadius = 9f;
     [SerializeField, Range(0f, 360f)] private float viewAngle = 110f;
@@ -29,7 +32,6 @@ public class Wolf : Agent
     [SerializeField, Min(0.1f)] private float searchRadius = 7f;
     [SerializeField, Min(0.1f)] private float howlInterval = 2f;
     private Arrive arrive;
-    private WolfHowl howl;
     private Renderer body;
     private MaterialPropertyBlock bodyColor;
     private int patrolIndex;
@@ -62,13 +64,81 @@ public class Wolf : Agent
     {
         base.Start();
         arrive = GetComponent<Arrive>();
-        howl = GetComponent<WolfHowl>();
         body = GetComponentInChildren<Renderer>();
         bodyColor = new MaterialPropertyBlock();
         if (hunter == null)
             hunter = FindFirstObjectByType<Hunter>();
+        if (randomizeStartPosition)
+            RandomizeInitialPosition();
         State = WolfState.Patrol;
         UpdateColor();
+    }
+
+    private void RandomizeInitialPosition()
+    {
+        if (patrolNodes == null || patrolNodes.Length == 0)
+            return;
+
+        var candidates = new List<GraphNode>();
+        foreach (GraphNode node in patrolNodes)
+            if (CanUseNode(node) && !candidates.Contains(node))
+                candidates.Add(node);
+        for (int i = candidates.Count - 1; i > 0; i--)
+        {
+            int other = UnityEngine.Random.Range(0, i + 1);
+            GraphNode temporary = candidates[i];
+            candidates[i] = candidates[other];
+            candidates[other] = temporary;
+        }
+
+        Wolf[] wolves = FindObjectsByType<Wolf>(FindObjectsSortMode.None);
+        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+        Vector3 scale = transform.lossyScale;
+        float radius = capsule != null
+            ? capsule.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.z)) : 0.5f;
+        float halfSegment = capsule != null
+            ? Mathf.Max(0f, capsule.height * Mathf.Abs(scale.y) * 0.5f - radius) : 0.5f;
+        Vector3 centerOffset = capsule != null ? transform.TransformVector(capsule.center) : Vector3.up;
+
+        foreach (GraphNode node in candidates)
+        {
+            Vector3 position = node.Position;
+            position.y = transform.position.y;
+            Vector3 center = position + centerOffset;
+            if (Physics.CheckCapsule(center + Vector3.up * halfSegment, center - Vector3.up * halfSegment,
+                radius, obstacleMask, QueryTriggerInteraction.Ignore))
+                continue;
+
+            bool occupied = false;
+            foreach (Wolf wolf in wolves)
+            {
+                if (wolf == this || !wolf.isActiveAndEnabled)
+                    continue;
+                Vector3 offset = wolf.transform.position - position;
+                offset.y = 0f;
+                if (offset.sqrMagnitude < initialSpawnSeparation * initialSpawnSeparation)
+                {
+                    occupied = true;
+                    break;
+                }
+            }
+            if (occupied)
+                continue;
+
+            transform.position = position;
+            patrolIndex = (Array.IndexOf(patrolNodes, node) + 1) % patrolNodes.Length;
+            GraphNode next = patrolNodes[patrolIndex];
+            if (next != null)
+            {
+                Vector3 direction = next.Position - position;
+                direction.y = 0f;
+                if (direction.sqrMagnitude > 0.0001f)
+                    transform.rotation = Quaternion.LookRotation(direction);
+            }
+            StopMovement();
+            return;
+        }
+        Debug.LogWarning($"{name}: no hay un punto inicial libre en su patrulla; se conserva la posicion de escena.", this);
     }
 
     protected override void Update()
@@ -95,7 +165,6 @@ public class Wolf : Agent
                 lastHowlTime = Time.time;
                 lastBroadcastPosition = lastKnownPosition;
                 AlertsSent++;
-                howl?.Play();
                 Howled?.Invoke(this, hunter, lastKnownPosition, observedLife);
             }
             if (Vector3.Distance(transform.position, hunter.transform.position) <= captureRadius)

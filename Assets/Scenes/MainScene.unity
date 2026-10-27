@@ -15051,7 +15051,6 @@ GameObject:
   - component: {fileID: 2113000103}
   - component: {fileID: 2113000104}
   - component: {fileID: 2113000105}
-  - component: {fileID: 2113000106}
   m_Layer: 0
   m_Name: Wolf_1
   m_TagString: Untagged
@@ -15180,19 +15179,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &2113000106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2113000100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a27c653737c64351a6f06f6e9fbebcd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WolfHowl
-  volume: 0.25
 --- !u!1 &2113000110
 GameObject:
   m_ObjectHideFlags: 0
@@ -15296,7 +15282,6 @@ GameObject:
   - component: {fileID: 2113000203}
   - component: {fileID: 2113000204}
   - component: {fileID: 2113000205}
-  - component: {fileID: 2113000206}
   m_Layer: 0
   m_Name: Wolf_2
   m_TagString: Untagged
@@ -15424,19 +15409,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &2113000206
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2113000200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a27c653737c64351a6f06f6e9fbebcd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WolfHowl
-  volume: 0.25
 --- !u!1 &2113000210
 GameObject:
   m_ObjectHideFlags: 0
@@ -15540,7 +15512,6 @@ GameObject:
   - component: {fileID: 2113000303}
   - component: {fileID: 2113000304}
   - component: {fileID: 2113000305}
-  - component: {fileID: 2113000306}
   m_Layer: 0
   m_Name: Wolf_3
   m_TagString: Untagged
@@ -15671,19 +15642,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &2113000306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2113000300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a27c653737c64351a6f06f6e9fbebcd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WolfHowl
-  volume: 0.25
 --- !u!1 &2113000310
 GameObject:
   m_ObjectHideFlags: 0
@@ -15787,7 +15745,6 @@ GameObject:
   - component: {fileID: 2113000403}
   - component: {fileID: 2113000404}
   - component: {fileID: 2113000405}
-  - component: {fileID: 2113000406}
   m_Layer: 0
   m_Name: Wolf_4
   m_TagString: Untagged
@@ -15914,19 +15871,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &2113000406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2113000400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a27c653737c64351a6f06f6e9fbebcd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WolfHowl
-  volume: 0.25
 --- !u!1 &2113000410
 GameObject:
   m_ObjectHideFlags: 0
