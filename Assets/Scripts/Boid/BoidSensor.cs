@@ -14,6 +14,16 @@ public class BoidSensor : MonoBehaviour
     private Bait closestBait;
     private Transform closestHunter;
 
+    private void OnDrawGizmosSelected()
+    {
+        Color previousColor = Gizmos.color;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, hunterPerceptionRadius);
+        Gizmos.color = new Color(1f, 0.5f, 0f);
+        Gizmos.DrawWireSphere(transform.position, baitPerceptionRadius);
+        Gizmos.color = previousColor;
+    }
+
     private void Update()
     {
         detectionTimer += Time.deltaTime;

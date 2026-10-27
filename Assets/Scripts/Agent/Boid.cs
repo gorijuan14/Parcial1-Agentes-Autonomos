@@ -77,11 +77,6 @@ public class Boid : Agent
 
             Vector3 _steering = evade.CalculateSteering();
 
-            if (flocking != null)
-            {
-                _steering += flocking.CalculateSteering();
-            }
-
             stateIndicator.SetBoidEvade();
 
             MoveInsideZone(_steering);

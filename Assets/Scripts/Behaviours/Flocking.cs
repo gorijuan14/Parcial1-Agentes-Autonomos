@@ -11,6 +11,18 @@ public class Flocking : SteeringBehaviour
     [SerializeField, Range(0f, 5f)] private float alignmentWeight = 1f;
     [SerializeField, Range(0f, 5f)] private float cohesionWeight = 1f;
 
+    private void OnDrawGizmosSelected()
+    {
+        Color previousColor = Gizmos.color;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, separationRadius);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, alignmentRadius);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, cohesionRadius);
+        Gizmos.color = previousColor;
+    }
+
     public override Vector3 CalculateSteering()
     {
         Collider[] neighbors = Physics.OverlapSphere(
