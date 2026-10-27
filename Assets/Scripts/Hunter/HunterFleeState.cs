@@ -57,6 +57,31 @@ public class HunterFleeState : HunterState
         float bestSafety = float.NegativeInfinity;
         float chosenLength = float.PositiveInfinity;
         IReadOnlyList<Wolf> wolves = hunter.VisibleWolves;
+        // Finish the objective instead of retreating when the exit is reachable
+        // safely and the hunter is closer to it than the visible threats.
+        if (hunter.HasCompletedHunting && hunter.ExitZone != null)
+        {
+            foreach (RefugeRoute route in routes)
+            {
+                if (route.Zone != hunter.ExitZone)
+                    continue;
+                Vector3 exitPosition = hunter.ExitZone.Center;
+                float distance = (hunter.transform.position - exitPosition).sqrMagnitude;
+                bool aheadOfWolves = true;
+                foreach (Wolf wolf in wolves)
+                    if (wolf != null && wolf.isActiveAndEnabled &&
+                        (wolf.transform.position - exitPosition).sqrMagnitude <= distance)
+                    {
+                        aheadOfWolves = false;
+                        break;
+                    }
+                if (aheadOfWolves)
+                {
+                    hunter.SelectedSafeZone = hunter.ExitZone;
+                    return;
+                }
+            }
+        }
         foreach (RefugeRoute route in routes)
         {
             if (route.Length > limit)
@@ -114,6 +139,12 @@ public class HunterFleeState : HunterState
     }
     public override void Update()
     {
+        if (hunter.HasCompletedHunting && hunter.ExitZone != null &&
+            hunter.ExitZone.Contains(hunter.transform.position, 0.55f))
+        {
+            hunterFSM.ChangeState(HunterStates.Exit);
+            return;
+        }
         ZoneGizmo zone = hunter.SelectedSafeZone;
         if (zone != null && zone.Contains(hunter.transform.position, 0.55f))
         {

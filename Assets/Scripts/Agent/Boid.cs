@@ -79,6 +79,8 @@ public class Boid : Agent
             evade.SetTarget(hunter);
 
             Vector3 _steering = evade.CalculateSteering();
+            if (flocking != null)
+                _steering += flocking.CalculateEvadeSeparation(_steering, maxAcceleration);
 
             stateIndicator.SetBoidEvade();
 

@@ -79,9 +79,29 @@ public class Flocking : SteeringBehaviour
             {
                 separation += direction.normalized / distance;
             }
+            else if (distance <= 0.0001f)
+            {
+                separation += gameObject.GetInstanceID() < neighborBoid.gameObject.GetInstanceID()
+                    ? Vector3.right * 10f : Vector3.left * 10f;
+            }
         }
 
         return separation;
+    }
+
+    public Vector3 CalculateEvadeSeparation(Vector3 evade, float accelerationLimit)
+    {
+        Vector3 separation = CalculateSeparation(Physics.OverlapSphere(
+            transform.position, separationRadius)) * separationWeight;
+        Vector3 escape = Vector3.ClampMagnitude(evade, accelerationLimit);
+        if (escape.sqrMagnitude < 0.0001f)
+            return Vector3.ClampMagnitude(separation, accelerationLimit);
+
+        // Keep escape acceleration intact; separation uses only the lateral budget.
+        Vector3 lateral = Vector3.ProjectOnPlane(separation, escape.normalized);
+        float budget = Mathf.Sqrt(Mathf.Max(0f,
+            accelerationLimit * accelerationLimit - escape.sqrMagnitude));
+        return Vector3.ClampMagnitude(lateral, budget);
     }
 
     private Vector3 CalculateAlignment(Collider[] neighbors)
