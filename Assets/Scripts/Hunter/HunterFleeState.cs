@@ -57,13 +57,13 @@ public class HunterFleeState : HunterState
         float bestSafety = float.NegativeInfinity;
         float chosenLength = float.PositiveInfinity;
         IReadOnlyList<Wolf> wolves = hunter.VisibleWolves;
-        // Finish the objective instead of retreating when the exit is reachable
-        // safely and the hunter is closer to it than the visible threats.
+        // Prefer finishing only when the exit route is similarly short to the
+        // nearest reachable refuge and the hunter is ahead of visible threats.
         if (hunter.HasCompletedHunting && hunter.ExitZone != null)
         {
             foreach (RefugeRoute route in routes)
             {
-                if (route.Zone != hunter.ExitZone)
+                if (route.Zone != hunter.ExitZone || route.Length > limit)
                     continue;
                 Vector3 exitPosition = hunter.ExitZone.Center;
                 float distance = (hunter.transform.position - exitPosition).sqrMagnitude;
